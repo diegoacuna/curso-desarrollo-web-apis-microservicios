@@ -1,0 +1,14 @@
+.reveal h5.actual-session {
+    margin-bottom: 5%;
+}
+.center {
+    text-align: center;
+}
+.row-img {
+    background: #ffffff;
+}
+
+.reveal section img.raw {
+    margin: 0;
+    box-shadow: none;
+}

@@ -1,0 +1,539 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>Desarrollo web orientado a API's y Microservicios - Clase 1</title>
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/league.css">
+		<link rel="stylesheet" href="css/bootstrap.css">
+		<link rel="stylesheet" href="css/main.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+
+				<section>
+                    <h2>Desarrollo web orientado a API's y Microservicios</h2>
+                    <h4>Un enfoque moderno</h4>
+                    <h5 class="actual-session">Clase 1</h5>
+                    <p>
+                        <small>
+                            Diego Acu&ntilde;a Rozas<br>
+                            Ing. Civil en Inform&aacute;tica - UTFSM<br>
+                            <a href="mailto:diego.acuna@mailbox.org">diego.acuna@mailbox.org</a>
+                        </small>
+                    </p>
+                </section>
+
+				<section>
+                    <h2>Clase de hoy</h2>
+
+                    <ul>
+                        <li>Sobre mi</li>
+                        <li>Motivaci&oacute;n del curso</li>
+                        <li>Concepto de aplicaci&oacute;n web</li>
+                        <li>Temario de las clases</li>
+                        <li>Comentarios</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>Sobre mi</h2>
+
+                    <ul>
+                        <li>Diego Acu&ntilde;a R.</li>
+                        <li>Ingeniero Civil en Inform&aacute;tica, UTFSM (ingreso 2008)</li>
+                        <li>Magister en Ciencias de la Inform&aacute;tica, UTFSM (ingreso 2014)</li>
+                        <li>&Aacute;reas de inter&eacute;s:
+                            <ul>
+                                <li><b>Desarrollo de software</b>: web, mobile, t&eacute;cnicas de estimaci&oacute;n, testing.</li>
+                                <li>
+                                    <b>An&aacute;lisis de datos</b>: machine learning, series de tiempo. Aplicaciones financieras,
+                                    aplicaciones orientadas a an&aacute;lisis de texto, NLP.
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>Motivaci&oacute;n del curso</h2>
+
+                    <ul>
+                        <li>
+                            Exponer tendencias actuales en desarrollo web
+                            <div class="row row-img">
+                                <div class="col-md-3">
+                                    <img src="img/microservices.png" alt="Microservicios" style="width: 100%;margin-top:25px;margin-left: 10px;">
+                                </div>
+                                <div class="col-md-3 center">
+                                    <img src="img/docker-logo.png" alt="Docker" style="width: 80%;">
+                                </div>
+                                <div class="col-md-3 center">
+                                    <img src="img/angular.png" alt="Angular" style="width: 67%;">
+                                </div>
+                                <div class="col-md-3 center">
+                                    <img src="img/rest.png" alt="REST" style="width: 73%;">
+                                </div>
+                            </div>
+                            de manera pr&aacute;ctica!
+                        </li>
+                        <li>
+                            Generar debate en torno al desarrollo web actual
+                        </li>
+                        <li>
+                            Enseñar herramientas que les pueden ser de utilidad en su vida profesional
+                        </li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>Aplicaci&oacute;n Web</h2>
+                    <h4>&iquest;Qu&eacute; es?</h4>
+                </section>
+
+                <section>
+                    <h2>¿Es una aplicaci&oacute;n web?</h2>
+
+                    <img src="img/depto-inf.png" alt="Sitio departamento de informatica UTFSM">
+                </section>
+
+                <section>
+                    <h2>¿Es una aplicaci&oacute;n web?</h2>
+
+                    <img src="img/drive.png" alt="Google Drive">
+                </section>
+
+                <section>
+                    <h2>Los navegadores modernos</h2>
+
+                    <p>
+                        Existen nuevas funcionalidades en los navegadores actuales que antes solo estaban
+                        disponibles al desarrollar aplicaciones de escritorio.
+                    </p>
+
+                    <ul>
+                        <li>
+                            Web Speech API:
+                            <a href="https://www.google.com/intl/es/chrome/demos/speech.html">DEMO</a>
+                        </li>
+                        <li>
+                            P2P communication (a.k.a. <a href="https://webrtc.org/">WebRTC</a>)
+                        </li>
+                        <li>
+                            Capturar audio y video de manera nativa! (a.k.a. <a href="https://webrtc.org/">WebRTC</a>)
+                        </li>
+                        <li>
+                            Notificaciones (<a href="http://www.html5rocks.com/en/tutorials/notifications/quick/">DEMO</a>)
+                        </li>
+                        <li>
+                            Geolocalizaci&oacute;n (probablemente lo han visto en alg&uacute;n sitio)
+                        </li>
+                        <li>etc.</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>Ahora s&iacute; podemos hablar de &quot;aplicaciones&quot; web</h2>
+                    <h4>Ya no es solo una palabra que vende</h4>
+                    <br><br>
+                    <p>
+                        Los navegadores modernos est&aacute;n dise&ntilde;ados para utilizar estas nuevas funcionalidades. Tiene sentido
+                        que comencemos a darle m&aacute;s trabajo a los navegadores.
+                    </p>
+                </section>
+
+                <section>
+                    <h2>Navegadores web modernos</h2>
+
+                    <div class="row row-img">
+                        <div class="col-md-4">
+                            <img src="img/chrome.png" alt="Google Chrome" class="raw">
+                        </div>
+                        <div class="col-md-4">
+                            <img src="img/firefox.jpg" alt="Firefox" class="raw">
+                        </div>
+                        <div class="col-md-4">
+                            <img src="img/opera.png" alt="Opera" class="raw">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <p>Uso de 71.4%</p>
+                        </div>
+                        <div class="col-md-4">
+                            <p>Uso de 16.9%</p>
+                        </div>
+                        <div class="col-md-4">
+                            <p>Uso de 1.2%</p>
+                        </div>
+                    </div>
+
+                    <p>En total cerca de un <strong>90%</strong> del mercado!</p>
+                    <br>
+                    <small>*Estadísticas obtenidas desde <a href="http://www.w3schools.com/browsers/browsers_stats.asp">http://www.w3schools.com/browsers/browsers_stats.asp</a></small>
+                </section>
+
+                <section>
+                    <h2>Navegadores web "casi" modernos</h2>
+
+                    <div class="row row-img">
+                        <div class="col-md-6">
+                            <img src="img/safari.png" alt="Safari" class="raw" style="width: 60%;">
+                        </div>
+                        <div class="col-md-6">
+                            <img src="img/edge.jpg" alt="Internet Explorer" class="raw">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p>Uso de 3.6%</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p>Uso de 5.7%</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>
+                        Si vamos a usar los recursos de los navegadores vale la pena saber que navegadores
+                        soportar&aacute;n las nuevas herramientas que aplicaremos
+                    </h2>
+                </section>
+
+                <section>
+                    <h2>Can I Use it?</h2>
+
+                    <img src="img/caniuse.png" alt="Can I Use it?">
+                    
+                    <p>
+                        <a href="http://caniuse.com/">http://caniuse.com/</a>
+                    </p>
+                </section>
+
+                <section>
+                    <h2>&iquest;Qu&eacute; hacemos con los navegadores que no est&aacute;n soportados?</h2>
+
+                    <ul>
+                        <li>
+                            Hace algunos a&ntilde;os nos habr&iacute;amos preocupado. Era posible encontrar una gran cantidad
+                            de <i>hacks</i> para Internet Explorer y de trucos para que
+                            los navegadores se comportaran de manera similar.
+                        </li>
+                        <li>
+                            Hoy en d&iacute;a, no importa tanto. Google Chrome es el navegador con mayor penetraci&oacute;n del mercado
+                            y es el con mejor soporte para las nuevas herramientas de la web.
+                        </li>
+                        <li>
+                            &iquest;y el resto?...
+                        </li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>Modernizr</h2>
+
+                    <img src="img/modernizr.png" alt="Modernizr">
+
+                    <p><small>
+                        En conjunto con los distintos <i>polyfills</i> disponibles podemos desarrollar una experiencia
+                        uniforme para la web.</small>
+                    </p>
+                </section>
+
+                <section>
+                    <h2>Volviendo a lo nuestro</h2>
+
+                    <ul>
+                        <li>
+                            Queremos utilizar al m&aacute;ximo los recursos del navegador => darle trabajo al cliente
+                        </li>
+                        <li>
+                            &iquest;C&oacute;mo funcionan los sistemas cliente-servidor tradicionales?
+                        </li>
+                        <li>
+                            Los servidores deben ser utilizados por lo que son buenos: "servir" contenido.
+                        </li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>El servidor y las API&apos;s REST</h2>
+
+                    <ul>
+                        <li>Protocolo cliente/servidor <i>stateless</i></li>
+                        <li>Operaciones definidas: <b>GET</b>, <b>POST</b>, <b>PUT</b>, <b>DELETE</b></li>
+                        <li>Podemos especificar el formato. Tradicionalmente: JSON o XML</li>
+                    </ul>
+
+                    <p>
+                        &iquest;Muy abstracto? Veamos un ejemplo
+                    </p>
+                </section>
+
+                <section>
+                    <h3>Sistema en rails para manejar usuarios</h3>
+
+                    <p>Servidor:</p>
+                    <pre><code data-trim data-noescape>
+class UsersController < ApplicationController
+
+  def show
+    @user = User.find(params[:id])
+  end
+
+end
+                    </code></pre>
+
+                    <p>
+                        Cliente (puede ser javascript) o algún cliente REST. Ejecutamos una llamada a
+                        <i>/api/users</i>
+                    </p>
+
+                    <pre><code data-trim data-noescape>
+{
+    "id": 151,
+    "name": "Diego A.",
+    "email": "diego.acuna@mailbox.org",
+    "password": "*****"
+}
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h2>&iquest;De qu&eacute; nos sirve ese trozo de json?</h2>
+
+                    <ul>
+                        <li>Es lo que más importa! son los datos de nuestra aplicación.</li>
+                        <li>El resto son tareas que el navegador puede perfectamente realizar.</li>
+                        <li><strong>Javascript</strong> adquiere gran relevancia en esta idea.</li>
+                        <li>Si lo llevamos al extremo: <i><strong>Single Page App</strong></i>.</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>En el caso del servidor</h2>
+
+                    <ul>
+                        <li>
+                            Ahora solo se encarga de procesar y entregar <strong>datos</strong>.
+                        </li>
+                        <li>
+                            Nos podemos preocupar de optimizar este proceso.
+                        </li>
+                        <li>
+                            Arquitecturas orientadas a microservicios.
+                        </li>
+                        <li>
+                            <i>Testing, Continuous Integration</i>
+                        </li>
+                        <li>Deployment, &iquest;Docker?</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>Ya tenemos un panorama general. Veamos el temario del curso en detalle.</h2>
+                </section>
+
+                <section>
+                    <h2>Clase 2 y 3</h2>
+
+                    <p>Nos vamos a enfocar en el servidor. <strong>BACKEND</strong></p>
+
+                    <div class="row">
+                        <div class="col-md-5">
+                            <ul>
+                                <li>Rails</li>
+                                <li>Stack MEAN (Mongodb, ExpressJS, AngularJS, Node.JS)</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-2" style="margin: 8% 0;">
+                            <i class="glyphicon glyphicon-arrow-right"></i>
+                        </div>
+                        <div class="col-md-5">
+                            Vamos a construir un mini-clon de wordpress (solo el backend).
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <div class="row">
+                        <div class="col-md-5">
+                            <ul>
+                                <li>Programaci&oacute;n funcional</li>
+                                <li>Scala y Reactive Apps</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-2" style="margin: 5% 0;">
+                            <i class="glyphicon glyphicon-arrow-right"></i>
+                        </div>
+                        <div class="col-md-5">
+                            Trabajar con Scala, ejemplos peque&ntilde;os, framework Play.
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Clase 4</h2>
+
+                    <h4>Test Driven Development</h4>
+
+                    <ul>
+                        <li>La idea es aprender a mejorar nuestro nivel de desarrollo de aplicaciones.</li>
+                        <li>Como reducir los errores al desarrollar.</li>
+                        <li>TDD es un nuevo estilo de desarrollo, hay que aprender y acostumbrarse a utilizarlo.</li>
+                        <li>
+                            Vamos a ver ejemplos y trataremos de construir una mini-aplicación utilizando TDD.
+                            Probablemente utilizando rails.
+                        </li>
+                        <li><strong>Bonus: Es útil en entrevistas laborales!</strong></li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>Clase 5</h2>
+
+                    <h4>Proyecto de la asignatura</h4>
+
+                    <ul>
+                        <li>
+                            El 40% de la nota de la asignatura corresponde a un proyecto que deber&aacute;n desarrollar
+                            <strong>durante el transcurso de la asignatura</strong>,
+                        </li>
+                        <li>Utilizaremos esta clase para ver avances del proyecto, definir l&iacute;mites, etc.</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>Clases 6 y 7</h2>
+
+                    <h4>Nos enfocamos en el cliente: Frontend</h4>
+
+                    <div class="row">
+                        <div class="col-md-5">
+                            <ul>
+                                <li>Single Page Apps</li>
+                                <li>AngularJs</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-2" style="margin: 7% 0;">
+                            <i class="glyphicon glyphicon-arrow-right"></i>
+                        </div>
+                        <div class="col-md-5">
+                            Vamos a construir una interfaz para nuestro google calendar.
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <div class="row">
+                        <div class="col-md-5">
+                            <ul>
+                                <li>Single Page Apps 2da. parte</li>
+                                <li>React</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-2" style="margin: 5% 0;">
+                            <i class="glyphicon glyphicon-arrow-right"></i>
+                        </div>
+                        <div class="col-md-5">
+                            Trabajo pr&aacute;ctico. Por definir que haremos.
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Clase 8</h2>
+                    <h4>Seguridad en API's: Oauth 2.0 y OpenID</h4>
+
+                    <ul>
+                        <li>
+                            En mi opini&oacute;n, la seguridad de una aplicaci&oacute;n es la parte aburrida.
+                        </li>
+                        <li>
+                            Oauth 2.0 y OpenID son protocolos de seguridad para API's. No son aburridos.
+                        </li>
+                        <li>
+                            Hay detalles muy interesantes en su implementación y en su historia. Vale la pena
+                            saber sobre estos protocolos.
+                        </li>
+                    </ul>
+
+                    <h5>&iquest;Qu&eacute; haremos?</h5>
+                    <p>
+                        Vamos a integrar estos protocolos de seguridad en su proyecto de la asignatura.
+                    </p>
+                </section>
+
+                <section>
+                    <h2>Clase 9</h2>
+                    <h4>Deployment de aplicaciones: Docker y Kubernetes</h4>
+
+                    <ul>
+                        <li>
+                            Vamos a aprender a hacer un deployment eficiente de nuestros microservicios y API's.
+                        </li>
+                        <li>
+                            Si da el tiempo, veremos algunos temas relacionados con integraci&oacute;n continua.
+                        </li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>Clase 10</h2>
+                    <h4>Presentaci&oacute;n del proyecto final</h4>
+                </section>
+
+                <section>
+                    <h2>Evaluación de la asignatura</h2>
+
+                    <p>
+                        60% asistencia + 40% proyecto = <i class="glyphicon glyphicon-ok"></i>
+                    </p>
+                </section>
+
+                <section>
+                    <h2>¿Consultas?</h2>
+                </section>
+
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+			// More info https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				history: true,
+				slideNumber: true,
+
+				// More info https://github.com/hakimel/reveal.js#dependencies
+				dependencies: [
+					{ src: 'plugin/markdown/marked.js' },
+					{ src: 'plugin/markdown/markdown.js' },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+				]
+			});
+		</script>
+	</body>
+</html>
