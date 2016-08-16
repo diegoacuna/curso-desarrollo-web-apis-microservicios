@@ -1,0 +1,916 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>Desarrollo web orientado a API's y Microservicios - Clase 2</title>
+
+		<link rel="stylesheet" href="../revealjs/css/reveal.css">
+		<link rel="stylesheet" href="../revealjs/css/theme/league.css">
+		<link rel="stylesheet" href="../revealjs/css/bootstrap.css">
+		<link rel="stylesheet" href="../revealjs/css/main.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="../revealjs/lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? '../revealjs/css/print/pdf.css' : '../revealjs/css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+
+				<section>
+                    <h2>Desarrollo web orientado a API's y Microservicios</h2>
+                    <h4>Un enfoque moderno</h4>
+                    <h5 class="actual-session">Clase 2</h5>
+                    <p>
+                        <small>
+                            Diego Acu&ntilde;a Rozas<br>
+                            Ing. Civil en Inform&aacute;tica - UTFSM<br>
+                            <a href="mailto:diego.acuna@mailbox.org">diego.acuna@mailbox.org</a>
+                        </small>
+                    </p>
+                </section>
+
+				<section>
+                    <h2>Clase de hoy</h2>
+
+                    <p>
+                        Vamos a aprender a desarrollar API&apos;s (backend). La idea es introducir los conceptos
+                        claves de una API REST de manera pr&aacute;ctica.
+                    </p>
+                    <ul>
+                        <li>API REST 101</li>
+                        <li>Rails</li>
+                        <li>API REST con Rails: simple-wordpress</li>
+                        <li>
+                            <strike>Stack MEAN</strike>
+                            <ul>
+                                <li><strike>MongoDB</strike></li>
+                                <li><strike>MEAN</strike></li>
+                            </ul>
+                        </li>
+                        <li><strike>API REST con MEAN: simple-wordpress</strike></li>
+                        <li>Comentarios finales</li>
+                    </ul>
+                </section>
+
+
+                <section>
+                    <h2>REST 101</h2>
+
+                    <ul>
+                        <li>REST: <strong>Re</strong>presentational <strong>S</strong>tate <strong>T</strong>ransfer</li>
+                        <li>Stateless</li>
+                        <li>Client-Server</li>
+                        <li>
+                            Utiliza HTTP para comunicación
+                            <ul>
+                                <li>Hereda sus herramientas y propiedades</li>
+                                <li>Verbos HTTP: GET, POST, PUT, DELETE</li>
+                                <li>Error Codes: 2xx, 3xx, 4xx, 5xx</li>
+                            </ul>
+                        </li>
+                        <li>Podr&iacute;amos decir que no es tan complejo como SOAP, RPC, etc.</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>Ejemplo REST</h2>
+                    <h3>API para manejar usuarios</h3>
+                    <p>
+                        Llamamos a la url GET <strong>http://ejemplo.com/api/usuarios/1</strong>. Veamos cada parte de
+                        la llamada.
+                    </p>
+                    <ul>
+                        <li><span class="second-color">http://</span> <i class="glyphicon glyphicon-arrow-right"></i> Estamos utilizando el protocolo HTTP</li>
+                        <li><span class="second-color">ejemplo.com</span> <i class="glyphicon glyphicon-arrow-right"></i> Dominio de nuestra app</li>
+                        <li><span class="second-color">/api</span> <i class="glyphicon glyphicon-arrow-right"></i> Es pr&aacute;ctica com&uacute;n dejar una secci&oacute;n
+                        dedicada de la url para especificar que se est&aacute; llamando a una api</li>
+                        <li><span class="second-color">/usuarios</span> <i class="glyphicon glyphicon-arrow-right"></i> <strong>REST Collection</strong></li>
+                        <li><span class="second-color">/1</span> <i class="glyphicon glyphicon-arrow-right"></i> <strong>REST Resource</strong></li>
+                    </ul>
+
+                    <p>
+                        Estamos obteniendo el <i>resource</i> 1 de la <i>collection</i> usuarios.
+                    </p>
+
+                </section>
+
+                <section>
+                    <h2>Ejemplo REST</h2>
+                    <h3>&iquest;Qu&eacute; responde el servidor?</h3>
+
+                    <strong>REQUEST:</strong>
+                    <pre><code>
+                    GET /api/usuarios/1 HTTP/1.1
+                    Host: ejemplo.com
+                    User-Agent: Mozilla/5.0
+                    </code></pre>
+
+                    <strong>RESPONSE:</strong>
+                    <pre><code>
+                    HTTP/1.1 200 OK
+                    Server: Apache/2.4.7 (Ubuntu)
+                    Content-Length: 30
+                    Content-Type: application/json
+
+                    {"id": 1, "nombre": "Diego A"}
+                    </code></pre>
+
+                </section>
+
+                <section>
+                    <h2>Ejemplo REST</h2>
+                    <h3>&iquest;Qu&eacute; responde el servidor?</h3>
+
+                    <strong>RESPONSE:</strong>
+                    <pre><code>
+                    HTTP/1.1 200 OK
+                    Server: Apache/2.4.7 (Ubuntu)
+                    Content-Length: 30
+                    Content-Type: application/json
+
+                    {"id": 1, "nombre": "Diego A"}
+                    </code></pre>
+
+                    <ul>
+                        <li>Notar el Response CODE: 200 (OK)</li>
+                        <li>
+                            Notar el Content-Type (application/json). Nos indica el formato de datos que
+                            estamos utilizando.
+                        </li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>Ruby on Rails (RoR)</h2>
+
+                    <div class="row">
+                        <div class="col-md-3">
+                            <img src="img/rails.png" alt="Ruby on Rails" style="">
+                        </div>
+                        <div class="col-md-9">
+                            <ul>
+                                <li>Full Stack web framework</li>
+                                <li>Lenguaje Ruby (?)</li>
+                                <li>Primera versi&oacute;n el a&ntilde;o 2004</li>
+                                <li>
+                                    Filosof&iacute;a Rails:
+                                    <ul>
+                                        <li><i>Convention Over Configuration</i></li>
+                                        <li><i>Don&apos;t Repeat Yourself</i></li>
+                                        <li><i>The menu is omakase</i></li>
+                                        <li><i>Beautiful code</i></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </section>
+
+                <section>
+                    <h2>Rails es un framework MVC</h2>
+                    <h3>Modelo - Vista - Controlador</h3>
+
+                    <img src="img/mvc.jpg" alt="MVC">
+                </section>
+
+                <section>
+                    <h2>Rails en la pr&aacute;ctica</h2>
+
+                    <ul>
+                        <li>
+                            Creando una nueva aplicaci&oacute;n:
+<pre><code data-trim data-noescape>
+rails new simple-wordpress
+cd simple-wordpress
+</code></pre>
+                        </li>
+                        <li>
+                            Directorios y archivos importantes:
+                            <ul>
+                                <li><i class="second-color">app/</i>: c&oacute;digo fuente de la app (model, controller, etc.)</li>
+                                <li><i class="second-color">config/</i>: configuraci&oacute;n de la app (DB, mailing, etc.)</li>
+                                <li><i class="second-color">db/</i>: esquema de la base de datos y <strong>migraciones</strong></li>
+                                <li><i class="second-color">Gemfile</i>: dependencias de la app (gemas en la jerga de ruby)</li>
+                                <li><i class="second-color">log/</i>: log de la app seg&uacute;n environment</li>
+                                <li><i class="second-color">public/</i>: archivos &quot;visibles&quot; por el exterior (servidos directamente)</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>Rails en la pr&aacute;ctica</h2>
+                    <h3>&iquest;Qu&eacute; vamos a hacer?</h3>
+
+                    <p>
+                        La idea es construir una API REST (solo el backend) de un sistema de blog simple. Le vamos a
+                        llamar simple-wordpress. La forma de construirlo seguir&aacute; los principios de rails.
+                    </p>
+
+                    <ul>
+                        <li>
+                            <strong class="second-color">Se deben poder publicar entradas en el blog</strong>: Un
+                            usuario deberá poder publicar entradas al blog mediante una petición POST. Cada entrada
+                            tendrá un título, fecha de publicación, autor y contenido.
+                        </li>
+                        <li>
+                            <strong class="second-color">Se debe poder listar las entradas</strong>
+                        </li>
+                        <li>
+                            <strong class="second-color">Se deben poder eliminar entradas</strong>
+                        </li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>Simple-Wordpress API</h2>
+                    <h3>Comencemos por el modelo</h3>
+
+                    <ul>
+                        <li>Conociendo los generadores de rails</li>
+                    </ul>
+
+<pre><code data-trim data-noescape>
+rails generate model Post title:string content:text autor:string
+</code></pre>
+                    <ul>
+                        <li>
+                            Rails autom&aacute;ticamente genera una migraci&oacute;n la que permite tener <i>versioning</i> de nuestro
+                            esquema de manera sencilla. <strong>Revisar directorio: <i>db/</i></strong>.
+                        </li>
+                        <li>
+                            Notar el <i>t.timestamps</i>: rails autom&aacute;ticamente agrega atributos <i>created_at</i> y
+                            <i>updated_at</i> a nuestro modelo. Estos atributos son manejados de manera transparente
+                            por el framework.
+                        </li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>Simple-Wordpress - Controlador</h2>
+
+                    <ul>
+                        <li>Para aplicar la migración anterior debemos ejecutar:</li>
+                    </ul>
+
+<pre><code data-trim data-noescape>
+rake db:migrate
+</code></pre>
+
+                    <ul>
+                        <li>Tenemos el modelo y nuestra tabla en la base de datos. Veamos el controlador.</li>
+                    </ul>
+
+<pre><code data-trim data-noescape>
+rails generate scaffold_controller Post
+    Running via Spring preloader in process 97935
+      create  app/controllers/posts_controller.rb
+      invoke  erb
+      create    app/views/posts
+      create    app/views/posts/index.html.erb
+      ...
+      invoke  test_unit
+      create    test/controllers/posts_controller_test.rb
+      invoke  helper
+      create    app/helpers/posts_helper.rb
+      invoke    test_unit
+      invoke  jbuilder
+      create    app/views/posts/index.json.jbuilder
+      ...
+</code></pre>
+                </section>
+
+                <section>
+                    <h2>Simple-Wordpress: Controlador</h2>
+
+                    <ul>
+                        <li>
+                            Rails autom&aacute;ticamente crea distintos archivos que nos ayudar&aacute;n en el desarrollo de nuestra
+                            app.
+                        </li>
+                        <li>
+                            El controlador: con acciones index, show, new, edit, create, update y destroy. &iquest;Cu&aacute;les de
+                            estos m&eacute;todos no son necesarios en nuestra API?
+                        </li>
+                        <li>
+                            Rails cre&oacute; dos tipos de vistas:
+                            <ul>
+                                <li>
+                                    Extensi&oacute;n .html.erb: aplicaci&oacute;n tradicional donde el servidor devuelve
+                                    un fragmentos de html renderizado.
+                                </li>
+                                <li>
+                                    Extensi&oacute;n .json.jbuilder: Corresponden a lo que usar&iacute;amos en una API REST. Podemos
+                                    definir la estructura del json que devolver&aacute; la API.
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <p>
+                        Librer&iacute;a clave: <strong>jbuilder</strong> (<a href="https://github.com/rails/jbuilder">
+                        https://github.com/rails/jbuilder</a>)
+                    </p>
+                </section>
+
+                <section>
+                    <h2>Simple-Wordpress: publicar entradas</h2>
+                    <p>
+                        Recordemos nuestra primera historia de usuario: debemos ser capaces de publicar entradas
+                        en nuestro blog. Veamos nuestro controlador:
+                    </p>
+
+<pre><code data-trim data-noescape>
+...
+# POST /posts
+# POST /posts.json
+def create
+    @post = Post.new(post_params)
+
+    respond_to do |format|
+        if @post.save
+            format.html { redirect_to @post, notice: 'Post was successfully created.' }
+            format.json { render :show, status: :created, location: @post }
+        else
+            format.html { render :new }
+            format.json { render json: @post.errors, status: :unprocessable_entity }
+        end
+    end
+end
+...
+</code></pre>
+                </section>
+
+                <section>
+                    <h2>Simple-Wordpress: publicar entradas</h2>
+                    <p>
+                        Antes de continuar realicemos una limpieza del código auto-generado por rails:
+                    </p>
+
+<pre><code data-trim data-noescape>
+...
+# POST /posts
+def create
+    @post = Post.new(post_params)
+    if @post.save
+        render :show, status: :created, location: @post
+    else
+        render json: @post.errors, status: :unprocessable_entity
+    end
+end
+...
+</code></pre>
+
+                    <p>y aprovechemos de eliminar las vistas .html.erb innecesarias. &iquest;De qu&eacute; se trata el <strong>Post.new(post_params)</strong>?</p>
+                </section>
+
+                <section>
+                    <h2>Simple-Wordpress: publicar entradas</h2>
+                    <h4>Rails y sus <strong>Strong Parameters</strong></h4>
+
+                    <p>
+                        Cuando recibimos datos desde internet nunca debemos confiar de su contenido ni de su origen.
+                        Por esto realizamos validaciones a nuestros datos. Adem&aacute;s, rails nos permite filtrar que datos
+                        desde la petici&oacute;n vamos a utilizar.
+                    </p>
+
+<pre><code data-trim data-noescape>
+# Never trust parameters from the scary internet, only allow the white list through.
+def post_params
+    params.fetch(:post, {}).permit(:title, :content, :autor)
+end
+</code></pre>
+
+                    <p>
+                        Solamente permitiremos parámetros de nombre "title", "content" y "autor". De eso se trata el
+                        <strong>Post.new(post_params)</strong>.
+                    </p>
+                </section>
+
+                <section>
+                    <h2>Simple-Wordpress: publicar entradas</h2>
+
+                    <p>Veamos el flujo de nuestro m&eacute;todo create:</p>
+
+<pre><code data-trim data-noescape>
+# POST /posts
+def create
+    @post = Post.new(post_params)
+    if @post.save
+        render :show, status: :created, location: @post
+    else
+        render json: @post.errors, status: :unprocessable_entity
+    end
+end
+</code></pre>
+                    <ul>
+                        <li>
+                            Si la llamada <i>@post.save</i> retorna <i>true</i> entonces se hace un &quot;render&quot; de la
+                            acci&oacute;n &quot;show&quot;.
+                        </li>
+                        <li>
+                            Si <i>@post.save</i> falla entonces se retorna un arreglo de errores (<i>@post.errors</i>).
+                        </li>
+                        <li>Notar que siempre generamos un &quot;status&quot; HTTP adecuado.</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>Simple-Wordpress: publicar entradas</h2>
+                    <p>
+                        Revisemos el m&eacute;todo <i>show</i> puesto que al parecer es necesario dado que se utilizar&aacute; en una llamada
+                        correcta de <i>create</i>.
+                    </p>
+
+<pre><code data-trim data-noescape>
+# GET /posts/1
+def show
+end
+</code></pre>
+
+                    <p>
+                        &iquest;Qu&eacute; hace este c&oacute;digo? &iquest;Nada? Tratemos de comprender que est&aacute; haciendo la aplicaci&oacute;n. Para
+                        comenzar probemos nuestra API (por ahora solo tenemos el m&eacute;todo create!)
+                    </p>
+                </section>
+
+                <section>
+                    <h2>Simple-Wordpress</h2>
+                    <h3>Rails: iniciando nuestra aplicación</h3>
+
+                    <ul>
+                        <li>
+                            Podemos iniciar nuestra aplicación rails ejecutando:
+                        </li>
+                    </ul>
+
+<pre><code data-trim data-noescape>
+rails server
+    => Booting WEBrick
+    => Rails 4.2.5 application starting in development on http://localhost:3000
+    => Run `rails server -h` for more startup options
+    => Ctrl-C to shutdown server
+    [2016-08-13 00:33:50] INFO  WEBrick 1.3.1
+    [2016-08-13 00:33:50] INFO  ruby 2.2.0 (2014-12-25) [x86_64-darwin15]
+    [2016-08-13 00:33:50] INFO  WEBrick::HTTPServer#start: pid=98585 port=3000
+</code></pre>
+
+                    <ul>
+                        <li>
+                            Por defecto, rails posee un servidor integrado (WEBrick) el cual corre en el puerto 3000
+                            con nuestra aplicación.
+                        </li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>Simple-Wordpress</h2>
+                    <h4>Rails: iniciando nuestra aplicaci&oacute;n</h4>
+
+                    <p>Si nos dirigimos en nuestro navegador a http://localhost:3000 veremos algo como:</p>
+                    <img src="img/rails_home.png" alt="localhost:3000" style="width: 58%;">
+                </section>
+
+                <section>
+                    <h2>Simple-Wordpress</h2>
+                    <h4>Rails: iniciando nuestra aplicación</h4>
+
+                    <p>
+                        Esto es útil en una aplicación tradicional. Nosotros estamos construyendo una API. Para probar
+                        nuestra API necesitaremos un cliente REST.
+                    </p>
+
+                    <img src="img/postman.png" alt="Postman" style="width: 55%;">
+                </section>
+
+                <section>
+                    <h3>Simple-Wordpress: Probando la API</h3>
+
+                    <p>
+                        Hagamos una llamada POST a nuestra API en /posts (lo que se traduce al método <i>create</i>
+                        en nuestro controlador.
+                    </p>
+
+                    <img src="img/fail_post.png" alt="Fail POST">
+
+                    <p>Error 404: la ruta no existe! Arreglemos el error...</p>
+                </section>
+
+                <section>
+                    <h3>Simple-Wordpress: Routing</h3>
+                    <p>
+                        Rails utiliza un archivo de <i>routing</i> que indica que url's existen en la aplicación y que
+                        métodos se ejecutan para cada url: el archivo <strong>config/routes.rb</strong>.
+                    </p>
+
+                    <ul>
+                        <li>Agreguemos al routing las acciones de nuestro controlador:</li>
+                    </ul>
+
+<pre><code data-trim data-noescape>
+Rails.application.routes.draw do
+    resources :posts
+end
+</code></pre>
+                    <ul>
+                        <li>
+                            Ese código basta para que rails cree automáticamente cada url para nuestro PostController
+                            en un modo "RESTful compatible". Evidentemente, para que funcione, debe exister el controlador
+                            PostController.
+                        </li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3>Simple-Wordpress: Probando la API</h3>
+
+                    <p>
+                        Probemos nuevamente:
+                    </p>
+
+                    <img src="img/invalid_authenticity_error.png" alt="Fail POST">
+
+                    <p>???</p>
+                </section>
+
+                <section>
+                    <h3>Simple-Wordpress: Probando la API</h3>
+
+                    <p>
+                        Rails utiliza un mecanismo anti-hacking para evitar un ataque muy popular denominado
+                        <strong>CSRF attack</strong>. Esta fuera del contexto del curso discutir este ataque pero debemos
+                        resolver el error en nuestra aplicación.
+                    </p>
+
+                    <ul>
+                        <li>
+                            El error se produce porque rails al no poder verificar la protección CSRF lanza una
+                            <i>exception</i> lo que explica el error que estamos viendo.
+                        </li>
+                        <li>
+                            Como estamos desarrollando una API no nos interesa que rails despliegue un error del tipo
+                            <i>exception</i>. Podemos configurar este comportamiento en el archivo
+                            <strong>app/controllers/application_controller.rb</strong>.
+                        </li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3>Simple-Wordpress: Probando la API</h3>
+
+                    <p>
+                        Reconfiguremos nuestra aplicación para solucionar el error:
+                    </p>
+
+<pre><code data-trim data-noescape>
+class ApplicationController < ActionController::Base
+    # Prevent CSRF attacks by raising an exception.
+    # For APIs, you may want to use :null_session instead.
+    protect_from_forgery with: :exception
+end
+</code></pre>
+                    <p>
+                        Debería ser:
+                    </p>
+
+<pre><code data-trim data-noescape>
+class ApplicationController < ActionController::Base
+    protect_from_forgery with: :null_session
+end
+</code></pre>
+                </section>
+
+                <section>
+                    <h3>Simple-Wordpress: Probando la API</h3>
+
+                    <p>
+                        Probemos nuevamente:
+                    </p>
+
+                    <img src="img/post_ok_1.png" alt="POST Ok">
+
+                    <p>
+                        Por fin! se cre&oacute; el POST correctamente. Pero... &iexcl;no le pasamos ning&uacute;n dato del post!
+                        Necesitamos realizar una validaci&oacute;n antes de crear el post...
+                    </p>
+                </section>
+
+                <section>
+                    <h3>Simple-Wordpress: Validaci&oacute;n</h3>
+
+                    <p>
+                        Rails permite de manera muy sencilla validar los datos antes de crear una instancia de nuestros
+                        modelos. Para esto, agregamos reglas de validaci&oacute;n a nuestro modelo. Veamos un ejemplo:
+                    </p>
+
+                    Archivo: <i>app/models/post.rb</i>
+<pre><code data-trim data-noescape>
+class Post &lt; ActiveRecord::Base
+    validates :title, presence: true
+    validates :content, presence: true
+    validates :autor, presence: true
+end
+</code></pre>
+
+                    <p>
+                        Con esto, le estamos diciendo a rails que el <i>title</i>, <i>content</i> y <i>autor</i> deben
+                        estar de manera obligatoria al crear un nuevo post.
+                    </p>
+
+                </section>
+
+                <section>
+                    <h3>Simple-Wordpress: Validaci&oacute;n</h3>
+
+                    <p>
+                        Existen muchas reglas de validaci&oacute;n distintas en rails. Por ejemplo:
+                    </p>
+
+                    <ul>
+                        <li>Presence: la acabamos de utilizar en nuestro modelo.</li>
+                        <li>Length: valida que el dato ingresado tenga como largo un valor especificado (o rango).</li>
+                        <li>Numericality: valida que el dato ingresado sea num&eacute;rico.</li>
+                        <li>Uniqueness: valida que el dato ingresado sea &uacute;nico antes de ser ingresado en la DB.</li>
+                        <li>etc.</li>
+                    </ul>
+
+                    <p>
+                        Por ahora, para simplificar el código, en nuestro modelo solo utilizaremos <i>presence</i>.
+                    </p>
+                </section>
+
+                <section>
+                    <h3>Simple-Wordpress: Probando la API</h3>
+
+                    <p>
+                        Probemos nuevamente:
+                    </p>
+
+                    <img src="img/validation_error.png" alt="POST Validation ERROR">
+
+                    <p>
+                        Perfecto! La validaci&oacute;n est&aacute; funcionando de manera correcta.
+                        <small>
+                            Se pueden cambiar el idioma de los mensajes de validaci&oacute;n. Rails posee la funcionalidad de
+                            i18n (internationalization). Para m&aacute;s informaci&oacute;n ver <a href="http://guides.rubyonrails.org/i18n.html">
+                            http://guides.rubyonrails.org/i18n.html
+                        </a>
+                        </small>
+                    </p>
+                </section>
+
+                <section>
+                    <h4>Simple-Wordpress: Probando la API</h4>
+
+                    <p>
+                        Probemos nuevamente con datos reales:
+                    </p>
+
+                    <img src="img/post-created.png" alt="POST OK">
+
+                    <p>
+                        <small>Todo OK! Notar que el &quot;Content-Type&quot; de nuestra petici&oacute;n debe ser &quot;application/json&quot; sino rails
+                        no considerar&aacute; nuestros datos como v&aacute;lidos.</small>
+                    </p>
+                </section>
+
+                <section>
+                    <h4>Simple-Wordpress: Probando la API</h4>
+
+                    <p>
+                        Ahora que tenemos datos reales insertados en nuestra DB, veamos lo que nos retorna nuestra
+                        API al llamar al método <i>index</i> (GET /posts). Si vemos el código:
+                    </p>
+
+<pre><code data-trim data-noescape>
+def index
+    @posts = Post.all
+end
+</code></pre>
+
+                    <p>
+                        Es bastante auto-explicativo. Se está llamando al método <i>all</i> del modelo Post. Este
+                        método existe en todos los modelos de rails (que descienden de ActiveRecord::Base) y trae
+                        todos los registros de la base de datos para ese modelo.
+                    </p>
+                    <p>
+                        Además, asigna ese listado de registros a la variable @post (llamada <strong>variable de
+                        instancia</strong> en ruby, en oposición a una variable local).
+                    </p>
+                </section>
+
+                <section>
+                    <h4>Simple-Wordpress: Probando la API</h4>
+
+                    <p>
+                        Veamos que response la API a un GET en /posts:
+                    </p>
+
+                    <img src="img/get_all.png" alt="GET ALL">
+                </section>
+
+                <section>
+                    <h4>Simple-Wordpress: Probando la API</h4>
+
+                    <p>
+                        Se ve bien. Tenemos 2 datos, pero no vemos la información del título, contenido ni el autor!
+                        El archivo que se encarga de mostrar ese json se encuentra en <strong class="second-color">
+                        app/views/posts/index.json.builder
+                    </strong>:
+                    </p>
+
+<pre><code data-trim data-noescape>
+json.array! @posts, partial: 'posts/post', as: :post
+</code></pre>
+
+                    <p>
+                        Nos esta diciendo que renderizará un arreglo json (json.array!) proveniente desde la variable
+                        <strong>@post</strong> (que viene del controlador). Pero, cada elemento del arreglo lo renderizará
+                        utilizando una vista <i>partial</i> ubicada en app/views/posts/_post.json.jbuilder (por defecto
+                        los partials se reconocen porque en el nombre del archivo se utiliza un '_' al comienzo).
+                    </p>
+                </section>
+
+                <section>
+                    <h4>Simple-Wordpress: Probando la API</h4>
+
+                    <p>
+                        Archivo <strong class="second-color">app/views/posts/_post.json.builder</strong>:
+                    </p>
+
+<pre><code data-trim data-noescape>
+json.extract! post, :id, :created_at, :updated_at
+json.url post_url(post, format: :json)
+</code></pre>
+
+                    <p>
+                        <i>json.extract! extrae ciertos atributos desde la variable <i>post</i> (&iquest;recuerdan el
+                        <strong>as: :post</strong> en el index.json.jbuilder?)</i>. Por ahora solo extrae el id y los
+                        datos de timestamp. Agreguemos el t&iacute;tulo, contenido y el autor:
+                    </p>
+
+<pre><code data-trim data-noescape>
+json.extract! post, :id, :title, :content, :autor, :created_at, :updated_at
+json.url post_url post
+</code></pre>
+                    <p>
+                        Adem&aacute;s, podemos borrar el formato en el json.url ya que siempre ser&aacute; json. PREGUNTA:
+                        <strong class="second-color">&iquest;Para qu&eacute; sirve el json.url?</strong>
+                    </p>
+                </section>
+
+                <section>
+                    <h4>Simple-Wordpress: Probando la API</h4>
+
+                    <p>
+                        GET /posts:
+                    </p>
+
+                    <img src="img/get_all_full.png" alt="GET ALL" style="width: 75%;">
+                </section>
+
+                <section>
+                    <h4>Simple-Wordpress: Probando la API</h4>
+
+                    <p>
+                        Veamos si podemos ver la informaci&oacute;n de solamente 1 post. Por ejemplo: GET /posts/2 (aqu&iacute;
+                        cobra sentido el json.url y lo que devuelve el GET /posts):
+                    </p>
+
+                    <img src="img/get_2.png" alt="GET ALL">
+                </section>
+
+                <section>
+                    <h4>Simple-Wordpress: Probando la API</h4>
+
+                    <p>
+                        Perfecto, funcion&oacute; y ni siquiera tuvimos que cambiar el c&oacute;digo. Esta es la ventaja de rails, solo
+                        tienes que configurar el framework una sola vez y luego el desarrollo es muy r&aacute;pido. Para
+                        referencia, el c&oacute;digo que permite esto es el m&eacute;todo <i>show</i> (y <i>set_post</i>)
+                        de nuestro controlador y la vista <i>show.json.jbuilder</i> que genera el output json.
+                    </p>
+
+                    M&eacute;todo show:
+<pre><code data-trim data-noescape>
+# GET /posts/1
+def show
+end
+</code></pre>
+
+                    Archivo: show.json.jbuilder
+<pre><code data-trim data-noescape>
+json.partial! &quot;posts/post&quot;, post: @post
+</code></pre>
+                </section>
+
+                <section>
+                    <h4>Simple-Wordpress: Eliminando registros</h4>
+
+                    <p>
+                        Solo nos queda poder eliminar registros desde nuestra API. Para esto, rails amablemente ha creado
+                        para nosotros el método <i>destroy</i> en nuestro controlador:
+                    </p>
+
+<pre><code data-trim data-noescape>
+# DELETE /posts/1
+# DELETE /posts/1.json
+def destroy
+    @post.destroy
+    respond_to do |format|
+        format.html { redirect_to posts_url, notice: 'Post was successfully destroyed.' }
+        format.json { head :no_content }
+    end
+end
+</code></pre>
+
+                    <p>Modifiquémoslo según lo que ya sabemos:</p>
+
+<pre><code data-trim data-noescape>
+# DELETE /posts/1
+def destroy
+    @post.destroy
+    head :no_content
+end
+</code></pre>
+                </section>
+
+                <section>
+                    <h4>Simple-Wordpress: Probando la API</h4>
+
+                    <p>
+                        Veamos si funciona:
+                    </p>
+
+                    <img src="img/delete.png" alt="DELETE">
+
+                    <p>
+                        Notar el HTTP code de respuesta: <strong>204 No Content</strong>. Es est&aacute;ndar para peticiones
+                        DELETE. Verifiquemos que efectivamente se elimin&oacute;...
+                    </p>
+                </section>
+
+                <section>
+                    <h4>Simple-Wordpress: Probando la API</h4>
+
+                    <p>
+                        GET a /posts para ver todos los post
+                    </p>
+
+                    <img src="img/get_all_after_delete.png" alt="GET all after DELETE">
+                </section>
+
+                <section>
+                    <h2>Simple-Wordpress</h2>
+                    <h4>TAREA: modifiquen el controlador para poder ejecutar una actualizaci&oacute;n de un post</h4>
+                    <p>
+                        Para esto utilizaremos el m&eacute;todo PUT de HTTP (en Postman). &iquest;Qu&eacute; m&eacute;todo del controlador debemos
+                        modificar y adaptar?
+                    </p>
+                </section>
+
+                <section>
+                    <h2>Simple-Wordpress</h2>
+                    <h4>TAREA2: Crear un sistema de comentarios para el blog</h4>
+                    <p>
+                        Deber&aacute;n investigar sobre relaciones en rails y aplicar lo que ya hemos visto.
+                    </p>
+                </section>
+
+                <section>
+                    <h2>&iquest;Comentarios y consultas?</h2>
+                </section>
+            </div>
+		</div>
+
+		<script src="../revealjs/lib/js/head.min.js"></script>
+		<script src="../revealjs/js/reveal.js"></script>
+
+		<script>
+			// More info https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				history: true,
+				slideNumber: true,
+
+				// More info https://github.com/hakimel/reveal.js#dependencies
+				dependencies: [
+					{ src: '../revealjs/plugin/markdown/marked.js' },
+					{ src: '../revealjs/plugin/markdown/markdown.js' },
+					{ src: '../revealjs/plugin/notes/notes.js', async: true },
+					{ src: '../revealjs/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+				]
+			});
+		</script>
+	</body>
+</html>
