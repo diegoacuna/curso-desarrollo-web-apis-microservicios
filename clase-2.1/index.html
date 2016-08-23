@@ -1,0 +1,195 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>Desarrollo web orientado a API's y Microservicios - Clase 2.1</title>
+
+		<link rel="stylesheet" href="../revealjs/css/reveal.css">
+		<link rel="stylesheet" href="../revealjs/css/theme/league.css">
+		<link rel="stylesheet" href="../revealjs/css/bootstrap.css">
+		<link rel="stylesheet" href="../revealjs/css/main.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="../revealjs/lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? '../revealjs/css/print/pdf.css' : '../revealjs/css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+
+				<section>
+                    <h2>Desarrollo web orientado a API's y Microservicios</h2>
+                    <h4>Un enfoque moderno</h4>
+                    <h5 class="actual-session">Clase 2.1</h5>
+                    <p>
+                        <small>
+                            Diego Acu&ntilde;a Rozas<br>
+                            Ing. Civil en Inform&aacute;tica - UTFSM<br>
+                            <a href="mailto:diego.acuna@mailbox.org">diego.acuna@mailbox.org</a>
+                        </small>
+                    </p>
+                </section>
+
+				<section>
+                    <h2>Clase de hoy</h2>
+
+                    <p>
+                        Vamos a aprender a desarrollar API&apos;s (backend). La idea es introducir los conceptos
+                        claves de una API REST de manera pr&aacute;ctica.
+                    </p>
+                    <ul>
+                        <li>Repaso general, dar contexto</li>
+                        <li>Rails</li>
+                        <li>API REST con Rails: simple-wordpress</li>
+                        <li>Comentarios finales</li>
+                    </ul>
+                </section>
+
+
+                <section>
+                    <h2>&iquest;En qu&eacute; estamos?</h2>
+
+                    <ul>
+                        <li>
+                            Desarrollo web
+                            <ul>
+                                <li>Contraste entre los sistemas cliente-servidor cl&aacute;sicos y nuestro enfoque moderno</li>
+                                <li>&iquest;Qu&eacute; hace el servidor?</li>
+                                <li>&iquest;Qu&eacute; hace el cliente?</li>
+                                <li>
+                                    &iquest;Cu&aacute;les son las diferencias en las funciones del cliente y servidor entre el enfoque
+                                    tradicional con nuestro enfoque moderno?
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>El servidor</h2>
+
+                    <ul>
+                        <li>Principalmente procesa datos/informaci&oacute;n</li>
+                        <li>Patr&oacute;n MVC: el servidor (c&oacute;digo de la aplicaci&oacute;n) es la C en MVC</li>
+                        <li>
+                            <strong>Observación:</strong> la frase anterior omite el real significado de "servidor".
+                        </li>
+                    </ul>
+
+                    <img src="img/mvc.jpg" alt="MVC">
+                </section>
+
+                <section>
+                    <h2>El cliente</h2>
+
+                    <ul>
+                        <li>Reconozcamos quien es el cliente</li>
+                        <li>&iquest;Cu&aacute;l es su funci&oacute;n?</li>
+                        <li>En los sistemas tradicionales: &iquest;Qu&eacute; hace y qu&eacute; no hace?</li>
+                    </ul>
+
+                    <img src="img/browsers.jpg" alt="Web Browsers">
+                </section>
+
+                <section>
+                    <h2>Contexto</h2>
+
+                    <ul>
+                        <li>
+                            Estamos construyendo aplicaciones web en forma de una API REST
+                            <ul>
+                                <li>
+                                    Ya no devolvemos &quot;vistas&quot; al cliente (c&oacute;digo html que representa una interfaz
+                                    gr&aacute;fica con los datos que procesa el servidor)
+                                </li>
+                                <li>
+                                    Solo devolvemos los datos procesados por el servidor en forma de algún formato
+                                    en particular (<strong>JSON</strong>, XML, etc.)
+                                </li>
+                                <li>
+                                    Dejamos el trabajo de desplegar la interfaz gr&aacute;fica al cliente (navegador web).
+                                    Las tecnologías del lado del cliente cobran alta importancia (javascript!)
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>&iquest;Qu&eacute; estamos haciendo?</h2>
+
+                    <ul>
+                        <li>
+                            Vamos a hablar de Backend y Frontend. En nuestro enfoque moderno ahora est&aacute;n realmente
+                            separados.
+                        </li>
+                        <li>
+                            <strong>BACKEND:</strong> nuestra lógica de negocio desde el lado del servidor. En términos
+                            prácticos será nuestro código fuente que correra en el servidor: rails (ruby), expressJS
+                            (javascript), Play (scala), Django (python), algún framework en php, etc.
+                        </li>
+                        <li>
+                            <strong>FRONTEND:</strong> nuestra interfaz gráfica con la que el usuario final interactúa,
+                            es decir, lo que se ve en el navegador web. La construimos con html, css y javascript.
+                        </li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>Volvamos a Rails</h2>
+                    <p><a href="../clase-2/index.html#/6">(volver a diapositiva de clase 2)</a></p>
+                </section>
+
+                <section>
+                    <h2>Proyecto del curso</h2>
+
+                    <ul>
+                        <li>M&aacute;ximo grupos de 3</li>
+                        <li>
+                            Desarrollar una aplicación web de mediana complejidad (interacción con una base de datos,
+                            uso de alguna API externa como facebook, google, etc)
+                        </li>
+                        <li>
+                            Desarrollo tanto del backend como del frontend.
+                        </li>
+                        <li>
+                            Pueden utilizar las tecnologías que ustedes deseen.
+                        </li>
+                        <li>
+                            <strong>El backend debe ser una API REST.</strong>
+                        </li>
+                    </ul>
+                </section>
+            </div>
+		</div>
+
+		<script src="../revealjs/lib/js/head.min.js"></script>
+		<script src="../revealjs/js/reveal.js"></script>
+
+		<script>
+			// More info https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				history: true,
+				slideNumber: true,
+
+				// More info https://github.com/hakimel/reveal.js#dependencies
+				dependencies: [
+					{ src: '../revealjs/plugin/markdown/marked.js' },
+					{ src: '../revealjs/plugin/markdown/markdown.js' },
+					{ src: '../revealjs/plugin/notes/notes.js', async: true },
+					{ src: '../revealjs/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+				]
+			});
+		</script>
+	</body>
+</html>
