@@ -11,3 +11,6 @@ Temario de clases
 
   * **Clase 1** - Introducción a API’s REST y arquitecturas basadas en microservicios: motivación y escenario actual
   * **Clase 2** - Backend y herramientas para su desarrollo (parte 1): rails, stack MEAN.
+    * **Clase 2.1** - Repaso general de API's REST y continuación Rails
+  * **Clase 3** PENDIENTE
+  * **Clase 4** - Test Driven Development y Behavior Driven Development

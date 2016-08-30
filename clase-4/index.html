@@ -1,0 +1,1040 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>Desarrollo web orientado a API's y Microservicios - Clase 4</title>
+
+		<link rel="stylesheet" href="../revealjs/css/reveal.css">
+		<link rel="stylesheet" href="../revealjs/css/theme/league.css">
+		<link rel="stylesheet" href="../revealjs/css/bootstrap.css">
+		<link rel="stylesheet" href="../revealjs/css/main.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="../revealjs/lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? '../revealjs/css/print/pdf.css' : '../revealjs/css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+
+				<section>
+                    <h2>Desarrollo web orientado a API's y Microservicios</h2>
+                    <h4>Un enfoque moderno</h4>
+                    <h5 class="actual-session">Clase 4</h5>
+                    <p>
+                        <small>
+                            Diego Acu&ntilde;a Rozas<br>
+                            Ing. Civil en Inform&aacute;tica - UTFSM<br>
+                            <a href="mailto:diego.acuna@mailbox.org">diego.acuna@mailbox.org</a>
+                        </small>
+                    </p>
+                </section>
+
+				<section>
+                    <h2>Clase de hoy</h2>
+
+                    <p>
+                        Vamos a hablar de testing.
+                    </p>
+                    <ul>
+                        <li>
+                            Test Driven Development
+                            <ul>
+                                <li>Sobre el testing</li>
+                                <li>Filosof&iacute;a TDD</li>
+                                <li>¿Realmente sirve?</li>
+                            </ul>
+                        </li>
+                        <li>TDD en la pr&aacute;ctica</li>
+                        <li>Behavior Driven Development</li>
+                        <li>BDD en la pr&aacute;ctica</li>
+                    </ul>
+                </section>
+
+
+                <section>
+                    <h2>Testing</h2>
+
+                    <ul>
+                        <li>
+                            Lo que nos interesa es la calidad del software que constru&iacute;mos
+                            <ul>
+                                <li>
+                                    Podemos definir y medir calidad utilizando distintas metodolog&iacute;as
+                                </li>
+                                <li>
+                                    &iquest;A qui&eacute;n le importa la calidad?
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <p>
+                        En la práctica
+                    </p>
+
+                    <ul>
+                        <li>
+                            Nuestro objetivo m&aacute;ximo es escribir c&oacute;digo sin errores
+                            <ul>
+                                <li>Reducir el tiempo que ocupamos en solucionar errores</li>
+                                <li>Reducir el tiempo de desarrollo: debugging, tiempo p&eacute;rdido solucionando problemas
+                                relacionados con la tecnolog&iacute;a</li>
+                                <li>Mantener el foco!</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3>Test Driven Development</h3>
+
+                    <p>
+                        Es una t&eacute;cnica de programaci&oacute;n con un enfoque que contrasta con el desarrollo tradicional. Se
+                        basa en dos puntos claves:
+                    </p>
+
+                    <ul>
+                        <li>Escribir los test primero</li>
+                        <li>Refactorizaci&oacute;n</li>
+                    </ul>
+
+                    <p>
+                        Tenemos que pensar y dise&ntilde;ar nuestros requerimientos antes de comenzar a escribir alguna
+                        l&iacute;nea de c&oacute;digo =&gt; IMHO esto es lo que diferencia a un desarrollador experto de un novato
+                    </p>
+
+                    <p>
+                        <strong>En resumen: TDD es acerca de transformar los requerimientos en pruebas de software.</strong>
+                    </p>
+                </section>
+
+                <section>
+                    <h3>Test Driven Development</h3>
+
+                    <img src="img/tdd_steps.jpg" alt="Ciclo de TDD" style="width: 30%;">
+                </section>
+
+                <section>
+                    <h4>Test Driven Development - Ciclo de vida</h4>
+
+                    <ol>
+                        <li>
+                            <strong>Seleccionar requerimiento</strong>: que vamos a desarrollar
+                        </li>
+                        <li>
+                            <strong>Escribir test</strong>: se escribe el test antes del c&oacute;digo funcional. Le da al
+                            desarrollador la perspectiva del cliente
+                        </li>
+                        <li>
+                            <strong>Ejecutar test (y fallar)</strong>: la prueba debe fallar ya que el c&oacute;digo no est&aacute;
+                            implementado
+                        </li>
+                        <li>
+                            <strong>Implementar</strong>: ahora s&iacute; escribimos el c&oacute;digo (de la manera m&aacute;s simple posible)
+                        </li>
+                        <li>
+                            <strong>Ejecutar test</strong> =&gt; (loop entre pasos 2 - 4)
+                        </li>
+                        <li>
+                            <strong>Refactorizar</strong>: reestructuramos el c&oacute;digo buscando mejorar su consistencia,
+                            claridad y eficiencia. Se altera la estructura del c&oacute;digo sin cambiar su comportamiento.
+                        </li>
+                        <li>
+                            <strong>Testing!</strong>: ejecutamos los test para asegurarnos que todo funciona OK!
+                        </li>
+                        <li><strong>Listo!</strong></li>
+                    </ol>
+                </section>
+
+                <section>
+                    <h3>Test Driven Development - &iquest;Sirve?</h3>
+
+                    <p>
+                        Al parecer s&iacute;: existe cierta evidencia de que aumenta la productividad en los equipos
+                        que adoptan TDD. Aunque los estudios realizados tienen fallas metodol&oacute;gicas.
+                    </p>
+                    <ul>
+                        <li>
+                            <i>&quot;A survey of evidence for test-driven development in academia&quot;</i> -
+                            C Desai, D Janzen, K Savage (2008)
+                        </li>
+                        <li>
+                            <i>&quot;Evaluating the efficacy of test-driven development: industrial case studies&quot;</i> -
+                            T Bhat, N Nagappan (2006)
+                        </li>
+                        <li>
+                            <i>&quot;Evaluating advantages of test driven development: a controlled experiment with professionals&quot;</i>
+                            - G Canfora, A Cimitile, F Garcia, M Piattini (2006)
+                        </li>
+                    </ul>
+
+                    <p>A&uacute;n as&iacute;...</p>
+                </section>
+
+                <section>
+                    <h3>Test Driven Development - Ventajas</h3>
+
+                    <ul>
+                        <li>
+                            Permite hacer cambios al c&oacute;digo de manera r&aacute;pida: basta con correr los test para asegurarse
+                            de que &quot;no echamos a perder nada&quot;
+                        </li>
+                        <li>
+                            Escribe solo el c&oacute;digo necesario: los test nos dan la seguridad de que nuestro trabajo est&aacute;
+                            completo
+                        </li>
+                        <li>
+                            Ayudan en la documentaci&oacute;n
+                        </li>
+                        <li>
+                            Feedback instant&aacute;neo, emocionalidad del programador
+                        </li>
+                    </ul>
+                    <img src="img/green_test.gif" alt="Green Tests" style="width: 20%;">
+
+                </section>
+
+                <section>
+                    <h3>Test Driven Development - En la pr&aacute;ctica</h3>
+
+                    <p>
+                        La metodolog&iacute;a TDD considera un framework para correr las pruebas que dise&ntilde;emos. De esta manera,
+                        el framework se encarga de autom&aacute;ticamente ejecutar las pruebas y de recolectar los resultados
+                        de estas. Actualmente hay una gran cantidad de frameworks de testing para cada lenguaje:
+                    </p>
+
+                    <ul>
+                        <li>PHP: <strong>phpunit</strong></li>
+                        <li>Python: <strong>unittest a.k.a PyUnit</strong></li>
+                        <li>Ruby: <strong>Test::Unit, RSpec</strong></li>
+                        <li>Java: <strong>JUnit</strong></li>
+                        <li>etc.</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3>Test Driven Development - En la pr&aacute;ctica</h3>
+
+                    <p>Ciclo de desarrollo utilizando TDD (en la pr&aacute;cica):</p>
+
+<pre><code data-trim data-noescape>
+test do
+  setup
+  ejecutar
+  verificar
+  teardown
+end
+</code></pre>
+
+                    <ul>
+                        <li><strong>setup</strong>: iniciar recursos, configuraciones, etc.</li>
+                        <li><strong>ejecutar</strong>: ponemos a prueba el sistema!</li>
+                        <li><strong>verificar</strong>: verificamos los resultados</li>
+                        <li><strong>teardown</strong>: reiniciamos el sistema a su estado inicial</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3>Test Driven Development - En la práctica</h3>
+
+                    <p>
+                        Veamos un ejemplo pr&aacute;ctico. Ya que en las clases anteriores estuvimos trabajando con ruby/rails
+                        vamos a hacer testing con ruby. As&iacute; adem&aacute;s aprovechamos de aprender m&aacute;s del lenguaje.
+                        Utilizaremos la gema RSpec.
+                    </p>
+
+                    <img src="img/rspec.png" alt="RSpec">
+
+                    <p>
+                        Comenzemos creando un proyecto de ejemplo...
+                    </p>
+                </section>
+
+                <section>
+                    <h3>Test Driven Development - En la práctica</h3>
+
+<pre><code data-trim data-noescape>
+mkdir testing-ejercicio-1
+vim Gemfile
+</code></pre>
+
+                    <p>El contenido del Gemfile define que usaremos RSpec:</p>
+
+                    <ul>
+                        <li>Gemfile</li>
+                    </ul>
+<pre><code data-trim data-noescape>
+source 'https://rubygems.org'
+
+gem 'rspec', '~> 3.0'
+</code></pre>
+
+                    <p>
+                        Para instalar:
+                    </p>
+
+<pre><code data-trim data-noescape>
+bundle install --binstubs
+bin/rspec --init
+ > create   .rspec
+ > create   spec/spec_helper.rb
+</code></pre>
+                </section>
+
+                <section>
+                    <h2>TDD con RSpec</h2>
+
+                    <p>
+                        Si la instalaci&oacute;n funcion&oacute; correctamente, RSpec crear&aacute; dos archivos al inicializarlo:
+                    </p>
+
+                    <ul>
+                        <li><strong>.rspec</strong>: <i>command line options</i> al ejecutar rspec</li>
+                        <li>
+                            <strong>spec/spec_helper.rb</strong>: configuraci&oacute;n al ejecutar los tests. Siempre es
+                            cargado (ver l&iacute;nea --require spec_helper en .rspec) por lo que se debe intentar mantener
+                            lo m&aacute;s &quot;liviano&quot; posible.
+                        </li>
+                    </ul>
+
+                    <p>
+                        Por defecto, nuestros test deben ir en el directorio /spec. Comencemos entonces a escribir
+                        algunos tests...
+                    </p>
+                </section>
+
+                <section>
+                    <h2>TDD con RSpec</h2>
+
+                    <p>
+                        Supongamos que estamos escribiendo una clase que contiene m&eacute;todos de utilidad para trabajar
+                        con strings. Por ejemplo, tendr&aacute; m&eacute;todo que permitan acortar strings si es que son muy extensas
+                        (agregando los s&iacute;mbolos ...), extraer partes de un string, etc.
+                    </p>
+
+                    <h3>REQ 1: invertir un string</h3>
+
+                    <p>
+                        Partamos con algo simple, queremos que dado un string, el m&eacute;todo nos retorne su versi&oacute;n invertida.
+                        Ej:
+                    </p>
+                    <p>
+                        INPUT = hola mundo =&gt; OUTPUT = odnum aloh
+                    </p>
+                    <p>
+                        Muy &uacute;til!
+                    </p>
+                </section>
+
+                <section>
+                    <h2>TDD REQ 1: Invertir un string</h2>
+
+                    <p>
+                        Debemos comenzar escribiendo el test, recuerden, el foco es en la funcionalidad! Entonces, crear
+                        un archivo en spec/string_utils_spec.rb:
+                    </p>
+
+<pre><code data-trim data-noescape>
+RSpec.describe StringUtils do
+
+  context "with a string" do
+    it "reverses a string" do
+      # FASE SETUP
+      str_utils = StringUtils.new
+
+      # FASE EJECUTAR
+      reversed_str = str_utils.reverse('hola mundo')
+
+      # FASE VERIFICAR
+      expect(reversed_str).to eq 'odnum aloh'
+    end
+  end
+
+end
+</code></pre>
+                </section>
+                <section>
+                    <h3>TDD REQ 1: Invertir un string</h3>
+
+                    <ul>
+                        <li>Se distinguen claramente las fases del test (no hay teardown en este caso)</li>
+                        <li><strong>Punto clave</strong>: &iexcl;VERIFICACI&Oacute;N!</li>
+                    </ul>
+
+                    <p>
+                        La verificaci&oacute;n se trata de asegurar que el resultado de nuestro m&eacute;todo o c&oacute;digo que estamos
+                        probando es comparable con alg&uacute;n valor que conocemos a priori. En RSpec:
+                    </p>
+
+                    <ul>
+                        <li>.to eq(valor): verifica que resultado es igual a <i>valor</i></li>
+                        <li>.not_to eq(valor): verifica resultado no sea igual a <i>valor</i></li>
+                        <li>.to be &gt;= valor: verifica que resultado sea mayor o igual a <i>valor</i></li>
+                        <li>etc.</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3>TDD REQ 1: Invertir un string</h3>
+
+                    <ul>
+                        <li>
+                            <i>context</i> y <i>it</i> crean un bloque donde ejecutamos c&oacute;digos. RSpec es un DSL que nos
+                            permite escribir los tests de manera m&aacute;s &quot;humana&quot;.
+                        </li>
+                    </ul>
+
+                    <p>
+                        Tenemos listo el test, ejecut&eacute;moslo para ver que sucede (en el directorio ra&iacute;z):
+                    </p>
+
+<pre><code data-trim data-noescape>
+bin/rspec --format doc
+
+&gt; /Users/dacuna/Development/curso-web-apis/clase-4/testing-ejercicio-1/spec/string_utils_spec.rb:1:in `<top (required)>&apos;: uninitialized constant StringUtils (NameError)
+    from /Users/dacuna/.rvm/gems/ruby-2.2.0/gems/rspec-core-3.5.2/lib/rspec/core/configuration.rb:1435:in `load&apos;
+    from /Users/dacuna/.rvm/gems/ruby-2.2.0/gems/rspec-core-3.5.2/lib/rspec/core/configuration.rb:1435:in `block in load_spec_files&apos;
+    from /Users/dacuna/.rvm/gems/ruby-2.2.0/gems/rspec-core-3.5.2/lib/rspec/core/configuration.rb:1433:in `each&apos;
+
+</code></pre>
+
+                    <p>
+                        El error fue: <strong>uninitialized constant StringUtils (NameError)</strong>. Es claro, fall&oacute;
+                        porque a&uacute;n no hemos creado la clase StringUtils con nuestro m&eacute;todo.
+                    </p>
+                </section>
+
+                <section>
+                    <h3>TDD REQ 1: Invertir un string</h3>
+
+                    <p>
+                        Veamos la clase StringUtils. La crearemos en un nuevo directorio lib/ y se llamar&aacute; string_utils.rb:
+                    </p>
+
+<pre><code data-trim data-noescape>
+class StringUtils
+
+  def reverse(to_reverse)
+
+  end
+
+end
+</code></pre>
+
+                    <p>
+                        Adem&aacute;s, debemos indicarle a nuestro test donde est&aacute; ubicada la clase. Editen spec/string_utils_spec.rb:
+                    </p>
+
+<pre><code data-trim data-noescape>
+require &apos;string_utils&apos;
+
+RSpec.describe StringUtils do
+    ...
+</code></pre>
+
+                    <p>No es necesario colocar lib/ en el require. RSpec lo hace por nosotros.</p>
+                </section>
+
+                <section>
+                    <h3>TDD REQ 1: Invertir un string</h3>
+
+                    <p>
+                        Ejecutemos el test nuevamente:
+                    </p>
+
+<pre><code data-trim data-noescape>
+bin/rspec --format doc
+
+&gt; StringUtils
+  with a string
+    reverses a string (FAILED - 1)
+
+Failures:
+
+  1) StringUtils with a string reverses a string
+     Failure/Error: expect(reversed_str).to eq &apos;odnum aloh&apos;
+
+       expected: &quot;odnum aloh&quot;
+            got: nil
+
+       (compared using ==)
+     # ./spec/string_utils_spec.rb:15:in `block (3 levels) in <top (required)>&apos;
+
+Finished in 0.02346 seconds (files took 0.15047 seconds to load)
+1 example, 1 failure
+
+Failed examples:
+
+rspec ./spec/string_utils_spec.rb:7 # StringUtils with a string reverses a string
+</code></pre>
+
+                    <p>
+                        Ahora s&iacute;! fall&oacute; porque el m&eacute;todo no hace lo que debe hacer. Reparemos esto.
+                    </p>
+                </section>
+
+                <section>
+                    <h3>TDD REQ 1: Invertir un string</h3>
+
+                    <p>
+                        Antes de escribir el c&oacute;digo de nuestro m&eacute;todo para invertir strings pensemos un momento cual
+                        ser&iacute;a la m&iacute;nima cantidad de cambios que debo hacerle a mi c&oacute;digo para que el test pase
+                        correctamente:
+                    </p>
+
+<pre><code data-trim data-noescape>
+class StringUtils
+
+  def reverse(to_reverse)
+    &apos;odnum aloh&apos;
+  end
+
+end
+</code></pre>
+
+                    <small>
+                        <strong>NOTA: En ruby no es necesario el &quot;return&quot;. La &uacute;ltima expresi&oacute;n dentro del contexto involucrado se
+                        retornar&aacute; autom&aacute;ticamente.</strong>
+                    </small>
+
+                    <p>
+                        &iquest;Est&aacute; correcto nuestro m&eacute;todo? &iquest;Hace lo que deber&iacute;a hacer?
+                        Preguntémosle a nuestro test...
+                    </p>
+                </section>
+
+                <section>
+                    <h3>TDD REQ 1: Invertir un string</h3>
+
+                    <pre><code data-trim data-noescape>
+bin/rspec --format doc
+
+> StringUtils
+  with a string
+    reverses a string
+
+Finished in 0.00136 seconds (files took 0.15886 seconds to load)
+1 example, 0 failures
+</code></pre>
+
+                    <p>
+                        ¡Pasó correctamente!
+                    </p>
+
+                    <p>
+                        <strong>LECCIÓN 1</strong>: Los tests pueden estar mal diseñados. Es claro que el error que
+                        cometimos es que no estamos testeando correctamente.
+                    </p>
+
+                    <p>
+                        <small>
+                            OBSERVACIÓN: si bien el ejemplo es sencillo y se ve ridículo el que el método retorne
+                            'odnum aloh', en la práctica con métodos más complejos es común que los tests estén mal
+                            diseñados. Este es un punto importante a notar cuando hacemos TDD. ¡Deben testear de manera
+                            correcta!
+                        </small>
+                    </p>
+                </section>
+
+                <section>
+                    <h3>TDD REQ 1: Invertir un string</h3>
+
+                    <p>
+                        Mejoremos nuestros tests. Escribamos un caso muy general, revertir un string generado aleatoriamente:
+                    </p>
+
+<pre><code data-trim data-noescape>
+require 'string_utils'
+
+RSpec.describe StringUtils do
+
+  context "with a string" do
+
+    ...
+    it "reverses a random string" do
+      str_utils = StringUtils.new
+
+      my_str = (0...8).map { (65 + rand(26)).chr }.join
+      reversed_str = str_utils.reverse(my_str)
+
+      expect(reversed_str).to eq my_str.reverse
+    end
+  end
+
+end
+</code></pre>
+
+                    <small>
+                        <strong>
+                            NOTA: ruby posee un método 'reverse' que invierte un string :( así que nuestro test es
+                            sencillo.
+                        </strong>
+                    </small>
+                </section>
+
+                <section>
+                    <h4>TDD REQ 1: Invertir un string</h4>
+
+                    <p>
+                        Aprovechemos de arreglar nuestro método (ya sabemos que el test va a fallar):
+                    </p>
+
+<pre><code data-trim data-noescape>
+class StringUtils
+
+  def reverse(to_reverse)
+    to_reverse.reverse
+  end
+
+end
+</code></pre>
+                    <p>Si ejecutamos los tests de nuevo: </p>
+
+                    <pre><code data-trim data-noescape>
+bin/rspec --format doc
+
+> StringUtils
+  with a string
+    reverses a string
+    reverses a random string
+
+Finished in 0.00129 seconds (files took 0.09004 seconds to load)
+2 examples, 0 failures
+</code></pre>
+
+                    <p>Todo OK!</p>
+                </section>
+
+                <section>
+                    <h2>TDD con RSpec</h2>
+
+                    <p>
+                        Ya sabemos como crear tests y probar nuestro c&oacute;digo utilizando RSpec. Veamos algunos ejercicios
+                        y tareas (usen TDD):
+                    </p>
+                    <ul style="font-size: 90%;">
+                        <li>
+                            Ejercicio (en clase) - REQ 2: dado un string escriba un m&eacute;todo que retorne los primeros
+                            n caracteres del string y si este es m&aacute;s largo que n entonces agregue &apos;...&apos; al final.
+                        </li>
+                        <li>
+                            Tarea (casa) - REQ 3: escriba un m&eacute;todo que dado un n&uacute;mero n retorne n palabras generadas
+                            desde el texto &apos;Lorem ipsum dolor sit amet, consectetur adipiscing elit&apos;
+                        </li>
+                        <li>
+                            Tarea (casa) - REQ 4: escriba un m&eacute;todo que reciba por par&aacute;metro una variable y un string.
+                            Si la variable es un string entonces el m&eacute;todo debe retornar dicha variable, sino entonces
+                            el m&eacute;todo retorna el string (segundo par&aacute;metro).
+                        </li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3>Algunos comentarios de RSpec</h3>
+
+                    <ul>
+                        <li>
+                            Hemos inicializado en cada test una instancia de nuestra clase. Podemos ahorrarnos ese
+                            código e inicializar la instancia solo 1 vez para toda la suite de tests:
+
+                            <pre><code data-trim data-noescape>
+before :each do
+    # FASE SETUP
+    @str_utils = StringUtils.new
+  end
+</code></pre>
+                            y luego en cada test (it "algo" do) utilizamos la variable de instancia <i>@str_utils</i>.
+                        </li>
+                        <li>
+                            Tenemos funcionalidades similares (<i>hooks</i>) para la fase de teardown.
+                        </li>
+                    </ul>
+
+                </section>
+
+                <section style="font-size: 90%;">
+                    <h3>Algunos comentarios de RSpec</h3>
+
+                    <ul>
+                        <li>
+                            <strong>¿Podemos utilizar RSpec para testing de nuestras aplicaciones rails?</strong>:
+                            SÍ <a href="https://github.com/rspec/rspec-rails">https://github.com/rspec/rspec-rails</a>.
+                            Receta:
+                            <ul>
+                                <li>
+                                    Agregar rspec-rails al Gemfile
+                                    <pre><code data-trim data-noescape>
+group :development, :test do
+  gem 'rspec-rails', '~> 3.5'
+end
+</code></pre>
+                                </li>
+                        </ul>
+                        </li>
+                        <li>
+                            Ejecutamos el bundle para instalar rspec e inicializamos nuestro directorio de specs:
+
+                            <pre><code data-trim data-noescape>
+bundle install
+rails generate rspec:install
+# para ejecutar los test utilizamos bundle exec rspec
+</code></pre>
+                        </li>
+
+                        <li>
+                            Desde ahora en adelante cada vez que utilicemos los generadores de rails (model, scaffold, etc.)
+                            automáticamente se crearán tests para nuestras clases. Es tarea de ustedes el completar los
+                            tests para que prueben todas sus funcionalidades.
+                        </li>
+                    </ul>
+
+                </section>
+
+                <section>
+                    <h2>Behavior Driven Development (BDD)</h2>
+
+                    <p>
+                        BDD es una t&eacute;cnica de testing que busca unir y proveer de un lenguaje com&uacute;n a la l&oacute;gica de
+                        negocio y la l&oacute;gica t&eacute;cnica de un software. Sus principios son:
+                    </p>
+
+                    <ul>
+                        <li>
+                            El negocio y la parte t&eacute;cnica deber&iacute;an tener un lenguaje en com&uacute;n para referirse a los
+                            requerimientos
+                        </li>
+                        <li>
+                            El software debe tener un valor identificable y verificable al &quot;negocio&quot;
+                        </li>
+                    </ul>
+
+                    <p>
+                        Suena un poco abstracto...
+                    </p>
+                </section>
+
+                <section>
+                    <h2>Behavior Driven Development (BDD)</h2>
+
+                    <p style="font-size: 90%;">
+                        Lo que buscamos es que la parte t&eacute;cnica de un proyecto pueda tener una comunicaci&oacute;n m&aacute;s
+                        flu&iacute;da con la parte no t&eacute;cnica (llam&eacute;mosla &quot;negocio&quot;). Queremos:
+                    </p>
+
+                    <ul style="font-size: 90%;">
+                        <li>
+                            Poder describir los requerimientos de un sistema en un mismo lenguaje, que sea entendido
+                            tanto por el negocio y tambi&eacute;n por la parte t&eacute;cnica
+                        </li>
+                        <li>
+                            El negocio y la parte t&eacute;cnica sean capaces de entender lo que debe ser constru&iacute;do y como debe
+                            funcionar el sistema
+                        </li>
+                        <li>
+                            Adem&aacute;s, como desarrolladores nos gustar&iacute;a que el negocio entienda las dificultades con las
+                            que nos podemos encontrar
+                        </li>
+                    </ul>
+
+                    <p>
+                        Es un proceso en conjunto entre el equipo t&eacute;cnico y el negocio.
+                    </p>
+                </section>
+
+                <section>
+                    <h3>BDD en la pr&aacute;ctica</h3>
+
+                    <p>
+                        Para entender un poco m&aacute;s el proceso, veamos como se utiliza. Seguiremos utilizando Ruby como
+                        lenguaje y para BDD utilizaremos el framework Cucumber.
+                    </p>
+
+                    <img src="img/cucumber-logo.png" alt="Cucumber">
+
+                    <p>
+                        Comencemos por agregar la dependencia a nuestro Gemfile:
+                    </p>
+
+                    <pre><code data-trim data-noescape>
+source &apos;https://rubygems.org&apos;
+
+gem &apos;rspec&apos;, &apos;~&gt; 3.0&apos;
+
+gem &apos;cucumber&apos;
+</code></pre>
+
+                    <small>
+                        Nota: RSpec viene de los ejemplos anteriores, pero es &uacute;til adem&aacute;s agregarlo ya que nos permite
+                        utilizar sus verificadores.
+                    </small>
+                </section>
+
+                <section>
+                    <h3>BDD en la pr&aacute;ctica</h3>
+
+                    <small>
+                        Nota: recuerden ejecutar bundle install --binstubs
+                    </small>
+
+                    <p>
+                        Supongamos que estamos desarrollando una calculadora. Nos reunimos con el equipo de negocio
+                        para escribir los requerimientos (para simplificaci&oacute;n los escribiremos en ingl&eacute;s a pesar de que
+                        cucumber tambi&eacute;n soporta el lenguaje espa&ntilde;ol). Un requerimiento es que la calculadora sume:
+                    </p>
+
+                    <pre><code data-trim data-noescape>
+Feature: Calculate Things
+
+  Scenario: using the plus button in the calculator
+    When I press the number 7
+    And the &quot;plus&quot; button
+    And the number 8
+    Then I should see 15
+</code></pre>
+
+                    <p>
+                        Los requerimientos est&aacute;n escritos en lenguaje natural siguiendo peque&ntilde;as reglas.
+                    </p>
+                </section>
+
+                <section>
+                    <h3>BDD en la pr&aacute;ctica</h3>
+
+                    <ul>
+                        <li>
+                            Definimos <i><strong>features</strong></i> las cuales son características funcionales de
+                            nuestro sistema.
+                        </li>
+                        <li>
+                            Definimos <i><strong>scenarios</strong></i> los que corresponde a funciones en particular
+                            de las <i>features</i>.
+                        </li>
+                        <li>
+                            Hay pequeñas reglas que nos permitirán luego construir los tests reales de manera más sencilla.
+                            Notar el uso de "When", "And" y "Then". Además, utilizar dichas palabras genera descripciones
+                            de requerimientos más claros.
+                        </li>
+                    </ul>
+
+                    <p>
+                        El requerimiento anterior se denomina <i>feature</i> en cucumber y se deben almacenar en el
+                        directorio features/ con la extensión .feature (features/calculator.feature por ejemplo).
+                    </p>
+                </section>
+
+                <section>
+                    <h3>BDD en la pr&aacute;ctica</h3>
+
+                    <p>
+                        Evidentemente que desde la perspectiva del testing, nuestro <i>feature</i> aún no hace nada.
+                        Para especificarle a cucumber como debe testear cada <i>feature</i> se utilizan los
+                        <i>step definitions</i>:
+                    </p>
+
+                    <ul>
+                        <li>
+                            Utilizan expresiones regulares para distinguir la parte importante de nuestro requerimiento
+                        </li>
+                        <li>
+                            Veamos un ejemplo:
+
+                            <pre><code data-trim data-noescape>
+When(/^I press the number (\d+)$/) do |number|
+  pending
+end
+</code></pre>
+                        </li>
+                    </ul>
+
+                    <p>
+                        Teníamos una línea en el feature que decía "When I press the number 7", escribimos entonces un
+                        step que permita extraer el número escrito en la feature (que es la parte importante para testear)
+                    </p>
+                </section>
+
+                <section>
+                    <h3>BDD en la pr&aacute;ctica - Steps definitions</h3>
+
+                    <p>
+                        Veamos todos los step definitions para nuestro requerimiento:
+                    </p>
+
+                    <pre><code data-trim data-noescape>
+When(/^I press the number (\d+)$/) do |number|
+  pending
+end
+
+And(/^the "([^"]*)" button$/) do |operator|
+  pending
+end
+
+And(/^the number (\d+)$/) do |number|
+  pending
+end
+
+Then(/^I should see (\d+)$/) do |result|
+  pending
+end
+</code></pre>
+                </section>
+
+                <section>
+                    <h3>BDD en la pr&aacute;ctica - Steps definitions</h3>
+
+                    <p>
+                        Ok! escribamos cada step con el código que debería hacer. Por los steps pareciera que deberíamos
+                        tener una clase Calculator y en cada paso agregar atributos para al final poder ejecutar
+                        la operación final (en el "Then").
+                    </p>
+
+                    <pre><code data-trim data-noescape>
+When(/^I press the number (\d+)$/) do |number|
+  @calculator = Calculator.new
+  @calculator.first_operator(number)
+end
+
+And(/^the "([^"]*)" button$/) do |operator|
+  @calculator.operator(operator)
+end
+
+And(/^the number (\d+)$/) do |number|
+  @calculator.second_operator(number)
+end
+
+Then(/^I should see (\d+)$/) do |result|
+  expect(result.to_i).to eq @calculator.calculate
+end
+</code></pre>
+                </section>
+
+                <section>
+                    <h3>BDD en la pr&aacute;ctica - Steps definitions</h3>
+
+                    <p>
+                        Claramente esto no a&uacute;n no funcionar&aacute; ya que no hemos escrito nuestra clase Calculator. Aprovechemos
+                        ahora de escribir dicha clase (lib/calculator.rb):
+                    </p>
+
+                    <pre><code data-trim data-noescape>
+class Calculator
+
+  def first_operator(num)
+    @first = num.to_i
+  end
+
+  def second_operator(num)
+    @second = num.to_i
+  end
+
+  def operator(op)
+    @operator = op
+  end
+
+  def calculate
+    case @operator
+      when 'plus'
+        @first + @second
+      when 'minus'
+        @first - @second
+      when 'times'
+        @first * @second
+      else
+        @first / @second
+    end
+  end
+
+end
+</code></pre>
+                </section>
+
+                <section>
+                    <h3>BDD en la pr&aacute;ctica - Probando nuestra feature</h3>
+
+                    <p>
+                        Ahora que tenemos todo listo, ejecutemos cucumber para verificar nuestras pruebas:
+                    </p>
+
+                    <pre><code data-trim data-noescape>
+cucumber
+> Feature: Calculate Things
+
+  Scenario: using the plus button in the calculator # features/calculator.feature:3
+    When I press the number 7                       # features/step_definitions/calculator_steps.rb:3
+    And the "plus" button                           # features/step_definitions/calculator_steps.rb:8
+    And the number 8                                # features/step_definitions/calculator_steps.rb:12
+    Then I should see 15                            # features/step_definitions/calculator_steps.rb:16
+
+1 scenario (1 passed)
+4 steps (4 passed)
+0m0.036s
+</code></pre>
+
+                    <p>
+                        Nuestras pruebas corrieron correctamente!<br><br>
+                        <small>
+                            En la pr&aacute;ctica nuestras <i>features</i> y <i>steps</i> describir&aacute;n y realizar&aacute;n testing
+                            de requerimientos de un sistema m&aacute;s complejo que nuestra simple calculadora.
+                        </small>
+                    </p>
+
+                </section>
+
+                <section>
+                    <h2>Conclusiones</h2>
+
+                    <ul>
+                        <li>
+                            El testing se trata acerca de la calidad de nuestro software. La calidad es importante tanto
+                            para el cliente (feliz) como para nosotros como desarrolladores (costo).
+                        </li>
+                        <li>
+                            TDD nos presenta un nuevo enfoque sobre como escribir el software. Nuestro objetivo es
+                            escribir software de calidad con menos esfuerzo.
+                        </li>
+                        <li>
+                            BDD busca unificar el lenguaje con el que describimos y entendemos el sistema que estamos
+                            construyendo tanto para la l&oacute;gica de negocio como para el &aacute;rea t&eacute;cnica.
+                        </li>
+                        <li>
+                            &iquest;Qu&eacute; opiniones tienen Uds. del testing luego de esta clase?
+                        </li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>&iquest;Consultas y comentarios?</h2>
+                </section>
+            </div>
+		</div>
+
+		<script src="../revealjs/lib/js/head.min.js"></script>
+		<script src="../revealjs/js/reveal.js"></script>
+
+		<script>
+			// More info https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				history: true,
+				slideNumber: true,
+
+				// More info https://github.com/hakimel/reveal.js#dependencies
+				dependencies: [
+					{ src: '../revealjs/plugin/markdown/marked.js' },
+					{ src: '../revealjs/plugin/markdown/markdown.js' },
+					{ src: '../revealjs/plugin/notes/notes.js', async: true },
+					{ src: '../revealjs/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+				]
+			});
+		</script>
+	</body>
+</html>
