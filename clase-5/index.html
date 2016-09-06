@@ -1,0 +1,1159 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>Desarrollo web orientado a API's y Microservicios - Clase 4</title>
+
+		<link rel="stylesheet" href="../revealjs/css/reveal.css">
+		<link rel="stylesheet" href="../revealjs/css/theme/league.css">
+		<link rel="stylesheet" href="../revealjs/css/bootstrap.css">
+		<link rel="stylesheet" href="../revealjs/css/main.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="../revealjs/lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? '../revealjs/css/print/pdf.css' : '../revealjs/css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+
+				<section>
+                    <h2>Desarrollo web orientado a API's y Microservicios</h2>
+                    <h4>Un enfoque moderno</h4>
+                    <h5 class="actual-session">Clase 5</h5>
+                    <p>
+                        <small>
+                            Diego Acu&ntilde;a Rozas<br>
+                            Ing. Civil en Inform&aacute;tica - UTFSM<br>
+                            <a href="mailto:diego.acuna@mailbox.org">diego.acuna@mailbox.org</a>
+                        </small>
+                    </p>
+                </section>
+
+				<section>
+                    <h2>Clase de hoy</h2>
+
+                    <p>
+                        Continuando con el backend: Stack MEAN.
+                    <ul>
+                        <li>Javascript en el lado del servidor</li>
+                        <li>MongoDB</li>
+                        <li>Blog en MEAN</li>
+                        <li>Comentarios finales</li>
+                    </ul>
+
+                    <p>
+                        Estudiaremos el stack de una forma que les permita analizar a futuro otras tecnolog&iacute;as
+                        que deseen utilizar. Es importante explorar las herramientas que quieran utilizar y conocer
+                        sus ventajas y desventajas antes de comenzar a desarrollar código en mayor profundidad.
+                    </p>
+                </section>
+
+                <section>
+                    <h2>Server-Side Javascript</h2>
+
+                    <p>
+                        Tradicionalmente conocemos javascript como un lenguaje client-side de la web (en palabras
+                        simples: solo lo ocupabamos en el navegador). Con la aparici&oacute;n de
+                        <a href="https://nodejs.org/en/">Node.js</a> el panorama cambi&oacute;:
+                    </p>
+
+                    <ul>
+                        <li>
+                            Permiti&oacute; la creaci&oacute;n de aplicaciones utilizando javascript en el lado del servidor.
+                        </li>
+                        <li>
+                            Tiene propiedades interesantes: altamente escalable, as&iacute;ncrono, orientado a eventos.
+                        </li>
+                        <li>
+                            Homogeneidad: javascript en todas las capas =&gt; server-side, client-side, potencialmente
+                            en la base de datos (soporte json)
+                        </li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3>Arquitectura de Node.js</h3>
+
+                    <img src="img/node-model.png" alt="Arquitectura de Node.js" style="width: 48%;">
+                </section>
+
+                <section>
+                    <h3>Stack MEAN</h3>
+
+                    <p>
+                        La idea es utilizar javascript en todas las capas de nuestra aplicaci&oacute;n:
+                    </p>
+
+                    <ul>
+                        <li>
+                            <strong>MongoDB</strong>: Base de datos orientada a documentos (en formato JSON)
+                        </li>
+                        <li>
+                            <strong>ExpressJS</strong>: framework de aplicaciones web &quot;lightweight&quot;
+                        </li>
+                        <li>
+                            <strong>AngularJS</strong>: framework javascript client-side. &quot;HTML enhanced for web apps!&quot;
+                        </li>
+                        <li>
+                            <strong>Node.js</strong>: javascript runtime environment. El &quot;n&uacute;cleo&quot; de MEAN
+                        </li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3>Stack MEAN: requerimientos</h3>
+
+                    <p>
+                        Recuerden que el foco es desarrollar el backend de nuestra API REST, por este motivo por
+                        ahora dejaremos AngularJS de lado y solo nos enfocaremos en las tecnolog&iacute;as server-side.
+                    </p>
+
+                    <ul>
+                        <li>
+                            <a href="http://nodejs.org/download/">
+                                Node.js</a>: (ubuntu=apt-get, fedora/centOS=yum, o desde las fuentes=make - make install)
+                        </li>
+                        <li>
+                            <a href="https://www.mongodb.org/downloads">MongoDB</a>: instrucciones para cada OS en el
+                            sitio de MongoDB
+                        </li>
+                        <li>
+                            Grunt: herramienta de construcci&oacute;n de apps (build tool) para javascript
+<pre><code data-trim data-noescape>
+npm install -g grunt-cli
+</code></pre>
+                        </li>
+                        <li>
+                            bower: gestor de dependencias para javascript
+
+<pre><code data-trim data-noescape>
+npm install -g bower
+</code></pre>
+                        </li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3>Stack MEAN: requerimientos</h3>
+
+                    <p>
+                        Si bien, para nuestro stack solo necesitamos MongoDB (ya lo instalamos), Node.js (ya lo instalamos),
+                        AngularJS (no lo utilizaremos por ahora), solo nos queda instalar ExpressJS y podremos comenzar
+                        a desarrollar.
+                    </p>
+
+                    <ul>
+                        <li>
+                            <a href="http://meanjs.org/">MEAN.js</a>: provee de una estructura inicial para nuestro
+                            proyecto basado en el stack MEAN. Es muy &uacute;til para que no tengamos que estar configurando
+                            todo nosotros.
+                        </li>
+                    </ul>
+
+<pre><code data-trim data-noescape>
+npm install -g bower
+npm install -g grunt-cli
+npm install -g yo #yeoman
+npm install -g generator-meanjs
+yo meanjs
+</code></pre>
+
+                    <small>
+                        OBSERVACI&Oacute;N: npm es el gestor de paquetes de node.js. Actualmente, al instalar node.js npm
+                        viene inclu&iacute;do por defecto. Yeoman es un &quot;generador autom&aacute;tico&quot; de aplicaciones.
+                    </small>
+                </section>
+
+                <section>
+                    <h2>Grunt</h2>
+                    <p style="font-size: 80%;">
+                        Grunt nos permitir&aacute; ejecutar de forma autom&aacute;tica tareas que realizaremos de manera repetitiva en
+                        nuestro workflow. Es una herramienta simple de configurar y muy &uacute;til (en cualquiero tipo de
+                        proyectos web no solo en el stack MEAN).
+                    </p>
+
+                    <img src="img/grunt.png" alt="Grunt" style="width: 50%;">
+
+                    <p style="font-size: 80%;">
+                        Grunt se basa en la configuraci&oacute;n de tareas a ejecutar, el repositorio de Grunt nos provee de
+                        un gran conjunto de tareas &uacute;tiles ya programadas:
+                        <a href="http://gruntjs.com/plugins">http://gruntjs.com/plugins</a>
+                    </p>
+                </section>
+
+                <section>
+                    <h2>Stack MEAN</h2>
+
+                    <p>
+                        Si la instalaci&oacute;n de las dependencias (con npm) y nuestra instalaci&oacute;n de MongoDB la realizamos
+                        correctamente entonces al ejecutar (desde el directorio de nuestra app):
+                    </p>
+
+<pre><code data-trim data-noescape>
+grunt
+</code></pre>
+
+                    <p>
+                        se ejecutar&aacute; autom&aacute;ticamente la tarea por defecto de nuestra configuraci&oacute;n Grunt. Dicha tarea
+                        inicia nuestra aplicaci&oacute;n y el servidor de node en el puerto 3000 (http://localhost:3000):
+                    </p>
+
+                    <img src="img/mean.png" alt="MEAN App" style="width: 60%;">
+                </section>
+
+                <section>
+                    <h3>Nuestro blog en MEAN</h3>
+
+                    <p>
+                        <small>OBSERVACI&Oacute;N: Recuerden que solo estamos desarrollando el backend por lo que la vista anterior era solo para
+                        verificar que nuestra instalaci&oacute;n fue correcta.
+                        </small>
+                    </p>
+
+                    <p>
+                        Veamos la estructura de nuestra aplicaci&oacute;n para entender que partes modificar:
+                    </p>
+
+                    <ul style="font-size:90%;">
+                        <li>
+                            <strong>config/</strong>: archivos de configuraci&oacute;n de la app. Se separan por
+                            <i>environments</i>. El concepto es similar a rails.
+                        </li>
+                        <li>
+                            <strong>modules/</strong>: el c&oacute;digo de nuestra app en s&iacute;. MEAN.js separa una app en modulos
+                            (para reutilizaci&oacute;n). Similar a por ejemplo frameworks como Django o Symfony.
+                        </li>
+                        <li>
+                            <strong>modules/mi_modulo/client</strong>: frontend de la aplicaci&oacute;n (AngularJS).
+                        </li>
+                        <li>
+                            <strong>modules/mi_modulo/server</strong>: backend de la aplicaci&oacute;n
+                        </li>
+                        <li>
+                            <strong>bower.json</strong>: archivo de dependencias del frontend.
+                        </li>
+                        <li>
+                            <strong>package.json</strong>: archivo de dependencias del backend.
+                        </li>
+                    </ul>
+
+                    <p>
+                        Nos enfocaremos en el c&oacute;digo del backend (modules/mi_modulo/server).
+                    </p>
+                </section>
+
+                <section>
+                    <h3>Nuestro blog en MEAN</h3>
+
+                    <p>
+                        Al iniciar la aplicaci&oacute;n con yeoman, nos deberia haber consultado si es que quer&iacute;amos el m&oacute;dulo
+                        de art&iacute;culos como ejemplo en nuestra app. Para simplificar el desarrollo coloquemos que s&iacute;. As&iacute;
+                        comenzaremos con un codebase de ejemplo.
+                    </p>
+
+                    <img src="img/articles-module.png" alt="Modulo de articulos" style="width: 30%;">
+                </section>
+
+                <section>
+                    <h3>Blog en MEAN: Modelo</h3>
+
+                    <p>
+                        En el directorio <i>modules/articles/server/models</i> encontraremos el archivo de modelo para
+                        un post de nuestro blog: <i>article.server.model.js</i>:
+                    </p>
+
+<pre><code data-trim data-noescape>
+'use strict';
+
+/**
+ * Module dependencies.
+ */
+var mongoose = require('mongoose'),
+  Schema = mongoose.Schema;
+
+/**
+ * Article Schema
+ */
+var ArticleSchema = new Schema({
+  created: {
+    type: Date,
+    default: Date.now
+  },
+  title: {
+    type: String,
+    default: '',
+    trim: true,
+    required: 'Title cannot be blank'
+  },
+  content: {
+    type: String,
+    default: '',
+    trim: true
+  },
+  user: {
+    type: Schema.ObjectId,
+    ref: 'User'
+  }
+});
+
+mongoose.model('Article', ArticleSchema);
+</code></pre>
+                </section>
+
+                <section>
+                    <h3>MongoDB</h3>
+
+                    <p>
+                        Recordemos que no estamos trabajando con un motor de DB relacional si no que estamos utilizando
+                        MongoDB. MongoDB es un motor que almacena documentos en formato JSON. Algunas propiedades:
+                    </p>
+
+                    <ul style="font-size:90%;">
+                        <li>
+                            <i>Schemaless:</i> en MongoDB no tenemos esquemos fijos para definir los documentos que
+                            guardemos. Cada instancia de un documento puede poseer atributos distintos.
+                        </li>
+                        <li>
+                            <i>Escalabilidad:</i> en general los motores documentales poseen buenas capacidades de
+                            escalabilidad dado que dejan de lado algunas otras propiedades de los motores relacionales
+                            (ACID).
+                        </li>
+                        <li>
+                            Modelo auto-descriptivo: basta con ver un documento para comprender la colecci&oacute;n con la
+                            que estamos trabajando.
+                        </li>
+                        <li>
+                            Modelo simple: MongoDB trabaja con objetos JSON.
+                        </li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3>Mongoose</h3>
+
+                    <p>
+                        Es &uacute;til disponer de software que nos permita trabajar m&aacute;s comodamente con nuestra base de datos.
+                        En rails utilizabamos <i>ActiveRecord</i>. Para el stack MEAN la herramienta seleccionada es
+                        Mongoose. Mongoose provee una herramienta sencilla para modelar nuestros objetos desde y hacia
+                        MongoDB y nuestra app:
+                    </p>
+
+<pre><code data-trim data-noescape>
+var mongoose = require(&apos;mongoose&apos;);
+mongoose.connect(&apos;mongodb://localhost/test&apos;);
+
+var Cat = mongoose.model(&apos;Cat&apos;, { name: String });
+
+var kitty = new Cat({ name: &apos;Zildjian&apos; });
+kitty.save(function (err) {
+  if (err) {
+    console.log(err);
+  } else {
+    console.log(&apos;meow&apos;);
+  }
+});
+</code></pre>
+                </section>
+
+                <section>
+                    <h3>Mongoose</h3>
+
+                    <p>
+                        Mongoose permite definir un esquema flexible para trabajar con nuestros documentos en MongoDB.
+                        Adem&aacute;s, ofrece funcionalidades para:
+                    </p>
+
+                    <ul>
+                        <li>
+                            Validaci&oacute;n: antes de procesar un documento hacia la DB queremos validar los datos (similar
+                            a rails)
+                        </li>
+                        <li>
+                            <i>Query Building</i>: una de las grandes ventajas de MongoDB es su sintaxis de consultas
+                            la cual es muy flexible. Mongoose expone la misma sintaxis.
+                        </li>
+                        <li>
+                            <i>Business logic hooks</i>: incluir funcionalidades tipo pre-save o after-save.
+                        </li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3>Nuestro modelo</h3>
+
+                    <p>Revisemos nuestro modelo en Mongoose nuevamente:</p>
+
+                    <pre><code data-trim data-noescape>
+...
+
+/**
+ * Article Schema
+ */
+var ArticleSchema = new Schema({
+  created: {
+    type: Date,
+    default: Date.now
+  },
+  title: {
+    type: String,
+    default: '',
+    trim: true,
+    required: 'Title cannot be blank'
+  },
+  content: {
+    type: String,
+    default: '',
+    trim: true
+  },
+  user: {
+    type: Schema.ObjectId,
+    ref: 'User'
+  }
+});
+
+mongoose.model('Article', ArticleSchema);
+</code></pre>
+
+                    <ul>
+                        <li>Posee un t&iacute;tulo, contenido, fecha de creaci&oacute;n y un usuario (?)</li>
+                        <li>
+                            Notar que el usuario constituye una referencia &iquest;a qu&eacute;?
+                        </li>
+                    </ul>
+
+                </section>
+
+                <section>
+                    <h3>Nuestro modelo</h3>
+
+                    <p style="font-size:85%;">
+                        Mean.js cre&oacute; autom&aacute;ticamente un esquema para manejar usuarios (ya que es un requerimiento
+                    t&iacute;pico). El c&oacute;digo se encuentra en el m&oacute;dulo users (<i>modules/users)</i>.
+                    </p>
+
+                    <h5>&iquest;Relaciones en nuestra base de datos de objetos? &iquest;no era NoSQL?</h5>
+
+                    <p style="font-size:85%;">
+                        El concepto de relaci&oacute;n (en el sentido de relacional) no tiene sentido en una base de datos
+                        documental pero en t&eacute;rminos de reutilizaci&oacute;n a veces es conveniente que podamos referenciar
+                        documentos entre ellos:
+                    </p>
+
+<pre><code data-trim data-noescape>
+var ArticleSchema = new Schema({
+  user: {
+    type: Schema.ObjectId,
+    ref: 'User'
+  }
+});
+</code></pre>
+
+                    <p style="font-size:85%;">
+                        Estamos referenciando un documento de la colecci&oacute;n de Usuarios (<i>User</i>) en nuestro
+                        documento de art&iacute;culos.
+                    </p>
+                </section>
+
+                <section>
+                    <h3>Rutas y controlador</h3>
+
+                    <p style="font-size:90%;">
+                        Ya tenemos el modelo, por ahora con los atributos que tiene nos basta. Veamos donde est&aacute;
+                        la funcionalidad en s&iacute; de nuestra app. Similar a rails, MEAN.js posee un archivo con las
+                        rutas de nuestro mo&oacute;dulo y un archivo para cada controlador. Veamos las rutas:
+                    </p>
+
+<pre><code data-trim data-noescape>
+var articlesPolicy = require('../policies/articles.server.policy'),
+  articles = require('../controllers/articles.server.controller');
+
+module.exports = function (app) {
+  // Articles collection routes
+  app.route('/api/articles').all(articlesPolicy.isAllowed)
+    .get(articles.list)
+    .post(articles.create);
+
+  // Single article routes
+  app.route('/api/articles/:articleId').all(articlesPolicy.isAllowed)
+    .get(articles.read)
+    .put(articles.update)
+    .delete(articles.delete);
+
+  // Finish by binding the article middleware
+  app.param('articleId', articles.articleByID);
+};
+</code></pre>
+                </section>
+
+                <section>
+                    <h3>Rutas y controlador</h3>
+
+                    <p>El c&oacute;digo es bastante autoexplicativo:</p>
+
+<pre><code data-trim data-noescape>
+var articlesPolicy = require('../policies/articles.server.policy'),
+  //la variable articles es una referencia a nuestro controlador
+  articles = require('../controllers/articles.server.controller');
+
+module.exports = function (app) {
+  // se define una url fija. Para cada url podemos especificar los distintos verbos
+  // http a los que respondera, en este caso get y post
+  app.route('/api/articles').all(articlesPolicy.isAllowed)
+    // a cada verbo le asignamos un metodo de nuestro controlador
+    .get(articles.list)  // para get el metodo es list
+    .post(articles.create); //para post el metodo es create
+
+  // Single article routes
+  app.route('/api/articles/:articleId').all(articlesPolicy.isAllowed)
+    .get(articles.read)
+    .put(articles.update)
+    .delete(articles.delete);
+
+  // ¿Recuerdan el set_post en rails? el middleware articleByID es exactamente lo mismo
+  app.param('articleId', articles.articleByID);
+};
+</code></pre>
+
+                    <strong>CONCEPTO: </strong> &iquest;Qu&eacute; es esto de policy (<i>articlesPolicy</i> o los par&aacute;metros
+                        especificados a .all =&gt; .all(articlesPolicy.isAllowed), etc.)?
+                </section>
+
+                <section>
+                    <h3>Policies</h3>
+
+                    <p>
+                        Veamos el código de las policies para entender que son:
+                    </p>
+
+<pre><code data-trim data-noescape>
+'use strict';
+
+/**
+ * Module dependencies.
+ */
+var acl = require('acl');
+
+// Using the memory backend
+acl = new acl(new acl.memoryBackend());
+
+/**
+ * Invoke Articles Permissions
+ */
+exports.invokeRolesPolicies = function () {
+  acl.allow([{
+    roles: ['admin'],
+    allows: [{
+      resources: '/api/articles',
+      permissions: '*'
+    }, {
+      resources: '/api/articles/:articleId',
+      permissions: '*'
+    }]
+  }, {
+    roles: ['user'],
+    allows: [{
+      resources: '/api/articles',
+      permissions: ['get', 'post']
+    }, {
+      resources: '/api/articles/:articleId',
+      permissions: ['get']
+    }]
+  }, {
+    roles: ['guest'],
+    allows: [{
+      resources: '/api/articles',
+      permissions: ['get']
+    }, {
+      resources: '/api/articles/:articleId',
+      permissions: ['get']
+    }]
+  }]);
+};
+
+/**
+ * Check If Articles Policy Allows
+ */
+exports.isAllowed = function (req, res, next) {
+  var roles = (req.user) ? req.user.roles : ['guest'];
+
+  // If an article is being processed and the current user created it then allow any manipulation
+  if (req.article && req.user && req.article.user.id === req.user.id) {
+    return next();
+  }
+
+  // Check for user roles
+  acl.areAnyRolesAllowed(roles, req.route.path, req.method.toLowerCase(), function (err, isAllowed) {
+    if (err) {
+      // An authorization error occurred.
+      return res.status(500).send('Unexpected authorization error');
+    } else {
+      if (isAllowed) {
+        // Access granted! Invoke next middleware
+        return next();
+      } else {
+        return res.status(403).json({
+          message: 'User is not authorized'
+        });
+      }
+    }
+  });
+};
+
+</code></pre>
+
+                    <p>
+                        Las policies definen un sistema de permisos de acceso para los usuarios (generalmente basado
+                        en roles) a las acciones y m&eacute;todos de nuestra aplicaci&oacute;n.
+                    </p>
+                </section>
+
+                <section>
+                    <h3>El controlador</h3>
+
+                    <p>
+                        Ya hemos revisado el modelo, las rutas y el sistema de permisos. Veamos ahora el controlador.
+                        Nos interesa primero crear un post así que veamos la función create:
+                    </p>
+
+<pre><code data-trim data-noescape>
+/**
+ * Create a article
+ */
+exports.create = function (req, res) {
+  // en req.body recibimos el json con el articulo (lo que envia el cliente)
+  var article = new Article(req.body);
+  // mean.js expone al usuario autenticado (o no) en la peticion
+  article.user = req.user;
+
+  // simplemente guardamos, mongoose se encarga del resto
+  article.save(function (err) {
+    // si es que hubo un error (por ejemplo validacion) se informa al cliente
+    if (err) {
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+    } else {
+      // si todo funciono bien entonces respondemos con un json del articulo
+      // notar que no es necesario definir una transformacion a json de nuestro
+      // articulo, como la DB lo almacena como json no se necesita transformar nada
+      res.json(article);
+    }
+  });
+};
+</code></pre>
+
+                    <small>Probemos nuestro código utilizando POSTMAN...</small>
+                </section>
+
+                <section>
+                    <h3>Acción create</h3>
+
+                    <img src="img/postman_bad_authorization.png" alt="POSTMAN">
+
+                    Necesitamos un usuario para pasar correctamente por la policy.
+                </section>
+
+                <section>
+                    <h3>Rutas de autenticaci&oacute;n y registro</h3>
+
+                    <p style="font-size: 80%;">
+                        Por defecto, MEAN.js cre&oacute; por nosotros un m&oacute;dulo para el manejo de usuarios. Adem&aacute;s, en nuestro
+                        m&oacute;dulo de art&iacute;culos agreg&oacute; policies para manejar el acceso a los m&eacute;todos de nuestro controlador.
+                        Lo que necesitamos ahora es un usuario para poder comprender el proceso de autenticaci&oacute;n.
+                        En la <a href="http://meanjs.org/docs/0.3.x/#express">documentaci&oacute;n de MEAN.js</a> podemos
+                        encontrar las rutas (o viendo el archivo de routing del m&oacute;dulo de usuarios) para usuarios:
+                    </p>
+
+                    <ul style="font-size: 80%;">
+                        <li><strong>GET http://localhost:3000/api/users/me</strong>:
+                        Returns the current authenticated user.</li>
+                        <li><strong>POST http://localhost:3000/api/auth/signup</strong>:
+                        This is used to sign up a user using username and password.</li>
+                        <li><strong>POST http://localhost:3000/api/auth/signin</strong>:
+                        This is used to sign in a user using username and password.</li>
+                        <li><strong>GET http://localhost:3000/api/auth/signout</strong>:
+                        This is used to sign out the current user.</li>
+                    </ul>
+
+                    <p>Primero registremos un usuario.</p>
+                </section>
+
+                <section>
+                    <h3>Registrar usuario</h3>
+
+                    <p>La acción a llamar es POST /api/auth/signup</p>
+
+                    <img src="img/create_user_req.png" alt="Create User Request">
+
+                    <p>&iquest;De d&oacute;nde vienen esos par&aacute;metros?</p>
+                </section>
+
+                <section>
+                    <h3>Registrar usuario</h3>
+
+                    <p>A continuaci&oacute;n se muestra el c&oacute;digo del modelo Usuario</p>
+
+<pre><code data-trim data-noescape>
+'use strict';
+
+/**
+ * Module dependencies.
+ */
+var mongoose = require('mongoose'),
+  Schema = mongoose.Schema,
+  crypto = require('crypto'),
+  validator = require('validator');
+
+/**
+ * A Validation function for local strategy properties
+ */
+var validateLocalStrategyProperty = function (property) {
+  return ((this.provider !== 'local' && !this.updated) || property.length);
+};
+
+/**
+ * A Validation function for local strategy password
+ */
+var validateLocalStrategyPassword = function (password) {
+  return (this.provider !== 'local' || validator.isLength(password, 6));
+};
+
+/**
+ * A Validation function for local strategy email
+ */
+var validateLocalStrategyEmail = function (email) {
+  return ((this.provider !== 'local' && !this.updated) || validator.isEmail(email));
+};
+
+/**
+ * User Schema
+ */
+var UserSchema = new Schema({
+  firstName: {
+    type: String,
+    trim: true,
+    default: '',
+    validate: [validateLocalStrategyProperty, 'Please fill in your first name']
+  },
+  lastName: {
+    type: String,
+    trim: true,
+    default: '',
+    validate: [validateLocalStrategyProperty, 'Please fill in your last name']
+  },
+  displayName: {
+    type: String,
+    trim: true
+  },
+  email: {
+    type: String,
+    trim: true,
+    unique: true,
+    default: '',
+    validate: [validateLocalStrategyEmail, 'Please fill a valid email address']
+  },
+  username: {
+    type: String,
+    unique: 'Username already exists',
+    required: 'Please fill in a username',
+    trim: true
+  },
+  password: {
+    type: String,
+    default: '',
+    validate: [validateLocalStrategyPassword, 'Password should be longer']
+  },
+  salt: {
+    type: String
+  },
+  profileImageURL: {
+    type: String,
+    default: 'modules/users/img/profile/default.png'
+  },
+  provider: {
+    type: String,
+    required: 'Provider is required'
+  },
+  providerData: {},
+  additionalProvidersData: {},
+  roles: {
+    type: [{
+      type: String,
+      enum: ['user', 'admin']
+    }],
+    default: ['user']
+  },
+  updated: {
+    type: Date
+  },
+  created: {
+    type: Date,
+    default: Date.now
+  },
+  /* For reset password */
+  resetPasswordToken: {
+    type: String
+  },
+  resetPasswordExpires: {
+    type: Date
+  }
+});
+
+/**
+ * Hook a pre save method to hash the password
+ */
+UserSchema.pre('save', function (next) {
+  if (this.password && this.isModified('password') && this.password.length > 6) {
+    this.salt = crypto.randomBytes(16).toString('base64');
+    this.password = this.hashPassword(this.password);
+  }
+
+  next();
+});
+
+/**
+ * Create instance method for hashing a password
+ */
+UserSchema.methods.hashPassword = function (password) {
+  if (this.salt && password) {
+    return crypto.pbkdf2Sync(password, new Buffer(this.salt, 'base64'), 10000, 64).toString('base64');
+  } else {
+    return password;
+  }
+};
+
+/**
+ * Create instance method for authenticating user
+ */
+UserSchema.methods.authenticate = function (password) {
+  return this.password === this.hashPassword(password);
+};
+
+/**
+ * Find possible not used username
+ */
+UserSchema.statics.findUniqueUsername = function (username, suffix, callback) {
+  var _this = this;
+  var possibleUsername = username + (suffix || '');
+
+  _this.findOne({
+    username: possibleUsername
+  }, function (err, user) {
+    if (!err) {
+      if (!user) {
+        callback(possibleUsername);
+      } else {
+        return _this.findUniqueUsername(username, (suffix || 0) + 1, callback);
+      }
+    } else {
+      callback(null);
+    }
+  });
+};
+
+mongoose.model('User', UserSchema);
+</code></pre>
+
+                    <p>
+                        Parece que el atributo provider es obligatorio, sin embargo yo no lo especifiqu&eacute; en la petici&oacute;n
+                        que realic&eacute;. Veamos que responde el backend...
+                    </p>
+                </section>
+
+                <section>
+                    <h3>Crear usuario</h3>
+
+                    <p>La respuesta del backend:</p>
+
+                    <img src="img/create_user_res.png" alt="Create User Response">
+
+                    <p>
+                        Por lo visto el usuario se cre&oacute; correctamente &iquest;acaso la validaci&oacute;n no est&aacute; funcionando? para
+                        salir de la duda veamos el c&oacute;digo del controlador...
+                    </p>
+                </section>
+
+                <section>
+                    <h4>Crear usuario</h4>
+
+                    <p style="font-size:85%;">
+                        La acci&oacute;n para crear un usuario est&aacute; en el archivo <i>modules/users/server/controllers/users/users.authentication.server.controller.js</i>
+                    </p>
+
+<pre><code data-trim data-noescape>
+/**
+ * Signup
+ */
+exports.signup = function (req, res) {
+  // For security measurement we remove the roles from the req.body object
+  delete req.body.roles;
+
+  // Init Variables
+  var user = new User(req.body);
+  var message = null;
+
+  // Add missing user fields
+  user.provider = 'local'; // ATENCION A ESTA LINEA
+  user.displayName = user.firstName + ' ' + user.lastName;
+
+  // Then save the user
+  user.save(function (err) {
+    if (err) {
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+    } else {
+      // Remove sensitive data before login
+      user.password = undefined;
+      user.salt = undefined;
+
+      req.login(user, function (err) {
+        if (err) {
+          res.status(400).send(err);
+        } else {
+          res.json(user);
+        }
+      });
+    }
+  });
+};
+</code></pre>
+
+                    <p style="font-size:85%;">
+                        Estamos autom&aacute;ticamente asignando un valor al atributo <i>provider</i>, no es que la validaci&oacute;n
+                        no haya funcionado. Provider es un atributo que maneja la librer&iacute;a de autenticaci&oacute;n de MEAN.js
+                        llamada <i><a href="http://passportjs.org/">Passport</a></i>.
+                    </p>
+                </section>
+
+                <section>
+                    <h3>Iniciar Sesi&oacute;n</h3>
+
+                    <p style="font-size:85%;">
+                        Ya tenemos nuestro usuario creado. Ahora nos vamos a autenticar para poder postear un art&iacute;culo.
+                        Seg&uacute;n las rutas del m&oacute;dulo de usuario, debemos ejecutar un POST a /api/auth/signin:
+                    </p>
+
+                    <img src="img/signin.png" alt="Sign In" style="width:70%;">
+                </section>
+
+                <section>
+                    <h3>Iniciar Sesi&oacute;n</h3>
+
+                    <p style="font-size:85%;">
+                        OK! al parecer estamos autenticados. En una API REST real, deber&iacute;amos recibir un token con el
+                        cual realizaremos futuras peticiones pero esto lo veremos m&aacute;s adelante en la clase de seguridad
+                        de API&apos;s REST. Como adelanto, t&iacute;picamente el proceso funciona as&iacute;:
+                    </p>
+
+                    <ol style="font-size:85%;">
+                        <li>
+                            El usuario se autentica en la API. El backend verifica que las credenciales son correctas.
+                        </li>
+                        <li>
+                            Si las credenciales son correctas entonces responde t&iacute;picamente con un HTTP Code 200 y adjunta
+                            un token (string aleatorio de un largo adecuado).
+                        </li>
+                        <li>
+                            Cuando el usuario quiera ejecutar alguna llamada a la API que necesite autenticaci&oacute;n deber&aacute;
+                            adjuntar el token a la petici&oacute;n. Tradicionalmente esto se realiza mediante una cabecera HTTP
+                            denominada <i>Authorization</i> (Bearer token).
+                        </li>
+                        <li>
+                            Potencialmente, el backend puede solicitar que el usuario &quot;refresque&quot; su autenticaci&oacute;n
+                            despu&eacute;s de un determinado tiempo (<i>refresh token</i>).
+                        </li>
+                    </ol>
+                </section>
+
+                <section>
+                    <h4>Crear Art&iacute;culo</h4>
+
+                    <p style="font-size:85%;">
+                        Volvamos a lo nuestro. Ya estamos autenticados, veamos si podemos crear un art&iacute;culo. Esto seg&uacute;n
+                        nuestras rutas se encuentra en POST <i>/api/articles</i>:
+                    </p>
+
+                    <img src="img/create_article.png" alt="Crear art&iacute;culo">
+
+                    <p style="font-size:85%;">
+                        Antes de hacer la petici&oacute;n veamos el c&oacute;digo de la acci&oacute;n para crear art&iacute;culos. Este se
+                        encuentra en el controlador de nuestro m&oacute;dulo de art&iacute;culos <i>article.server.controller.js</i>
+                        y corresponde al m&eacute;todo <i>create</i>.
+                    </p>
+                </section>
+
+                <section>
+                    <h3>Crear Art&iacute;culo</h3>
+
+                    <p>
+                        C&oacute;digo del m&eacute;todo create:
+                    </p>
+
+<pre><code data-trim data-noescape>
+/**
+ * Create a article
+ */
+exports.create = function (req, res) {
+  var article = new Article(req.body);
+  article.user = req.user;
+
+  article.save(function (err) {
+    if (err) {
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+    } else {
+      res.json(article);
+    }
+  });
+};
+</code></pre>
+
+                    <p style="font-size:85%;">
+                        El c&oacute;digo es sencillo. Es importante adem&aacute;s notar que el usuario del art&iacute;culo se asigna
+                        de manera manual al usuario que viene de la petici&oacute;n (req) la cual es autom&aacute;ticamente
+                        asignado por <i>passport</i>.
+                    </p>
+                </section>
+
+                <section>
+                    <h3>Crear Art&iacute;culo</h3>
+
+                    <p style="font-size:80%;">
+                        Veamos ahora la respuesta del servidor de nuestra petici&oacute;n:
+                    </p>
+
+                    <img src="img/create_article_resp.png" alt="Crear art&iacute;culo respuesta">
+
+                    <p style="font-size:80%;">
+                        Perfecto! nuestra acción funciona correctamente. Probemos listando todos los post...
+                    </p>
+                </section>
+
+                <section>
+                    <h3>Listar Art&iacute;culos</h3>
+
+                    <p>
+                        Ejecutemos una petición a GET <i>/api/articles</i>:
+                    </p>
+
+                    <img src="img/list_articles.png" alt="Listar art&iacute;culos">
+
+                    <p>
+                        Analicemos el c&oacute;digo de esta acci&oacute;n...
+                    </p>
+                </section>
+
+                <section>
+                    <h3>Listar Art&iacute;culos</h3>
+
+<pre><code data-trim data-noescape>
+/**
+ * List of Articles
+ */
+exports.list = function (req, res) {
+  Article.find().sort('-created').populate('user', 'displayName').exec(function (err, articles) {
+    if (err) {
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+    } else {
+      res.json(articles);
+    }
+  });
+};
+</code></pre>
+
+                    <p>
+                        Utilizamos mongoose para traer los art&iacute;culos (.find()), el m&eacute;todo populate permite obtener
+                        la referencia del usuario (desde otro documento) a cada art&iacute;culo (&iquest;recuerdan el ref en la
+                        definici&oacute;n del modelo de Article?).
+                    </p>
+                </section>
+
+                <section>
+                    <h3>Ejercicios</h3>
+
+                    <ul>
+                        <li>
+                            Prueben con POSTMAN las acciones de actualizar y eliminar un post.
+                        </li>
+                        <li>
+                            Creen nuevos usuarios y analicen lo que retorna el listar todos los post (GET a
+                            /api/articles)
+                        </li>
+                        <li>
+                            &iquest;Un usuario x puede editar un post de un usuario y? si la respuesta es no, &iquest;d&oacute;nde est&aacute;
+                            el c&oacute;digo que maneja esa l&oacute;gica?
+                        </li>
+                        <li>
+                            Agregar un sistema de comentarios simple a nuestros art&iacute;culos (similar a lo que se hizo
+                            en el sistema rails)
+                        </li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3>Comentarios finales</h3>
+
+                    <ul style="font-size:90%;">
+                        <li>
+                            Durante estos ejemplos no hemos escrito ninguna l&iacute;nea de c&oacute;digo. Es importante comprender
+                            las herramientas antes de poder utilizarlas.
+                        </li>
+                        <li>
+                            La gran mayor&iacute;a de frameworks poseen scaffoldings que nos ahorran tiempo, tomense el tiempo
+                            de entender el c&oacute;digo del scaffold antes de escribir su propio c&oacute;digo. Entiendan el &quot;idioma&quot;
+                            del framework.
+                        </li>
+                        <li>
+                            El stack MEAN permite un desarrollo &aacute;gil y para aquellos que se sientan c&oacute;modos con javascript
+                            es una gran opci&oacute;n.
+                        </li>
+                        <li>
+                            El uso de un solo lenguaje en todas las capas simplifica el desarrollo y testing de una app.
+                            Cada pieza del stack MEAN posee ventajas significativas (a costa de perder propiedades deseables)
+                            frente a un stack tradicional. Es importante balancear los beneficios y desventajas al tomar
+                            la decisi&oacute;n de que stack utilizar.
+                        </li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>Comentarios y/o consultas</h2>
+                </section>
+            </div>
+		</div>
+
+		<script src="../revealjs/lib/js/head.min.js"></script>
+		<script src="../revealjs/js/reveal.js"></script>
+
+		<script>
+			// More info https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				history: true,
+				slideNumber: true,
+
+				// More info https://github.com/hakimel/reveal.js#dependencies
+				dependencies: [
+					{ src: '../revealjs/plugin/markdown/marked.js' },
+					{ src: '../revealjs/plugin/markdown/markdown.js' },
+					{ src: '../revealjs/plugin/notes/notes.js', async: true },
+					{ src: '../revealjs/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+				]
+			});
+		</script>
+	</body>
+</html>
