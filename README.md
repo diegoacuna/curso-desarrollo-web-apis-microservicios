@@ -14,3 +14,4 @@ Temario de clases
     * **Clase 2.1** - Repaso general de API's REST y continuación Rails
   * **Clase 3** PENDIENTE
   * **Clase 4** - Test Driven Development y Behavior Driven Development
+  * **Clase 5** - Stack MEAN (Backend)
