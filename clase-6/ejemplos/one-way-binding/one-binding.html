@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>One Way Data-Binding</title>
+
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        tr:hover {background-color: #f5f5f5}
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+
+<h3>Gesti&oacute;n de cursos</h3>
+
+<p>
+    A continuación se listan los cursos disponibles:
+</p>
+
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Curso</th>
+        <th>Horario</th>
+        <th>Alumnos</th>
+    </tr>
+    </thead>
+    <tbody class="curso-container">
+    </tbody>
+</table>
+
+<p>
+    &iquest;Qu&eacute; pasa si generamos un cambio en el modelo?
+    <a href="#" class="cambiar-modelo">HAZ CLICK AQU&Iacute;</a> <br><br>
+    <span class="resultado-cambio-modelo"></span>
+</p>
+
+<script>
+    // definimos nuestro modelo
+    var cursos = [
+        {
+            "nombre": "Curso desarrollo de API's y microservicios",
+            "alumnos": [
+                {
+                    "nombre": "Juan Perez",
+                    "rol": "12345678-9",
+                    "nota": 90
+                },
+                {
+                    "nombre": "Juanita Perez",
+                    "rol": "98765432-1",
+                    "nota": 100
+                }
+            ],
+            "horario": "Martes 5-6"
+        },
+        {
+            "nombre": "FIS-140",
+            "alumnos": [
+                {
+                    "nombre": "Alumno 1",
+                    "rol": "87123172-9",
+                    "nota": 55
+                },
+                {
+                    "nombre": "Alumno 2",
+                    "rol": "97612338-1",
+                    "nota": 99
+                }
+            ],
+            "horario": "Jueves 1-2"
+        }
+    ];
+
+    window.onload = function(e){
+       //inicializamos la tabla de cursos con el modelo que definimos antes
+        var container = document.getElementsByClassName('curso-container')[0];
+        cursos.forEach(function(item, index) {
+            var row = document.createElement('tr');
+            row.insertCell(0).innerHTML = (index+1).toString();
+            row.insertCell(1).innerHTML = item.nombre;
+            row.insertCell(2).innerHTML = item.horario;
+            var alumnos = document.createElement('ul');
+            item.alumnos.forEach(function(alumno) {
+                var li = document.createElement('li'),
+                    content = document.createTextNode(alumno.nombre + " (" + alumno.rol + ") - NOTA: " + alumno.nota);
+                li.appendChild(content);
+                alumnos.appendChild(li);
+            });
+            row.insertCell(3).appendChild(alumnos);
+            container.appendChild(row);
+        });
+
+        // hacemos un attach del evento click en el enlace para cambiar el modelo
+        document.getElementsByClassName('cambiar-modelo')[0].onclick=function() {
+            // cambiamos el modelo
+            cursos[0].nombre = "Desarrollo web orientado a API's y Microservicios: un enfoque moderno";
+            // veamos la consola a ver que nos dice...
+            console.log(cursos);
+            document.getElementsByClassName('resultado-cambio-modelo')[0].innerHTML = "El nombre nuevo del curso es: " +
+                cursos[0].nombre + "<br><br> <strong>NO CAMBIÓ LA VISTA!</strong> (VEAN LA TABLA)";
+        };
+    };
+</script>
+
+</body>
+</html>

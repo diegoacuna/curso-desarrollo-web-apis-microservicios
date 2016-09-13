@@ -1,0 +1,977 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>Desarrollo web orientado a API's y Microservicios - Clase 4</title>
+
+		<link rel="stylesheet" href="../revealjs/css/reveal.css">
+		<link rel="stylesheet" href="../revealjs/css/theme/league.css">
+		<link rel="stylesheet" href="../revealjs/css/bootstrap.css">
+		<link rel="stylesheet" href="../revealjs/css/main.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="../revealjs/lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? '../revealjs/css/print/pdf.css' : '../revealjs/css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+
+				<section>
+                    <h2>Desarrollo web orientado a API's y Microservicios</h2>
+                    <h4>Un enfoque moderno</h4>
+                    <h5 class="actual-session">Clase 6</h5>
+                    <p>
+                        <small>
+                            Diego Acu&ntilde;a Rozas<br>
+                            Ing. Civil en Inform&aacute;tica - UTFSM<br>
+                            <a href="mailto:diego.acuna@mailbox.org">diego.acuna@mailbox.org</a>
+                        </small>
+                    </p>
+                </section>
+
+				<section>
+                    <h2>Clase de hoy</h2>
+
+                    <p>Vamos a hablar del Frontend:</p>
+
+                    <ul>
+                        <li>Aspectos b&aacute;sicos y tecnolog&iacute;as disponibles</li>
+                        <li>Single Page Apps</li>
+                        <li>
+                            AngularJS
+                            <ul>
+                                <li>Conceptos claves</li>
+                                <li>Controllers, Factories</li>
+                                <li>Resources</li>
+                            </ul>
+                        </li>
+                        <li>Consultas y Comentarios</li>
+                    </ul>
+
+                </section>
+
+                <section>
+                    <h2>
+                        FRONTEND
+                    </h2>
+
+                    <p>
+                        Hasta ahora hemos trabajado solo con el backend de nuestra aplicaci&oacute;n. Es decir,
+                        hemos constru&iacute;do una API que es capaz de procesar y responder peticiones provenientes
+                        de un cliente y en su mayor&iacute;a en formato JSON.
+                    </p>
+
+                    <p>
+                        Ahora nos concentraremos en el frontend, es decir, en desarrollar ese &quot;cliente&quot; que hace
+                        peticiones a la API
+                    </p>
+
+                    <p>&iquest;Qu&eacute; entendemos por frontend?</p>
+                </section>
+
+                <section>
+                    <h2>&iquest;Qu&eacute; entendemos por frontend?</h2>
+
+                    <p>
+                        Antes de desarrollar el frontend, pensemos un momento en cual deber&iacute;a ser su funci&oacute;n:
+                    </p>
+
+                    <ul>
+                        <li>Realizar y recibir peticiones a nuestra API</li>
+                        <li>Permitir que un usuario o otro cliente &quot;utilice&quot; nuestra app</li>
+                        <li>Es la cara visible de nuestra app</li>
+                        <li>&iquest;Realizar alg&uacute;n tipo de procesamiento de datos?</li>
+                    </ul>
+
+                    <p>
+                        Tradicionalmente est&aacute; asociado a interfaces gr&aacute;ficas y dise&ntilde;o web.
+                    </p>
+                </section>
+
+                <section>
+                    <h3>Tecnolog&iacute;as disponibles</h3>
+
+                    <div style="font-size: 90%;">
+                        <p>
+                            Antiguamente desarrollariamos el backend y el frontend de manera acoplada. El mismo framework
+                            para el backend nos entregaba herramientas para construir nuestras vistas utilizando html/js/css
+                            (ejemplo: erb, haml, Twig, Thymeleaf, etc.). Ahora:
+                        </p>
+
+                        <ul>
+                            <li>El backend est&aacute; completamente separado del frontend. Ya no son necesarias dichas librer&iacute;as.</li>
+                            <li>
+                                &iquest;Qu&eacute; tenemos disponible?
+                                <ul>
+                                    <li>HTML/CSS</li>
+                                    <li>
+                                        Javascript y sus derivados:
+                                        <ul>
+                                            <li>Coffeescript</li>
+                                            <li>Typescript</li>
+                                            <li>elm lang</li>
+                                            <li>Dart</li>
+                                            <li><a href="https://github.com/jashkenas/coffeescript/wiki/list-of-languages-that-compile-to-js">etc...</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section>
+                    <h3>Tecnolog&iacute;as disponibles</h3>
+
+                    <p>
+                        Hoy el desarrollo de frontend dispone de una gran cantidad de herramientas. Existen una infinidad
+                        de librer&iacute;as y de lenguajes. Todos tienen sus ventajas y desventajas y depender&aacute; del desarrollador
+                        evaluar cual se integra mejor con sus objetivos de desarrollo en su aplicaci&oacute;n.
+                    </p>
+
+                    <p>
+                        Nosotros nos apegaremos a las tecnolog&iacute;as m&aacute;s tradicionales y mayormente utilizaremos:
+                    </p>
+
+                    <ul>
+                        <li>HTML</li>
+                        <li>CSS</li>
+                        <li>Javascript + librer&iacute;as</li>
+                    </ul>
+                </section>
+
+                <section style="font-size: 90%;">
+                    <h3>Single-Page App</h3>
+
+                    <p>
+                        Antes de continuar, hablaremos de un concepto muy popular hoy en d&iacute;a en el desarrollo frontend.
+                        Con el auge de las API&apos;s REST y del desacoplamiento completo entre backend y frontend, surge
+                        el concepto de Single-Page App. &iquest;Qu&eacute; define a una Single-Page App?
+                    </p>
+
+                    <ul>
+                        <li>
+                            Sitio web &quot;de una sola p&aacute;gina&quot;. Existe solo un index.html
+                        </li>
+                        <li>
+                            El contenido se va cargando de manera din&aacute;mica seg&uacute;n la p&aacute;gina lo requiera
+                        </li>
+                        <li>
+                            En ning&uacute;n momento se carga otra p&aacute;gina (en el sentido del navegador)
+                        </li>
+                        <li>
+                            Para el usuario es una experiencia m&aacute;s flu&iacute;da y din&aacute;mica
+                        </li>
+                    </ul>
+
+                    <p>
+                        Gracias a las nuevas tecnolog&iacute;as y API&apos;s de HTML que han implementado los navegadores, es posible
+                        construir Single-Page App de alta calidad...
+                    </p>
+                </section>
+
+                <section>
+                    <h2>Single-Page App: Ejemplo</h2>
+
+                    <img src="img/gmail.jpg" alt="Gmail">
+                </section>
+
+                <section>
+                    <h2>Single-Page App: Ejemplo ¿real?</h2>
+
+                    <img src="img/redilegra.png" alt="Redilegra">
+                </section>
+
+                <section>
+                    <h2>AngularJS</h2>
+
+                    <p>
+                        Si bien (como ya se explic&oacute;) existen una gran cantidad de tecnolog&iacute;as disponibles para el desarrollo
+                        del frontend y de Single-Page Apps, nosotros vamos a utilizar en esta clase AngularJS:
+                    </p>
+
+                    <ul>
+                        <li>Desarrollada por google</li>
+                        <li>
+                            Las interfaces son declarativas: mostrar o no mostrar algo seg&uacute;n alguna condici&oacute;n, recorrer
+                            un listado e imprimir un atributo, etc.
+                        </li>
+                        <li>
+                            La l&oacute;gica del negocio es imperativa: escribimos c&oacute;digo en javascript que eval&uacute;a y ejecuta
+                            la l&oacute;gica que deseemos.
+                        </li>
+                    </ul>
+
+                    <p>
+                        Veamos algunos conceptos claves de la librer&iacute;a...
+                    </p>
+                </section>
+
+                <section>
+                    <h3>AngularJS: Two Way Data Binding</h3>
+
+                    <p>
+                        Por lejos, el concepto más importante en AngularJS y en Single-Page Apps. Veamos primero como
+                        funcionan los sistemas de template tradicionales:
+                    </p>
+
+                    <img src="img/one-way-databinding.png" alt="One Way Data Binding">
+
+                    <p>
+                        Concepto clave: cambios en la vista no gatillan cambios en el modelo y cambios en el modelo
+                        no gatillan cambios en la vista. Veamos un ejemplo...
+                    </p>
+                </section>
+
+                <section>
+                    <h2>One Way Data Binding: Ejemplo</h2>
+
+                    <img src="img/onewayexample.png" alt="Ejemplo One Way Data Binding">
+
+                    <p>
+                        El archivo est&aacute; en <a href="ejemplos/one-way-binding/one-binding.html">
+                            <i>ejemplos/one-way-binding/one-binding.html</i>
+                        </a>
+                    </p>
+                </section>
+
+                <section>
+                    <h3>AngularJS: Two Way Data Binding</h3>
+
+                    <p style="font-size: 80%;">
+                        Tener one way data binding no es muy &uacute;til. Requiere mucho trabajo el tener que mantener el
+                        modelo y la vista actualizadas. Veamos una manera simple de arreglar nuestro ejemplo:
+                    </p>
+
+                    <img src="img/onewayexamplefixed.png" alt="One Way Binding To Two Way Binding" style="width: 80%;">
+
+                    <p style="font-size: 80%;">
+                        El archivo está en <a href="ejemplos/one-way-binding/one-binding-to-two-binding.html">
+                            <i>ejemplos/one-way-binding/one-binding-to-two-binding.html</i>
+                        </a>
+                    </p>
+                </section>
+
+                <section>
+                    <h3>AngularJS: Two Way Data Binding</h3>
+
+                    <p style="font-size: 90%;">
+                        Es costoso escribir el c&oacute;digo para mantener nuestros modelos y vistas sincronizados. Por suerte
+                        AngularJS nos provee de un mecanismo sencillo de utilizar. Posee <i>Two Way Data Binding</i> implementado
+                        por defecto en la librer&iacute;a:
+                    </p>
+
+                    <img src="img/Two_Way_Data_Binding.png" alt="Two Way Data Binding">
+
+                    <p style="font-size: 90%;">
+                        La idea es similar a lo expuesto. Mantener la vista y el modelo sincronizados.
+                    </p>
+                </section>
+
+                <section>
+                    <h3>Explorando AngularJS</h3>
+
+                    <p>
+                        Veamos un poco de c&oacute;digo con AngularJS. Vamos a generar una aplicaci&oacute;n utilizando un generador
+                        de yeoman (<a href="../clase-5/index.html#/6">ver clase anterior</a>):
+                    </p>
+
+<pre><code data-trim data-noescape>
+npm install -g grunt-cli bower yo generator-karma generator-angular
+</code></pre>
+                    <p>
+                        Luego:
+                    </p>
+
+
+<pre><code data-trim data-noescape>
+mkdir angular-blog-frontend
+cd angular-blog-frontend
+yo angular angular-blog
+</code></pre>
+
+                    <p>
+                        Vamos a generar un frontend para nuestra API de nuestro blog que constru&iacute;mos en rails.
+                        Para ejecutar la aplicaci&oacute;n:
+                    </p>
+
+<pre><code data-trim data-noescape>
+grunt server
+</code></pre>
+                </section>
+
+                <section>
+                    <h3>grunt server</h3>
+
+                    <img src="img/grunt_server.png" alt="Grunt server">
+                </section>
+
+                <section>
+                    <h3>Explorando AngularJS</h3>
+
+                    <p style="font-size: 90%;">
+                        En general, existen 4 componentes claves en una aplicación AngularJS:
+                    </p>
+
+                    <ul style="font-size: 90%;">
+                        <li>
+                            <strong>app.js</strong>: archivo de configuración de nuestra aplicación. Aquí se configuran los módulos y
+                            parámetros importantes de la app.
+                        </li>
+                        <li>
+                            <strong>Controladores</strong>: la lógica del negocio de las vistas la almacenamos en controladores. En general
+                            una vista/fragmento será manejada por un controlador (dependiendo de su complejidad).
+                        </li>
+                        <li>
+                            <strong>Vistas</strong>: plantillas html declarativas. Se conectan con los controladores y poseen two way
+                            data binding con las variables que se definen tanto en las vistas como en los controladores.
+                        </li>
+                        <li>
+                            <strong>Rutas</strong>: indican las acciones (url's) de nuestra aplicación. A través de las rutas le indicamos
+                            a AngularJS que debe mostrar en cada página.
+                        </li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3>Modificando el main</h3>
+
+                    <p>
+                        Hagamos un experimento sencillo, modifiquemos la vista inicial de nuestra aplicación. Veamos
+                        el archivo <i>app.js</i>:
+                    </p>
+
+<pre><code data-trim data-noescape>
+'use strict';
+
+angular
+  .module('angularBlogApp', [
+    'ngAnimate',
+    'ngCookies',
+    'ngResource',
+    'ngRoute',
+    'ngSanitize',
+    'ngTouch'
+  ])
+  .config(function ($routeProvider) {
+    $routeProvider
+      .when('/', {
+        templateUrl: 'views/main.html',
+        controller: 'MainCtrl',
+        controllerAs: 'main'
+      })
+      .when('/about', {
+        templateUrl: 'views/about.html',
+        controller: 'AboutCtrl',
+        controllerAs: 'about'
+      })
+      .otherwise({
+        redirectTo: '/'
+      });
+  });
+</code></pre>
+
+                    <p>
+                        Las rutas están definidas en el mismo archivo app.js (<i>$routeProvider</i>). Atención en la ruta
+                        '/' (main).
+                    </p>
+                </section>
+
+                <section style="font-size: 80%;">
+                    <h3>Ruta '/' Main</h3>
+
+                    <p>
+                        En el routing vemos que la vista está en <i>views/main.html</i> y el controlador es MainCtrl.
+                        Modifiquemos tanto el controlador como la vista para imprimir algo y ver en acción el two way
+                        data binding de angular:
+                    </p>
+
+                    Controlador:
+<pre><code data-trim data-noescape>
+angular.module('angularBlogApp')
+  .controller('MainCtrl', function ($scope) {
+
+    $scope.nombre = "Diego";
+
+  });
+</code></pre>
+
+                    Vista:
+
+<pre><code data-trim>
+<div class="jumbotron">
+  <h1>Bienvenid@, {{nombre}}</h1>
+
+  <p class="lead">
+    &iquest;Quieres cambiar el nombre? Utiliza el formulario de abajo!
+  </p>
+  <p>
+    <input type="text" ng-model="nombre">
+  </p>
+</div>
+</code></pre>
+                </section>
+
+                <section>
+                    <h3>Explorando AngularJS</h3>
+
+                    <img src="img/angular_binding_example.gif" alt="Angular Binding">
+                </section>
+
+                <section>
+                    <h3>Explorando AngularJS - $scope</h3>
+
+                    <p>
+                        El objeto <i>$scope</i> que utilizamos en el controlador es una variable especial en Angular.
+                        Cualquier atributo que agreguemos en dicho objeto estar&aacute; disponible en la vista. Si no agregamos
+                        el atributo al <i>$scope</i> entonces <strong>no lo podremos utilizar en la vista</strong>.
+                    </p>
+
+                    <p>
+                        Por defecto, los atributos del <i>$scope</i> poseen two way data binding. Podemos agregar lo
+                        que queramos al <i>$scope</i>
+                    </p>
+
+<pre><code data-trim data-noescape>
+$scope.nombres = ["Juan", "Pedro", "Diego", "Maria"];
+</code></pre>
+
+<pre><code data-trim>
+<p>
+     O elige alguno de los nombres que tenemos disponibles:
+</p>
+
+<ul>
+    <li ng-repeat="nombre in nombres">{{nombre}}</li>
+</ul>
+</code></pre>
+                </section>
+
+                <section>
+                    <h4>Explorando AngularJS - $scope</h4>
+
+                    <p style="font-size: 90%;">
+                        Ya vimos como funcionaba el data binding cambiando un valor en la vista (autom&aacute;ticamente se
+                        actualizaba el modelo). Veamos como funciona desde el controlador:
+                    </p>
+
+<pre><code data-trim data-noescape>
+angular.module('angularBlogApp')
+  .controller('MainCtrl', function ($scope) {
+
+    $scope.nombre = "Diego";
+    $scope.nombres = ["Juan", "Pedro", "Diego", "Maria"];
+
+    $scope.cambiarNombre = function(nombre) {
+      $scope.nombre = nombre;
+    };
+
+  });
+</code></pre>
+
+                    <p style="font-size: 90%;">
+                        Definimos una funci&oacute;n que recibe un nombre por par&aacute;metro y cambia el modelo nombre al par&aacute;metro
+                        recibido. IMPORTANTE: si queremos llamar a est&aacute; funci&oacute;n desde la vista entonces debemos asignarla
+                        al <i>$scope</i>. Recuerden, al <i>$scope</i> le podemos agregar lo que queramos.
+                    </p>
+                </section>
+
+                <section>
+                    <h3>Explorando AngularJS - $scope</h3>
+
+                    <p>Y en la vista:</p>
+
+<pre><code data-trim>
+<div class="jumbotron">
+  <h1>Bienvenid@, {{nombre}}</h1>
+
+  <p class="lead">
+    ¿Quieres cambiar el nombre? Utiliza el formulario de abajo!
+  </p>
+  <p>
+    <input type="text" ng-model="nombre">
+  </p>
+</div>
+
+<p>
+  O elige alguno de los nombres que tenemos disponibles:
+</p>
+
+<ul>
+    <li ng-repeat="nombre in nombres">
+     <a href="" ng-click="cambiarNombre(nombre)">{{nombre}}</a>
+    </li>
+</ul>
+</code></pre>
+
+                    <p>
+                        Veamos como se ve...
+                    </p>
+                </section>
+
+                <section>
+                    <h3>Explorando AngularJS - $scope</h3>
+
+                    <img src="img/angular_binding_example_2.gif" alt="Ejemplo 2 Binding">
+                </section>
+
+                <section>
+                    <h3>AngularJS - Llamando a nuestra API</h3>
+
+                    <p  style="font-size: 90%;">
+                        Ya estamos preparados para interactuar con nuestra API en rails. Vamos a partir listando los
+                        post de nuestro blog en nuestra p&aacute;gina principal. Para esto, vamos a utilizar
+                        <a href="https://docs.angularjs.org/api/ngResource/service/$resource">angular-resource</a> el
+                        cual ya viene integrado en nuestro proyecto (gracias a yeoman):
+                    </p>
+
+<pre><code data-trim data-noescape>
+angular.module('angularBlogApp')
+  .controller('MainCtrl', function ($scope, $resource) {
+
+    $scope.nombre = "Diego";
+    $scope.nombres = ["Juan", "Pedro", "Diego", "Maria"];
+
+    //definimos nuestro recurso, este es un endpoint a los post de nuestra API
+    var Post = $resource('http://localhost:3000/posts/:postId', {postId:'@id'});
+
+    $scope.cambiarNombre = function(nombre) {
+      $scope.nombre = nombre;
+    };
+
+    //cualquier codigo que pongamos directamente en el controlador sera ejecutado al iniciar la vista
+
+    //la funcion query llama a '/posts' y trae todos los posts
+    $scope.posts = Post.query();
+
+  });
+</code></pre>
+                </section>
+
+                <section>
+                    <h3>AngularJS - Llamando a nuestra API - CORS</h3>
+
+                    <p>
+                        Si ejecutan el c&oacute;digo anterior, ver&aacute;n un error en la consola de google chrome similar a:
+                    </p>
+
+                    <img src="img/cors_error.png" alt="CORS ERROR">
+
+                    <p>
+                        Esta restricci&oacute;n proviene de un mecanismo de manejo de recursos web denominado CORS. En resumen,
+                        los navegadores bloquean las solicitudes a recursos en otros dominios (o puertos) que el
+                        host de origen.
+                    </p>
+
+                    <p>
+                        Para solucionarlo, necesitamos modificar nuestro backend...
+                    </p>
+                </section>
+
+                <section>
+                    <h3>AngularJS - Llamando a nuestra API - CORS</h3>
+
+                    <p>
+                        En rails, se debe modificar el archivo <i>app/controllers/application_controller.rb</i>:
+                    </p>
+
+<pre><code data-trim data-noescape>
+class ApplicationController < ActionController::Base
+  protect_from_forgery with: :null_session
+
+  before_filter :add_allow_credentials_headers
+
+  def add_allow_credentials_headers
+    # https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS#section_5
+    #
+    # Because we want our front-end to send cookies to allow the API to be authenticated
+    # (using 'withCredentials' in the XMLHttpRequest), we need to add some headers so
+    # the browser will not reject the response
+    response.headers['Access-Control-Allow-Origin'] = request.headers['Origin'] || '*'
+    response.headers['Access-Control-Allow-Credentials'] = 'true'
+  end
+
+  def options
+    head :status => 200, :'Access-Control-Allow-Headers' => 'accept, content-type'
+  end
+end
+</code></pre>
+
+                    <p>
+                        y adem&aacute;s debemos configurar nuestra aplicaci&oacute;n de angular...
+                    </p>
+                </section>
+
+                <section>
+                    <h3>AngularJS - Llamando a nuestra API - CORS</h3>
+
+                    <p>
+                        Debemos modificar el archivo <i>app/scripts/app.js</i>:
+                    </p>
+
+<pre><code data-trim data-noescape>
+...
+  .config(['$httpProvider', function($httpProvider) {
+      $httpProvider.defaults.useXDomain = true;
+      $httpProvider.defaults.withCredentials = true;
+      delete $httpProvider.defaults.headers.common["X-Requested-With"];
+      $httpProvider.defaults.headers.common["Accept"] = "application/json";
+      $httpProvider.defaults.headers.common["Content-Type"] = "application/json";
+    }
+  ]);
+</code></pre>
+
+                    <p>
+                        Dicho c&oacute;digo debe ser agregado al final del archivo. Si se corre nuevamente el backend y
+                        recargamos el frontend entonces ya no aparecer&aacute; el error.
+                    </p>
+
+                    <p>
+                        Volvamos a la construcci&oacute;n de nuestro frontend.
+                    </p>
+                </section>
+
+                <section>
+                    <h3>AngularJS - Listar los posts</h3>
+
+                    <p style="font-size: 90%;">
+                        Ya tenemos en el <i>$scope</i> una variable posts con los post cargados desde el backend. Ahora,
+                        los vamos a listar en la p&aacute;gina principal. La vista:
+                    </p>
+
+<pre><code data-trim>
+<div class="jumbotron">
+  <h1>Bienvenid@ al blog</h1>
+
+  <p class="lead">
+    Subt&iacute;tulo de nuestro blog
+  </p>
+</div>
+
+<div class="row">
+  <div class="col-lg-12" ng-repeat="post in posts">
+
+    <div class="media">
+      <div class="media-left">
+        <a href="#">
+          <img class="media-object" holder="holder.js/200x200/text:?" alt="Post">
+        </a>
+      </div>
+      <div class="media-body">
+        <h4 class="media-heading">{{post.title}}</h4>
+        <small>Por: {{post.autor}}, <i><span am-time-ago="post.created_at"></span></i></small>
+
+        <p class="post-content">
+          {{post.content}}
+        </p>
+
+        <p>
+          Comentarios ({{post.comments.length}}) |
+            &Uacute;ltima actualizaci&oacute;n: <span am-time-ago="post.updated_at"></span>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+</code></pre>
+
+                    <small>
+                        OBSERVACI&Oacute;N: para imprimir las fechas utilicé <a href="https://github.com/urish/angular-moment">
+                        angular-moment</a> y para imprimir el "holder" de la imagen utilicé <a href="https://github.com/joshvillbrandt/ng-holder">
+                        ng-holder</a>.
+                    </small>
+
+                </section>
+
+                <section>
+                    <h3>AngularJS - Listar los posts</h3>
+
+                    <p>Y se ve as&iacute;:</p>
+
+                    <img src="img/list_posts.png" alt="Listar posts" style="width: 70%;">
+                </section>
+
+                <section>
+                    <h4>AngularJS - Routing - Ver un post</h4>
+
+                    <p>
+                        Para aprender m&aacute;s del routing, creemos una p&aacute;gina para ver un post. Primero
+                        utilizando el generador creemos el controlador:
+                    </p>
+
+<pre><code data-trim data-noescape>
+yo angular:route showPost
+</code></pre>
+
+                    <p>
+                        Genera un archivo <i>app/scripts/controllers/showpost.js</i>, una vista en
+                        <i>app/views/showpost.html</i> y agrega en el archivo <i>app/scripts/app.js</i> una ruta para
+                        la acci&oacute;n showpost:
+                    </p>
+
+<pre><code data-trim data-noescape>
+...
+.when('/showPost', {
+        templateUrl: 'views/showpost.html',
+        controller: 'ShowpostCtrl',
+        controllerAs: 'showPost'
+      })
+...
+</code></pre>
+
+                    <p>Vamos a cambiar algunas cosas para que los nombres queden m&aacute;s limpios...</p>
+
+                </section>
+
+                <section>
+                    <h3>AngularJS - Ver un post</h3>
+
+                    La ruta:
+
+<pre><code data-trim data-noescape>
+...
+.when('/posts/:post_id', {
+        templateUrl: 'views/showpost.html',
+        controller: 'ShowPostCtrl',
+        controllerAs: 'showPost'
+      })
+...
+</code></pre>
+
+                    <small>En las rutas en angular podemos asignar parámetros utilizando el símbolo ':'</small>
+
+                    <p>Controlador:</p>
+
+<pre><code data-trim data-noescape>
+angular.module('angularBlogApp')
+  .controller('ShowPostCtrl', function () {
+
+  });
+</code></pre>
+
+                    <p>
+                        Ahora, vamos a crear el enlace en nuestro listado de posts...
+                    </p>
+
+                </section>
+
+                <section>
+                    <h3>AngularJS - Ver un post</h3>
+
+                    <p>
+                        Para crear un enlace utilizamos <i>ng-href</i>:
+                    </p>
+
+<pre><code data-trim>
+<div class="col-lg-12" ng-repeat="post in posts">
+
+    <div class="media">
+      <div class="media-left">
+        <a href="#">
+          <img class="media-object" holder="holder.js/200x200/text:?" alt="Post">
+        </a>
+      </div>
+      <div class="media-body">
+        <h4 class="media-heading">
+          <a ng-href="#/posts/{{post.id}}">{{post.title}}</a>
+        </h4>
+        <small>Por: {{post.autor}}, <i><span am-time-ago="post.created_at"></span></i></small>
+
+        <p class="post-content">
+          {{post.content}}
+        </p>
+
+        <p>
+          Comentarios ({{post.comments.length}}) |
+            &Uacute;ltima actualizaci&oacute;n: <span am-time-ago="post.updated_at"></span>
+        </p>
+      </div>
+    </div>
+  </div>
+</code></pre>
+
+                    <p>
+                        Por ahora, podemos hacer click en el enlace y nos llevará al controlador ShowPostCtrl y a la
+                        vista correspondiente.
+                    </p>
+                </section>
+
+                <section>
+                    <h3>AngularJS - Ver un post - Controlador</h3>
+
+                    <p>
+                        El controlador es bastante simple. Podemos acceder a los par&aacute;metros de la url mediante el objeto
+                        <i>$routeParams</i>:
+                    </p>
+
+<pre><code data-trim data-noescape>
+angular.module('angularBlogApp')
+  .controller('ShowPostCtrl', function ($scope, $resource, $routeParams) {
+
+    var Post = $resource('http://localhost:3000/posts/:postId', {postId:'@id'});
+
+    Post.get({postId: $routeParams.post_id}, function(post) {
+      $scope.post = post;
+    });
+
+  });
+</code></pre>
+
+                    <p>
+                        Ahora construyamos una vista más decente en <i>app/views/showpost.html</i>...
+                    </p>
+
+                </section>
+
+                <section>
+                    <h3>AngularJS - Ver un post - Vista</h3>
+
+<pre><code data-trim>
+<div class="row">
+  <div class="col-lg-8">
+    <h1>{{post.title}}</h1>
+
+    <p>Por: {{post.autor}}, <i><span am-time-ago="post.created_at"></span></i></p>
+
+    <p style="font-size: 15px;">
+      {{post.content}}
+    </p>
+  </div>
+  <div class="col-lg-4">
+    <aside style="margin-top: 30px;">
+      <img class="media-object" holder="holder.js/200x200/text:?" alt="Post">
+      <br>
+      <p>
+        Actualizado: <span am-time-ago="post.updated_at"></span>
+      </p>
+    </aside>
+  </div>
+</div>
+
+<div class="row">
+
+  <div class="col-lg-12">
+    <h3>Comentarios ({{post.comments.length}})</h3>
+  </div>
+
+  <div class="col-lg-12" ng-repeat="comment in post.comments">
+    <div class="media">
+      <div class="media-left">
+        <a href="#">
+          <img class="media-object" holder="holder.js/96x96/text:?" alt="Post">
+        </a>
+      </div>
+      <div class="media-body">
+        <h4 class="media-heading">{{comment.title}}</h4>
+        <small><i><span am-time-ago="comment.created_at"></span></i></small>
+
+        <p class="post-content">
+          {{comment.content}}
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+</code></pre>
+
+                    <p>
+                        Y si entramos ahora al post, lo veremos as&iacute;...
+                    </p>
+                </section>
+
+                <section>
+                    <h3>AngularJS - Ver un post - Vista</h3>
+
+                    <img src="img/show_post.gif" alt="Ver Post">
+                </section>
+
+                <section>
+                    <h2>Comentarios</h2>
+
+                    <ul>
+                        <li>
+                            Con lo visto ya pueden comenzar a interiorizarse m&aacute;s en AngularJS. Algunos conceptos m&aacute;s
+                            avanzados: <i>services</i>, <i>factories</i> y <i>directives</i>.
+                        </li>
+                        <li>
+                            Algunas librer&iacute;as muy &uacute;tiles:
+                            <ul>
+                                <li>
+                                    <a href="https://github.com/mgonto/restangular">Restangular</a>: muy buen
+                                    reemplazo a <i>$resource</i> (de verdad muy bueno!)
+                                </li>
+                                <li>
+                                    <a href="https://github.com/angular-ui/ui-router">ui-router</a>: reemplazo al
+                                    sistema base de <i>routing</i> de Angular (también muy bueno!).
+                                </li>
+                                <li>
+                                    <a href="https://angular-ui.github.io/bootstrap/">angular-bootstrap</a>: las
+                                    funcionalidades javascript de bootstrap integradas a AngularJS.
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            Aprendan a utilizar bootstrap, principalmente su <i>grid system</i>, les ahorrar&aacute; mucho
+                            trabajo en la construcci&oacute;n est&eacute;tica del frontend.
+                        </li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>Tareas</h2>
+
+                    <ul>
+                        <li>
+                            Construyan una vista/controlador para crear un post: deberán estudiar como guardar un modelo
+                            utilizando <i>$resource</i> y como trabajar con formularios en Angular.
+                        </li>
+                        <li>
+                            Construyan una vista de edici&oacute;n para un post: deberán estudiar como actualizar un modelo
+                            utilizando <i>$resource</i> y como trabajar con formularios en Angular.
+                        </li>
+                        <li>
+                            Construyan un enlace para eliminar un post.
+                        </li>
+                        <li>
+                            Funcionalidad para agregar comentarios.
+                        </li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h1>&iquest;Comentarios y consultas?</h1>
+                </section>
+            </div>
+		</div>
+
+		<script src="../revealjs/lib/js/head.min.js"></script>
+		<script src="../revealjs/js/reveal.js"></script>
+
+		<script>
+			// More info https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				history: true,
+				slideNumber: true,
+
+				// More info https://github.com/hakimel/reveal.js#dependencies
+				dependencies: [
+					{ src: '../revealjs/plugin/markdown/marked.js' },
+					{ src: '../revealjs/plugin/markdown/markdown.js' },
+					{ src: '../revealjs/plugin/notes/notes.js', async: true },
+					{ src: '../revealjs/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+				]
+			});
+		</script>
+	</body>
+</html>

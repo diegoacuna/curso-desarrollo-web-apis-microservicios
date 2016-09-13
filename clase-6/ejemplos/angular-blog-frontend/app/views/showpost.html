@@ -1,0 +1,45 @@
+<div class="row">
+  <div class="col-lg-8">
+    <h1>{{post.title}}</h1>
+
+    <p>Por: {{post.autor}}, <i><span am-time-ago="post.created_at"></span></i></p>
+
+    <p style="font-size: 15px;">
+      {{post.content}}
+    </p>
+  </div>
+  <div class="col-lg-4">
+    <aside style="margin-top: 30px;">
+      <img class="media-object" holder="holder.js/200x200/text:?" alt="Post">
+      <br>
+      <p>
+        Actualizado: <span am-time-ago="post.updated_at"></span>
+      </p>
+    </aside>
+  </div>
+</div>
+
+<div class="row">
+
+  <div class="col-lg-12">
+    <h3>Comentarios ({{post.comments.length}})</h3>
+  </div>
+
+  <div class="col-lg-12" ng-repeat="comment in post.comments">
+    <div class="media">
+      <div class="media-left">
+        <a href="#">
+          <img class="media-object" holder="holder.js/96x96/text:?" alt="Post">
+        </a>
+      </div>
+      <div class="media-body">
+        <h4 class="media-heading">{{comment.title}}</h4>
+        <small><i><span am-time-ago="comment.created_at"></span></i></small>
+
+        <p class="post-content">
+          {{comment.content}}
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
