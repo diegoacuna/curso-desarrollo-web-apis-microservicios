@@ -1,0 +1,1046 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>Desarrollo web orientado a API's y Microservicios - Clase 4</title>
+
+		<link rel="stylesheet" href="../revealjs/css/reveal.css">
+		<link rel="stylesheet" href="../revealjs/css/theme/league.css">
+		<link rel="stylesheet" href="../revealjs/css/bootstrap.css">
+		<link rel="stylesheet" href="../revealjs/css/main.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="../revealjs/lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? '../revealjs/css/print/pdf.css' : '../revealjs/css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+
+				<section>
+                    <h2>Desarrollo web orientado a API's y Microservicios</h2>
+                    <h4>Un enfoque moderno</h4>
+                    <h5 class="actual-session">Clase 7</h5>
+                    <p>
+                        <small>
+                            Diego Acu&ntilde;a Rozas<br>
+                            Ing. Civil en Inform&aacute;tica - UTFSM<br>
+                            <a href="mailto:diego.acuna@mailbox.org">diego.acuna@mailbox.org</a>
+                        </small>
+                    </p>
+                </section>
+
+				<section>
+                    <h2>Clase de hoy</h2>
+
+                    <p>Seguimos con el Frontend:</p>
+
+                    <ul>
+                        <li>Otras tecnologías de frontend:
+                            <ul>
+                                <li>ReactJS</li>
+                            </ul>
+                        </li>
+                        <li>Consultas y Comentarios</li>
+                    </ul>
+
+                </section>
+
+                <section>
+                    <h2>Seguimos con el frontend</h2>
+
+                    <p>
+                        En la clase anterior, estuvimos trabajando con AngularJS el cual provee de un framework con
+                        muchas herramientas para desarrollar aplicaciones web modernas y en particular Single-Page
+                        Apps.
+                    </p>
+
+                    <p>
+                        En esta clase, estudiaremos la librer&iacute;a llamada ReactJS
+                    </p>
+
+                    <img src="img/react.png" alt="ReactJS">
+                </section>
+
+                <section>
+                    <h2>ReactJS: &iquest;Qu&eacute; es?</h2>
+
+                    <p>
+                        Comencemos entendiendo qu&eacute; es y para qu&eacute; sirve esta librer&iacute;a.
+                    </p>
+
+                    <h3>&iquest;Qu&eacute; es?</h3>
+
+                    <ul>
+                        <li>Librer&iacute;a javascript para construir interfaces de usuario</li>
+                        <li>Desarrollada por Facebook</li>
+                        <li>Declarativa (en el mismo sentido que angular)</li>
+                        <li>Basada en componentes (reutilizaci&oacute;n de c&oacute;digo)</li>
+                        <li>Data Binding!</li>
+                    </ul>
+
+                    <p>
+                        La filosof&iacute;a de React se basa en componentes modulares y reutilizables.
+                    </p>
+                </section>
+
+                <section>
+                    <h2>ReactJS: Diferencias con Angular</h2>
+
+                    <p>
+                        React y Angular tienen enfoques distintos. Sabemos que Angular es m&aacute;s un &quot;framework&quot; que una
+                        librer&iacute;a. Entonces:
+                    </p>
+
+                    <ul>
+                        <li>
+                            ReactJS solo sirve para la construcci&oacute;n de la interfaz del usuario:
+                            <ul>
+                                <li>Tenemos que utilizar otra librer&iacute;a para hacer las llamadas REST</li>
+                                <li>Similar para el routing</li>
+                                <li>etc.</li>
+                            </ul>
+                        </li>
+                        <li>
+                            No hay que considerar esto como una desventaja. ReactJS nos permite decidir que librer&iacute;a
+                            utilizar para dichas tareas (en realidad no es su trabajo).
+                        </li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>ReactJS: Aprendiendo desde la práctica</h2>
+
+                    <p>
+                        Para aprender ReactJS lo mejor es utilizarlo. Para ahorrar trabajo utilizaremos (como de costumbre)
+                        un generador (directo desde Facebook):
+                    </p>
+
+<pre><code data-trim data-noescape>
+npm install -g create-react-app
+</code></pre>
+
+                    <p>
+                        Este generador permite crear una Single-Page App con React ahorr&aacute;ndonos la configuraci&oacute;n de todas
+                        las librer&iacute;as por separado. Para crear una aplicaci&oacute;n:
+                    </p>
+
+<pre><code data-trim data-noescape>
+create-react-app blog-frontend
+cd blog-frontend
+</code></pre>
+
+                    <p>Veamos la estructura que nos genera...</p>
+                </section>
+
+                <section>
+                    <h2>Estructura de aplicación React</h2>
+
+                    <p>
+                        El generador nos crea la siguiente estructura de directorios:
+                    </p>
+
+<pre><code data-trim data-noescape>
+blog-frontend/
+  README.md
+  node_modules/
+  package.json
+  public/
+    index.html
+    favicon.ico
+  src/
+    App.css
+    App.js
+    App.test.js
+    index.css
+    index.js
+    logo.svg
+</code></pre>
+
+                    <p>
+                        <strong>public/index.html</strong> es nuestra vista de entrada y <strong>src/index.js</strong>
+                        nuestro script de entrada en la aplicación.
+                    </p>
+                </section>
+
+                <section>
+                    <h2>ReactJS: ejecutando el servidor</h2>
+
+                    <p>
+                        Veamos como se ve nuestra aplicación. Para iniciar el servidor de node debemos ejecutar:
+                    </p>
+
+<pre><code data-trim data-noescape>
+npm start
+</code></pre>
+
+                    <p>
+                        Lo que iniciará el servidor en el puerto 3000 por defecto:
+                    </p>
+
+                    <img src="img/node_server.png" alt="React Node" style="width: 80%;">
+                </section>
+
+                <section>
+                    <h3>ReactJS: Stack de desarrollo</h3>
+
+                    <p>
+                        Recordemos que ReactJS solo es la "V" en MVC, veamos cual es el stack de tecnologías que nuestro
+                        generador configuró para nosostros:
+                    </p>
+
+                    <ul>
+                        <li>
+                            <a href="https://webpack.github.io/">webpack</a>: permite generar <i>assets</i> estáticos
+                            a partir de un conjunto de módulos y dependencias. Nosotros entenderemos por módulos a
+                            módulos de ES6 (más de esto a continuación).
+                        </li>
+                        <li>
+                            <a href="http://babeljs.io/">Babel</a>: es un compilador de javascript!
+                        </li>
+                        <li>
+                            <a href="https://github.com/postcss/autoprefixer">Autoprefixer</a>: parsea nuestro CSS
+                            y agregar de manera automática los molestos <i>vendor prefixes</i>.
+                        </li>
+                        <li>
+                            <a href="http://facebook.github.io/jest/">Jest</a>: <i>unit testing framework</i> para
+                            javascript (también de Facebook).
+                        </li>
+                    </ul>
+                </section>
+
+                <section style="font-size: 90%;">
+                    <h3>NOTA: ¿Babel? compilador javascript?</h3>
+
+                    <p>
+                        Javascript no es un lenguaje compilador. ¿Para qué necesitamos Babel? La respuesta:
+                        <strong>EcmaScript 6</strong>.
+                    </p>
+
+                    <p>
+                        Javascript se rige por un estándar denominado EcmaScript. La última versión de este estándar
+                        corresponde a ES6 la cual agrega una gran cantidad de mejoras al lenguaje:
+                    </p>
+
+                    <ul>
+                        <li>
+                            <strong>Arrow Function</strong>: en palabras simples, definición de funciones al estilo "lambda":
+
+                            Antes:
+
+<pre><code data-trim data-noescape>
+var data = [1, 2, 3, 4, 5];
+data.forEach(function(elem){
+    console.log(elem)
+});
+</code></pre>
+
+                            Ahora (ES6):
+
+<pre><code data-trim data-noescape>
+var data = [1, 2, 3, 4, 5];
+data.forEach(elem => {
+    console.log(elem);
+});
+</code></pre>
+                        </li>
+                    </ul>
+                </section>
+
+                <section style="font-size: 80%;">
+                    <h3>NOTA: ¿Babel? compilador javascript?</h3>
+
+                    <ul>
+                        <li>
+                            <strong>Clases</strong>: ahora javascript dispone de clases:
+
+                            Antes:
+
+<pre><code data-trim data-noescape>
+function Person(name, lastname) {
+    this.firstName = name;
+    this.lastName = lastname;
+};
+Person.prototype.sayName = function(){
+    return this.firstName+ " " + this.lastName;
+};
+
+var yo = new Person("Diego", "Acuña");
+yo.sayName();
+</code></pre>
+
+                            Ahora (ES6):
+
+<pre><code data-trim data-noescape>
+class Person {
+    constructor(firstName, lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+
+    sayName() {
+        return this.firstName + " " + this.lastName;
+    }
+}
+
+var yo = new Person("Diego", "Acuña");
+yo.sayName();
+</code></pre>
+                        </li>
+                    </ul>
+                </section>
+
+                <section style="font-size: 80%;">
+                    <h3>NOTA: ¿Babel? compilador javascript?</h3>
+
+                    <ul>
+                        <li>
+                            <strong>Módulos</strong>: ahora podemos "requerir" librerías javascript en nuestro código:
+
+                            Antes:
+
+                            <pre><code data-trim data-noescape>
+//archivo1.js
+...
+
+//archivo2.js (hace uso de funciones en archivo1.js)
+
+//index.html
+&lt;script src=&quot;archivo1.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;archivo2.js&quot;&gt;&lt;/script&gt;
+</code></pre>
+
+                            Ahora (ES6):
+
+<pre><code data-trim data-noescape>
+//archivo: lib/person.js
+module "person" {
+    export function hello(nombre) {
+        return nombre;
+    }
+}
+
+//archivo: app.js
+import { hello } from "person";
+var app = {
+    foo: function() {
+        hello("Carlos");
+    }
+}
+export app;
+</code></pre>
+                        </li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>EcmaScript 6 y Babel</h2>
+
+                    <p>
+                        Existen muchas otras novedades en ES6 pero solo están disponibles en los navegadores que
+                        implementen el estándar (que es relativamente nuevo = mediados del 2015)...
+                    </p>
+
+                    <img src="img/babel.png" alt="Babel">
+
+                    <p>
+                        Babel nos permitirá usar ES6 en navegadores que aún no lo soporta. Por eso es un compilador.
+                    </p>
+
+                    <small>
+                        NOTA: Cuando hablabamos de módulos en webpack nos referíamos a los módulos que podemos
+                        construir con ES6.
+                    </small>
+                </section>
+
+                <section>
+                    <h2>Peticiones REST en nuestra App</h2>
+
+                    <p>
+                        Por defecto, no disponemos de una librería para hacer peticiones ajax. ES6 dispone de nuevas
+                        funciones para hacer peticiones de manera sencilla sin la necesidad de dependencias adicionales.
+                        Para esto se utiliza la función <i>fetch</i>:
+                    </p>
+
+<pre><code data-trim data-noescape>
+fetch('http://localhost:3001/posts')
+    .then((response) => {
+        return response.json()
+    })
+    .then((data) => {
+        console.log(data)
+    });
+</code></pre>
+
+                    <p>
+                        Veamos si funciona. Primero ejecutamos nuestra api rails del blog (ojo que en el puerto 3001 ya
+                        que el puerto 3000 está ocupado por la aplicación React).
+                    </p>
+
+<pre><code data-trim data-noescape>
+rails server -p 3001
+</code></pre>
+                </section>
+
+                <section>
+
+                    <p style="font-size: 70%;">
+                        y ahora podemos ejecutar el código javascript. Por ejemplo, para una prueba rápida pueden pegar
+                        el código en la consola del google chrome:
+                    </p>
+
+                    <img src="img/chrome_console.png" alt="Consola Chrome" style="width: 70%;">
+
+                    <p style="font-size: 70%;">A lo que les responde:</p>
+
+                    <img src="img/promise_response.png" alt="Respuesta API Fetch" style="width: 55%;">
+                </section>
+
+                <section>
+                    <h3>Página de inicio de la aplicación</h3>
+
+                    <p>
+                        Perfecto! ya podemos hacer llamadas a nuestra API utilizando <i>fetch</i> de manera elegante y
+                        sencilla. Veamos como podemos desplegar los posts del blog en la página inicial y así aprendemos
+                        más de ReactJS. Veamos primero el archivo <i>index.js</i>:
+                    </p>
+
+<pre><code data-trim data-noescape>
+import React from 'react';
+import ReactDOM from 'react-dom';
+import App from './App';
+import './index.css';
+
+ReactDOM.render(
+  &lt;App /&gt;,
+  document.getElementById('root')
+);
+</code></pre>
+                </section>
+
+                <section style="font-size: 90%;">
+                    <h3>Página de inicio de la aplicación</h3>
+
+                    <p>
+                        Lo que hace este código es importar un componente React llamado App y lo renderiza en el
+                        elemento de id <i>root</i> en nuestra vista principal (index.html). Veamos el <i>index.html</i>
+                        para ver la vista principal:
+                    </p>
+
+<pre><code data-trim data-noescape>
+&lt;!doctype html&gt;
+&lt;html lang="en"&gt;
+  &lt;head&gt;
+    &lt;meta charset="utf-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;
+    &lt;link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico"&gt;
+    &lt;title&gt;React App&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;div id="root"&gt;&lt;/div&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+                    <p>
+                        Es como una vista Single-Page App estándar (similar a las de AngularJS). El elemento con id=root
+                        es el <i>div</i> dentro del <i>body</i>. Allí se renderiza el componente App. Veamos ahora
+                        el componente App...
+                    </p>
+                </section>
+
+                <section style="font-size: 90%;">
+                    <h3>Página de inicio de la aplicación</h3>
+
+                    <p>
+                        Nuestro componente App consiste en:
+                    </p>
+
+<pre><code data-trim data-noescape>
+import React, { Component } from 'react';
+import logo from './logo.svg';
+import './App.css';
+
+class App extends Component {
+  render() {
+    return (
+      &lt;div className="App"&gt;
+        &lt;div className="App-header"&gt;
+          &lt;img src={logo} className="App-logo" alt="logo" /&gt;
+          &lt;h2&gt;Welcome to React&lt;/h2&gt;
+        &lt;/div&gt;
+        &lt;p className="App-intro"&gt;
+          To get started, edit &lt;code&gt;src/App.js&lt;/code&gt; and save to reload.
+        &lt;/p&gt;
+      &lt;/div&gt;
+    );
+  }
+}
+
+export default App;
+</code></pre>
+
+                    <p>
+                        Esta es efectivamente la interfaz gráfica que vemos al iniciar nuestra aplicación. Hagamos
+                        algunas modificaciones...
+                    </p>
+
+                </section>
+
+                <section>
+                    <h3>React Bootstrap = Componentes y Reutilización</h3>
+
+                    <p>
+                        Ya mencionamos anteriormente que la filosofía de React se basa en la reutilización de componentes.
+                        Vamos a agregar bootstrap para el diseño de nuestra app. Para esto utilizaremos react-bootstrap
+                        la cual es una librería con componentes React basados en bootstrap:
+                    </p>
+
+<pre><code data-trim data-noescape>
+npm install react-bootstrap --save
+npm install bootstrap@3 --save
+</code></pre>
+
+                    <p>
+                        y ahora lo importamos en nuestro archivo <i>src/index.js</i>:
+                    </p>
+
+<pre><code data-trim data-noescape>
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap/dist/css/bootstrap-theme.css';
+</code></pre>
+
+                    <p>
+                        Ahora tenemos componentes como <i>Button, Navbar, etc.</i> disponibles en nuestros propios
+                        componentes de React. Mejoremos el App...
+                    </p>
+                </section>
+
+                <section style="font-size: 90%;">
+                    <h3>Página de inicio de la aplicación</h3>
+
+                    <p>
+                        La modificación quedaría:
+                    </p>
+
+<pre><code data-trim data-noescape>
+import React, { Component } from 'react';
+import { Grid, Row, Col, Navbar, Jumbotron, Button } from 'react-bootstrap';
+
+class App extends Component {
+    render() {
+        return (
+            &lt;Grid&gt;
+                &lt;Row&gt;
+                    &lt;Col lg={12}&gt;
+                        &lt;Jumbotron className="text-center"&gt;
+                            &lt;Grid&gt;
+                                &lt;h1&gt;Nuestro Blog&lt;/h1&gt;
+                                &lt;p&gt;
+                                    Blog con Frontend en React (V) y backend en Rails
+                                &lt;/p&gt;
+                            &lt;/Grid&gt;
+                        &lt;/Jumbotron&gt;
+                    &lt;/Col&gt;
+                &lt;/Row&gt;
+            &lt;/Grid&gt;
+        );
+    }
+}
+
+export default App;
+</code></pre>
+
+                    <p>
+                        Utilizamos los componentes de react-bootstrap como <i>Grid, Row, Col, Jumbotron, etc.</i>. Para
+                        más información ver la <a href="https://react-bootstrap.github.io/components.html">
+                        documentación de react-bootstrap.</a>. Veamos como se ve...
+                    </p>
+
+                </section>
+
+                <section>
+                    <h2>Página de inicio</h2>
+
+                    <img src="img/pagina-inicio-1.png" alt="Página de inicio">
+
+                    <p>
+                        OK! hasta ahora vamos bien. El paso siguiente es listar los posts. Para esto vamos a crear
+                        un componente que se encargue de esto. Recordar: React es acerca de componentes y reutilización.
+                        Debemos hacer nuestros componentes lo más especialidados posible.
+                    </p>
+                </section>
+
+                <section>
+                    <h2>Nota: Acerca de JSX</h2>
+
+                    <p>
+                        Notaron que la sintaxis de las vistas no es realmente html (por ejemplo en html no existe
+                        la etiqueta Jumbotron). Para la sintaxis de las plantillas en React se utiliza un lenguaje
+                        llamado JSX.
+                    </p>
+
+                    <p>
+                        En resumen, JSX permite trabajar de manera más simple con las estructuras de los componentes
+                        de React. Tiene una sintaxis legible y fácil de entender para desarrolladores no tan técnicos.
+                        Para más información ver:
+                    </p>
+
+                    <a href="https://facebook.github.io/react/docs/jsx-in-depth.html">JSX in depth</a>
+                </section>
+
+                <section style="font-size:90%;">
+                    <h3>Componente para listar Posts</h3>
+
+                    <p>
+                        Vamos a crear un componente para listar los post en nuestra página de inicio. Nuevamente
+                        recordando que los componentes deben ser simples y cumplir tareas especificas, tendremos
+                        lo siguiente en mente:
+                    </p>
+
+                    <ul>
+                        <li>
+                            Tendremos un componente especializado únicamente en renderizar los post. Este componente
+                            no se encarga de recibir los post, asume que tiene un arreglo de post que debe renderizar.
+                        </li>
+                        <li>
+                            Tendremos otro componente que será un <i>container</i> del componente anterior. Este
+                            componente más general se encargará se hacer la llamada a la API y de renderizar al
+                            componente anterior.
+                        </li>
+                        <li>
+                            Luego, en nuestro componente App inicial mostraremos el componente <i>container</i> para
+                            desplegar el listado de posts.
+                        </li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>Componente para listar Posts</h2>
+
+                    <p>Veamos como sería el primer componente que vamos a crear:</p>
+
+<pre><code data-trim data-noescape>
+import React, { Component } from 'react';
+import { Row, Col } from 'react-bootstrap';
+import Holder from 'react-holder';
+
+class PostList extends Component {
+    render() {
+        return (
+            &lt;Row&gt;
+                &lt;Col lg={12}&gt;
+                    {this.props.posts.map(this.createPostItem)}
+                &lt;/Col&gt;
+            &lt;/Row&gt;
+        );
+    }
+
+    createPostItem(post) {
+        return (
+            &lt;div className="media" key={post.id}&gt;
+                &lt;div className="media-left"&gt;
+                    &lt;a href="#"&gt;
+                        &lt;Holder className="media-object"/&gt;
+                    &lt;/a&gt;
+                &lt;/div&gt;
+                &lt;div className="media-body"&gt;
+                    &lt;h4 className="media-heading"&gt;
+                        &lt;a&gt;{post.title}&lt;/a&gt;
+                    &lt;/h4&gt;
+                    &lt;small&gt;Por: {post.autor}, &lt;i&gt;&lt;span&gt;{post.created_at}&lt;/span&gt;&lt;/i&gt;&lt;/small&gt;
+
+                    &lt;p className="post-content"&gt;
+                        {post.content}
+                    &lt;/p&gt;
+
+                    &lt;p&gt;
+                        Comentarios ({post.comments.length}) |
+                        &Uacute;ltima actualizaci&oacute;n: &lt;span&gt;{post.updated_at}&lt;/span&gt;
+                    &lt;/p&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        );
+    }
+
+}
+
+export default PostList;
+</code></pre>
+
+                    <small>NOTA: Utilizamos la misma plantilla para desplegar los post que en nuestro frontend con Angular</small>
+
+                    <p>
+                        Veamos de que se trata el <i>this.props</i>...
+                    </p>
+                </section>
+
+                <section>
+                    <h3>Propiedades de un componente</h3>
+
+                    <p>
+                        Hay dos conceptos importantes que manejar con respecto a los datos de un componente:
+                    </p>
+
+                    <ul>
+                        <li>
+                            <strong>Propiedades (<i>this.props</i>)</strong>: son las propiedades de un componente. Lo importante es que
+                            son inmutables, representan la configuración del componente. Piensen que son como las
+                            propiedades de las etiquetas html (por ejemplo el href de un anchor).
+                        </li>
+                        <li>
+                            <strong>State</strong>: representan datos mutables del componente. Los cambios del <i>state</i>
+                            pueden venir por ejemplo de eventos generados por la interacción del usuario.
+                        </li>
+                    </ul>
+
+                    <p>
+                        Veamos ahora como sería el <i>container</i> de nuestro componente PostList.
+                    </p>
+                </section>
+
+                <section>
+                    <h3>Container del PostList</h3>
+
+<pre><code data-trim data-noescape>
+import React, { Component } from 'react';
+import PostList from './PostList';
+
+class PostListContainer extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            posts: []
+        }
+    }
+
+    render() {
+        return (
+            &lt;PostList posts={this.state.posts} /&gt;
+        );
+    }
+
+    componentDidMount() {
+        var _this = this;
+        fetch('http://localhost:3001/posts').then((response) => {
+            return response.json()
+        }).then((data) => {
+            _this.setState({posts: data})
+        });
+    }
+
+}
+
+export default PostListContainer;
+</code></pre>
+
+                    <p>
+                        El método <i>componentDidMount</i> se ejecuta luego de que el componente es inicializado, allí
+                        hacemos la llamada a nuestra API. Ahora usemos este componente en nuestra App...
+                    </p>
+                </section>
+                
+                <section>
+                    <h3>Listar los Posts</h3>
+                    
+                    <p>
+                        El código de nuestro App.js quedaría:
+                    </p>
+
+<pre><code data-trim data-noescape>
+import React, { Component } from 'react';
+import { Grid, Row, Col, Jumbotron } from 'react-bootstrap';
+import PostListContainer from './PostListContainer';
+
+class App extends Component {
+    render() {
+        return (
+            &lt;Grid&gt;
+                &lt;Row&gt;
+                    &lt;Col lg={12}&gt;
+                        &lt;Jumbotron className="text-center"&gt;
+                            &lt;Grid&gt;
+                                &lt;h1&gt;Nuestro Blog&lt;/h1&gt;
+                                &lt;p&gt;
+                                    Blog con Frontend en React (V) y backend en Rails
+                                &lt;/p&gt;
+                            &lt;/Grid&gt;
+                        &lt;/Jumbotron&gt;
+                    &lt;/Col&gt;
+                &lt;/Row&gt;
+                &lt;PostListContainer /&gt;
+            &lt;/Grid&gt;
+        );
+    }
+}
+
+export default App;
+</code></pre>
+
+                    <p>
+                        Veamos como se ve nuestra vista...
+                    </p>
+                </section>
+
+                <section>
+                    <h3>Listar los Posts</h3>
+
+                    <p>
+                        Nuestra vista se ve:
+                    </p>
+
+                    <img src="img/listar-posts.png" alt="Listar posts">
+                </section>
+
+                <section>
+                    <h3>Ver un Post: Routing</h3>
+
+                    <p>
+                        Ahora veamos como crear una vista para mostrar un post. Para esto necesitamos saber como
+                        realizar <i>routing</i> en nuestra aplicación. Para esto, utilizaremos la librería
+                        React-Router.
+                    </p>
+
+                    <img src="img/react_router.png" alt="React Router" style="width: 50%;">
+
+                    <p>Para instalarlo:</p>
+
+<pre><code data-trim data-noescape>
+npm install --save react-router
+</code></pre>
+                </section>
+
+                <section>
+                    <h3>Componente Post</h3>
+
+                    <p>
+                        Antes de continuar con el routing, vamos a construir el componente para mostrar un post.
+                        Utilizaremos la misma plantilla que creamos en nuestra app Angular. Veamos como sería
+                        el componente:
+                    </p>
+
+<pre><code data-trim data-noescape>
+import React, { Component } from 'react';
+import { Grid, Row, Col, Jumbotron } from 'react-bootstrap';
+
+class Post extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            post: {}
+        }
+    }
+
+    componentDidMount() {
+        var _this = this;
+        fetch('http://localhost:3001/posts/'+this.props.params.postId).then((response) => {
+            return response.json()
+        }).then((data) => {
+            _this.setState({post: data})
+        });
+    }
+
+    render() {
+        var post = this.state.post;
+        return (
+            &lt;Grid&gt;
+                &lt;Row&gt;
+                    &lt;Col lg={12}&gt;
+                        &lt;Jumbotron className="text-center"&gt;
+                            &lt;Grid&gt;
+                                &lt;h1&gt;Nuestro Blog&lt;/h1&gt;
+                                &lt;p&gt;
+                                    Blog con Frontend en React (V) y backend en Rails
+                                &lt;/p&gt;
+                            &lt;/Grid&gt;
+                        &lt;/Jumbotron&gt;
+                    &lt;/Col&gt;
+                &lt;/Row&gt;
+                &lt;Row&gt;
+                    &lt;Col lg={8}&gt;
+                        &lt;h1&gt;{post.title}&lt;/h1&gt;
+
+                        &lt;p&gt;Por: {post.autor}, &lt;i&gt;{post.created_at}&lt;/i&gt;&lt;/p&gt;
+
+                        &lt;p style={{'fontSize': '15px'}}&gt;
+                            {post.content}
+                    &lt;/p&gt;
+
+                    &lt;/Col&gt;
+
+                    &lt;Col lg={4}&gt;
+                        &lt;aside style={{'marginTop': '30px'}}&gt;
+                            &lt;p&gt;
+                                Actualizado: {post.updated_at}
+                            &lt;/p&gt;
+                    &lt;/aside&gt;
+                    &lt;/Col&gt;
+                &lt;/Row&gt;
+            &lt;/Grid&gt;
+        );
+    }
+}
+
+export default Post;
+</code></pre> 
+                </section>
+                
+                <section>
+                    <h3>Configurando el Routing</h3>
+                    
+                    <p>
+                        Para utilizar nuestra librería de routing, debemos configurarla en nuestro archivo 
+                        <i>src/index.js</i>:
+                    </p>
+
+<pre><code data-trim data-noescape>
+import React from 'react';
+import ReactDOM from 'react-dom';
+import App from './App';
+import Post from './Post';
+import { Router, Route, browserHistory } from 'react-router'
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap/dist/css/bootstrap-theme.css';
+import './index.css';
+
+ReactDOM.render(
+  (
+      &lt;Router history={browserHistory}&gt;
+          &lt;Route path="/" component={App}/&gt;
+          &lt;Route path="/post/:postId" component={Post}/&gt;
+      &lt;/Router&gt;
+  ), document.getElementById('root')
+);
+</code></pre>
+
+                    <p>
+                        Como se ve en el código, el routing lo configuramos ruta por ruta asignando que componente
+                        se desplegará en dicha ruta.
+                    </p>
+                </section>
+
+                <section style="font-size:95%;">
+                    <h3>Más sobre las rutas</h3>
+
+                    <p>
+                        Podemos definir parámetros en nuestras rutas (como se vió anteriormente). El parámetro real de
+                        se puede obtener mediante la propiedad <i>params</i> del componente asignado a la ruta.
+                    </p>
+
+                    <p>
+                        Un ejemplo de lo anterior, en nuestro componente Post utilizamos:
+                    </p>
+
+<pre><code data-trim data-noescape>
+componentDidMount() {
+    var _this = this;
+    fetch('http://localhost:3001/posts/'+this.props.params.postId).then((response) => {
+        return response.json()
+    }).then((data) => {
+        _this.setState({post: data})
+    });
+}
+</code></pre>
+
+                    <p>
+                        El <i>this.props.params.postId</i> proviene de la ruta configurada en el Routing.
+                    </p>
+                </section>
+
+                <section>
+                    <h3>Mostrar un Post</h3>
+
+                    <p>
+                        Ya tenemos todo configurado. Veamos como se despliega la vista de ver un Post:
+                    </p>
+
+                    <img src="img/ver_post.png" alt="Ver Post">
+
+                    <p>Excelente! ya hemos listado y mostrado un post.</p>
+                </section>
+
+                <section>
+                    <h2>Tareas</h2>
+
+                    <p>
+                        Con lo mencionado en esta clase y con la ayuda de google intenten desarrollar las siguientes tareas:
+                    </p>
+
+                    <ul>
+                        <li>
+                            Primero creen un componente para desplegar los comentarios de cada post. Una vez construído
+                            inserten los comentarios en la vista de cada post.
+                        </li>
+                        <li>
+                            Creen un formulario para agregar un nuevo post.
+                        </li>
+                        <li>
+                            Creen un formulario para actualizar un post.
+                        </li>
+                        <li>
+                            Creen un enlace para eliminar post.
+                        </li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3>Comentarios finales</h3>
+
+                    <ul>
+                        <li>
+                            React es una librería para renderizar interfaces gráficas y crear aplicaciones interactivas
+                            con un enfoque en una alta performance.
+                        </li>
+                        <li>
+                            Para construir una aplicación Single-Page no basta solo con React, es necesario utilizar
+                            otras librerías (para llamadas REST, Routing, etc).
+                        </li>
+                        <li>
+                            ¿Es necesaria la C=Controller al utilizar React?
+                        </li>
+                        <li>
+                            React requiere de una filosofía distinta al flujo tradicional (como en Angular) ya que es
+                            necesario pensar en componentes reutilizables.
+                        </li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h1>¿Consultas y Comentarios?</h1>
+                </section>
+
+            </div>
+		</div>
+
+		<script src="../revealjs/lib/js/head.min.js"></script>
+		<script src="../revealjs/js/reveal.js"></script>
+
+		<script>
+			// More info https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				history: true,
+				slideNumber: true,
+
+				// More info https://github.com/hakimel/reveal.js#dependencies
+				dependencies: [
+					{ src: '../revealjs/plugin/markdown/marked.js' },
+					{ src: '../revealjs/plugin/markdown/markdown.js' },
+					{ src: '../revealjs/plugin/notes/notes.js', async: true },
+					{ src: '../revealjs/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+				]
+			});
+		</script>
+	</body>
+</html>
