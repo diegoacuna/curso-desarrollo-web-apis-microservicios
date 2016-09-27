@@ -15,3 +15,5 @@ Temario de clases
   * **Clase 3** PENDIENTE
   * **Clase 4** - Test Driven Development y Behavior Driven Development
   * **Clase 5** - Stack MEAN (Backend)
+  * **Clase 6** - AngularJS (Frontend)
+  * **Clase 7** - ReactJS (Frontend)
