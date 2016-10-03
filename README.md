@@ -17,3 +17,4 @@ Temario de clases
   * **Clase 5** - Stack MEAN (Backend)
   * **Clase 6** - AngularJS (Frontend)
   * **Clase 7** - ReactJS (Frontend)
+  * **Clase 8** - Seguridad en API's: OAuth 2.0

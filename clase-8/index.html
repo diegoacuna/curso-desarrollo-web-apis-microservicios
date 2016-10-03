@@ -1,0 +1,801 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>Desarrollo web orientado a API's y Microservicios - Clase 8</title>
+
+		<link rel="stylesheet" href="../revealjs/css/reveal.css">
+		<link rel="stylesheet" href="../revealjs/css/theme/league.css">
+		<link rel="stylesheet" href="../revealjs/css/bootstrap.css">
+		<link rel="stylesheet" href="../revealjs/css/main.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="../revealjs/lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? '../revealjs/css/print/pdf.css' : '../revealjs/css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+
+				<section>
+                    <h2>Desarrollo web orientado a API's y Microservicios</h2>
+                    <h4>Un enfoque moderno</h4>
+                    <h5 class="actual-session">Clase 8</h5>
+                    <p>
+                        <small>
+                            Diego Acu&ntilde;a Rozas<br>
+                            Ing. Civil en Inform&aacute;tica - UTFSM<br>
+                            <a href="mailto:diego.acuna@mailbox.org">diego.acuna@mailbox.org</a>
+                        </small>
+                    </p>
+                </section>
+
+				<section>
+                    <h2>Clase de hoy</h2>
+
+                    <p>Nos vamos a enfocar en la seguridad:</p>
+
+                    <ul>
+                        <li>Conceptos básicos de seguridad en API's</li>
+                        <li>Autenticación vs Autorización</li>
+                        <li>
+                            OAuth 2.0
+                            <ul>
+                                <li>Visión general</li>
+                                <li>Tipos de flujos</li>
+                            </ul>
+                        </li>
+                        <li>Seguridad en nuestra app rails</li>
+                        <li>Consultas y comentarios</li>
+                    </ul>
+
+                </section>
+
+                <section>
+                    <h2>Seguridad en API's</h2>
+
+                    <p>
+                        Ya hemos aprendido a construir el backend de nuestra API y además hemos estudiado tecnologías
+                        para construir el frontend de nuestra aplicación final.
+                    </p>
+
+                    <p>
+                        Hasta este momento, no nos hemos concentrado en la seguridad de nuestra aplicación. En esta
+                        clase estudiaremos los mecanismos tradicionales y protocolos para asegurar nuestra aplicación.
+                    </p>
+
+                    <p>
+                        Comencemos analizando algunas de las problemáticas básicas a las que nos enfrentaremos al
+                        desarrollar una API.
+                    </p>
+                </section>
+
+                <section>
+                    <h2>Seguridad en API's</h2>
+
+                    <p>
+                        Tradicionalemente, las aplicaciones web utilizaban mecanismos basados en sesiones para mantener
+                        la seguridad del sistema.
+                    </p>
+
+                    <img src="img/session_management.gif" alt="Session Management">
+
+                    <p>
+                        ¿Por qué este mecanismo no es útil al construir una API?
+                    </p>
+                </section>
+
+                <section>
+                    <h2>REST es Stateless</h2>
+
+                    <p>
+                        Recordemos que REST es Stateless, es decir, cada petición HTTP que se realice al servidor
+                        debe estar autocontenida => No se necesita de ninguna información adicional para procesar
+                        la petición.
+                    </p>
+
+                    <img src="img/session_management_2.png" alt="Session Management">
+
+                    <p>Entonces, no pueden haber sesiones!</p>
+
+                </section>
+
+                <section>
+                    <h2>REST es Stateless</h2>
+
+                    <p>
+                        REST = Representational State Transfer, es decir, el estado se transfiere en cada petición y no
+                        es almacenado en el servidor. Esto es bueno ya que permite escalar el servidor sin preocuparnos
+                        de almacenar el estado de cada cliente.
+                    </p>
+
+                    <p>
+                        Dado que desde un comienzo nos interesó el hacer que el cliente haga más trabajo, le dejaremos
+                        el manejo del estado del cliente al mismo cliente.
+                    </p>
+
+                    <p>
+                        ¿Cómo podemos entonces asegurar nuestra aplicación? Primero tratemos de definir que es exactamente
+                        lo que queremos hacer...
+                    </p>
+                </section>
+
+                <section>
+                    <h2>Autenticación vs Autorización</h2>
+
+                    <p>
+                        En una aplicación web podemos definir principalmente dos requerimientos de seguridad:
+                    </p>
+
+                    <ul>
+                        <li>
+                            <strong>Autenticación</strong>: queremos asegurarnos que el cliente que está accediendo
+                            a recursos de nuestra aplicación es efectivamente el dueño de las credenciales. Por ejemplo,
+                            Facebook quiere asegurar que el usuario que está listando los post de su muro en la página
+                            http://www.facebook.com es efectivamente el dueño de ese muro. <strong>¿Por qué querríamos
+                            hacer esto? ¿es posible que sea otro cliente?</strong>
+                        </li>
+                        <li>
+                            <strong>Autorización</strong>: queremos que solo clientes con la autorización necesaria puedan
+                            acceder a determinados recursos.
+                        </li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>Autenticación vs Autorización</h2>
+
+                    <p>¿Notan la diferencia?</p>
+
+                    <img src="img/authvsaut.png" alt="Autenticación vs Autorización">
+
+                    <p>
+                        Se produce debido a que nuestra API no es una aplicación web sino que una interfaz a un
+                        conjunto de recursos.
+                    </p>
+                </section>
+
+                <section>
+                    <h2>Mecanismo sencillo de seguridad</h2>
+
+                    <p>
+                        Para entender como funcionan los protocolos de seguridad en API's, veamos una implementación
+                        sencilla (e ingenua) de como asegurar una API. El concepto clave es <strong>token</strong>. La
+                        idea:
+                    </p>
+
+                    <ul>
+                        <li>
+                            Un usuario realiza una petición de autenticación con su <i>username/password</i> a una ruta
+                            de la API (por ejemplo: /auth/sign_in). Para esto puede utilizar una petición POST.
+                        </li>
+                        <li>
+                            La API valida las credenciales y si son correctas retorna un <strong>token</strong>, el cual
+                            es un string de un largo adecuado generado aleatoriamente. Este token es almacenado por el
+                            servidor y le indica que si un usuario quiere solicitar algún recurso, debe especificar
+                            dicho token.
+                        </li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>Mecanismo sencillo de seguridad</h2>
+
+                    <ul>
+                        <li>
+                            Posteriormente, si un usuario desea por ejemplo solicitar sus posts, entonces deberá
+                            realizar la petición y adjunta mediante un HTTP Header su token.
+                        </li>
+                        <li>
+                            La API al recibir la petición, para verificar si el usuario que la realizó efectivamente
+                            tiene los permisos necesarios validará que el token de la petición es exactamente el mismo
+                            almacenado para el usuario dueño de los recursos.
+                        </li>
+                    </ul>
+
+                    <p>
+                        ¿Ven algunos problemas en este mecanismo? ¿Funciona?
+                    </p>
+                </section>
+
+                <section style="font-size: 93%;">
+                    <h2>OAuth 2.0</h2>
+
+                    <p>
+                        Los mecanismos de seguridad de API's se basan en <strong>tokens</strong> (más sofisticados que
+                        nuestra propuesta inicial). OAuth es un protocolo de <strong>autorización</strong> muy popular
+                        utilizado actualmente para autorizar recursos de una API. Partamos con la definición de su
+                        especificación.
+                    </p>
+
+                    <blockquote>
+                        "The OAuth 2.0 authorization framework enables a third-party application to obtain limited access
+                        to an HTTP service, either on behalf of a resource owner by orchestrating an approval interaction
+                        between the resource owner and the HTTP service, or by allowing the  third-party application to
+                        obtain access on its own behalf."
+                    </blockquote>
+                </section>
+
+                <section>
+                    <h2>OAuth 2.0</h2>
+
+                    <ul>
+                        <li>
+                            Permite que otras aplicaciones accedan a recursos de nuestra API con permisos de sus dueños
+                            (de manera similar a como lo hace Facebook que permite utilizar su API en otras aplicaciones).
+                        </li>
+                        <li>
+                            Notar que hace énfasis en que el framework permite accedo a una <i>third-party application</i>.
+                            Debemos pensar en términos de aplicaciones que acceden a recursos (no personas).
+                        </li>
+                    </ul>
+
+                    <p>
+                        Esto permite que un usuario le de permisos a otras aplicaciones a que accedan a sus recursos
+                        sin la necesidad de tener que divulgar sus contraseñas. Esto es <strong>AUTORIZAR</strong>.
+                    </p>
+                </section>
+
+                <section style="font-size: 90%;">
+                    <h3>OAuth 2.0 - Conceptos claves</h3>
+
+                    <p>Veamos algunos conceptos claves del protocolo</p>
+
+                    <ul>
+                        <li>
+                            <strong>Resource Owner</strong>: generalmente una persona que es dueño de algún recurso
+                            manejado por una API. Es capaz de dar acceso a dichos recursos.
+                        </li>
+                        <li>
+                            <strong>Client</strong>: puede ser una aplicación web (frontend), una aplicación móvil, etc.
+                            La aplicación realiza peticiones a la API para acceder recursos públicos o de un <strong>client</strong>.
+                            El <strong>resource owner</strong> debe autorizar al <strong>client</strong> para que pueda
+                            acceder a sus recursos.
+                        </li>
+                        <li>
+                            <strong>Resource Server</strong>: es el servidor que contiene la API que construímos.
+                        </li>
+                        <li>
+                            <strong>Authorization Server</strong>: servidor que implementa el protocolo OAuth 2.0 y es
+                            responsable de la autorización y de entregar los <strong>access token</strong> que le
+                            dan a una aplicación acceso a los recursos de un usuario. Puede ser el mismo <strong>
+                            resource server.
+                        </strong>
+                        </li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3>OAuth 2.0 - Conceptos claves</h3>
+
+                    <p>Veamos algunos conceptos claves del protocolo</p>
+
+                    <ul>
+                        <li>
+                            <strong>Access Token</strong>: un conjunto de caracteres aleatorios que funcionan como
+                            una credencial utilizada por el <strong>client</strong> para acceder a recursos privados
+                            de un <strong>resource owner</strong>.
+                        </li>
+                        <li>
+                            <strong>Protected Resource</strong>: es un recurso (datos) que pertenecen a un <strong>
+                            resource owner</strong>. Por ejemplo, los datos de perfil de un usuario.
+                        </li>
+                        <li>
+                            <strong>Authorization Grant</strong>: proceso en el cual el <strong>authorization server</strong>
+                            permite a un <strong>client</strong> el obtener un <strong>access token</strong> en nombre
+                            del <strong>resource owner</strong>. OAuth 2.0 define 4 tipos de <strong>authorization grant</strong>.
+                        </li>
+                    </ul>
+
+                    <p>
+                        ¿Cómo es el flujo general de una transacción OAuth 2.0?
+                    </p>
+                </section>
+
+                <section>
+                    <h2>OAuth 2.0 - Authorization Grant</h2>
+
+                    <p>
+                        ¿Cómo es el flujo general de una transacción OAuth 2.0?
+                    </p>
+
+                    <img src="img/oauth-abstract.png" alt="OAuth 2.0" style="width: 70%;">
+                </section>
+
+                <section>
+                    <h2>OAuth 2.0 - Registro de aplicación</h2>
+
+                    <p>
+                        Dado que OAuth considera que aplicaciones de terceros (que eventualmente puede ser una de
+                        nosotros mismos) utilicen nuestra API, es necesario disponer de un proceso en el cual las
+                        aplicaciones se registren como <strong>client</strong> de nuestra API.
+                    </p>
+
+                    <p>
+                        Una vez que al aplicación se ha registrado obtendrá:
+                    </p>
+
+                    <ul>
+                        <li>
+                            <strong>Client ID</strong>: identificador único del cliente.
+                        </li>
+                        <li>
+                            <strong>Client Secret</strong>: utilizada para verificar la identidad del cliente (es como
+                            la contraseña del cliente y debe ser tratada como tal).
+                        </li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>OAuth 2.0 - Grant Authorization Code</h2>
+
+                    <p>
+                        Este tipo de Grant es el más utilizado del protocolo y se refiere al caso en el cual el cliente
+                        es una aplicación del lado del servidor que está consumiendo una API. Esto asume:
+                    </p>
+
+                    <ul>
+                        <li>Existe una seguridad del servidor por lo que un atacante no puede obtener el <strong>client secret</strong>.</li>
+                    </ul>
+
+                    <p>
+                        Veamos como sería el flujo de este Grant.
+                    </p>
+                </section>
+
+                <section>
+                    <h2>OAuth 2.0 - Grant Authorization Code</h2>
+
+                    <img src="img/auth_code_flow.png" alt="Authorization Code">
+                </section>
+
+                <section style="font-size: 90%;">
+                    <h2>OAuth 2.0 - Grant Authorization Code</h2>
+
+                    <ol>
+                        <li>
+                            <strong>Authorization Code Link</strong>: el <strong>client</strong> le envía un enlace
+                            al <strong>resource owner</strong> para que este autorice al <strong>client</strong> a hacer
+                            uso de sus recursos. El enlace corresponde a un servicio del <strong>authorization server</strong>.
+                        </li>
+                        <li>
+                            <strong>El resource owner autoriza al client</strong>: el <strong>resource owner</strong> autoriza
+                            con sus credenciales al <strong>client</strong> para que utilice sus recursos.
+                        </li>
+                        <li>
+                            <strong>El client recibe un Authorization Code</strong>: el <strong>authorization server</strong>
+                            le envía al <strong>client</strong> un código que indica que ha sido autorizado por el
+                            <strong>resource owner</strong>.
+                        </li>
+                        <li>
+                            <strong>El client solicita un access token</strong>: con el Authorization Code, el <strong>client</strong>
+                            puede solicitar al <strong>authorization server</strong> un access token para hacer peticiones
+                            a nombre del <strong>resource owner</strong>.
+                        </li>
+                        <li>
+                            <strong>El client recibe el access token</strong>: una vez que el <strong>authorization server</strong>
+                            le entregue el access token al <strong>client</strong>, este puede realizar peticiones a la API
+                            en nombre del <strong>resource owner</strong>.
+                        </li>
+                    </ol>
+                </section>
+
+                <section>
+                    <h2>OAuth 2.0 - Resource Owner Password Credentials</h2>
+
+                    <p>
+                        Si bien existen 4 tipos de Grant (hemos visto ya 1 como ejemplo), en nuestro caso, nosotros
+                        estaremos construyendo tanto el backend como el frontend por lo que podemos estar seguros
+                        que el <strong>client</strong> que consume la API es confiable. Para este caso se diseñó
+                        el grant <strong>Password Credentials</strong>. Veamos como funciona.
+                    </p>
+
+                    <ol>
+                        <li>
+                            El <strong>resource owner</strong> directamente entrega su usuario y contraseña al
+                            client.
+                        </li>
+                        <li>
+                            Con esta información, el <strong>client</strong> solicita al <strong>authorization server</strong>
+                            un access token especificando además su Client ID.
+                        </li>
+                    </ol>
+                </section>
+
+                <section>
+                    <h2>OAuth 2.0 - Resource Owner Password Credentials</h2>
+
+                    <img src="img/oauth_username_password_flow.png" alt="Username Password Flow">
+                </section>
+
+                <section>
+                    <h2>OAuth 2.0 - Agregando seguridad a nuestra API Rails</h2>
+
+                    <p>
+                        Vamos a agregar autorización tipo OAuth 2.0 a nuestra API Rails para ver como funciona
+                        en la práctica. Para esto utilizaremos la gema <a href="https://github.com/doorkeeper-gem/doorkeeper">Doorkeeper</a>
+                        y para el manejo de usuarios la gema <a href="https://github.com/plataformatec/devise">Devise</a>:
+                    </p>
+
+
+<pre><code data-trim data-noescape>
+gem 'devise'
+gem 'doorkeeper'
+</code></pre>
+                    Primero configuramos devise:
+
+<pre><code data-trim data-noescape>
+rails generate devise:install
+rails generate devise User
+</code></pre>
+
+                    El último comando genera un modelo llamado User que devise utilizará como usuario del sistema.
+                </section>
+
+                <section>
+                    <h2>OAuth 2.0 - Agregando seguridad a nuestra API Rails</h2>
+
+                    <p>
+                        Ahora configuramos Doorkeeper:
+                    </p>
+
+<pre><code data-trim data-noescape>
+rake db:migrate # para aplicar la migracion de devise
+rails generate doorkeeper:migration
+</code></pre>
+
+                    <p>
+                        Esto creará una migración especial para doorkeeper. Podemos agregar claves foráneas a nuestro
+                        modelo de usuarios con la expresión:
+                    </p>
+
+<pre><code data-trim data-noescape>
+add_foreign_key :table_name, :users, column: :resource_owner_id
+</code></pre>
+
+                    En cada tabla que incluya la columna <i>resource_owner_id</i> en la migración creada por doorkeeper
+                    (ver código de ejemplo).
+                </section>
+
+                <section>
+                    <h2>OAuth 2.0 - Agregando seguridad a nuestra API Rails</h2>
+
+                    <p>
+                        Ahora aplicamos los cambios:
+                    </p>
+
+<pre><code data-trim data-noescape>
+rake db:migrate
+</code></pre>
+                    y agregamos las rutas de doorkeeper en nuestro routes.rb:
+
+<pre><code data-trim data-noescape>
+...
+use_doorkeeper
+...
+</code></pre>
+
+                    Con el comando <i>rake routes</i> podemos comprobar que se agregaron las rutas de doorkeper en nuestra
+                    API...
+                </section>
+
+                <section>
+                    <h2>OAuth 2.0 - Agregando seguridad a nuestra API Rails</h2>
+
+                    <pre><code data-trim data-noescape>
+                       Prefix Verb   URI Pattern                                  Controller#Action
+                              GET    /oauth/authorize/:code(.:format)             doorkeeper/authorizations#show
+          oauth_authorization GET    /oauth/authorize(.:format)                   doorkeeper/authorizations#new
+                              POST   /oauth/authorize(.:format)                   doorkeeper/authorizations#create
+                              DELETE /oauth/authorize(.:format)                   doorkeeper/authorizations#destroy
+                  oauth_token POST   /oauth/token(.:format)                       doorkeeper/tokens#create
+                 oauth_revoke POST   /oauth/revoke(.:format)                      doorkeeper/tokens#revoke
+           oauth_applications GET    /oauth/applications(.:format)                doorkeeper/applications#index
+                              POST   /oauth/applications(.:format)                doorkeeper/applications#create
+        new_oauth_application GET    /oauth/applications/new(.:format)            doorkeeper/applications#new
+       edit_oauth_application GET    /oauth/applications/:id/edit(.:format)       doorkeeper/applications#edit
+            oauth_application GET    /oauth/applications/:id(.:format)            doorkeeper/applications#show
+                              PATCH  /oauth/applications/:id(.:format)            doorkeeper/applications#update
+                              PUT    /oauth/applications/:id(.:format)            doorkeeper/applications#update
+                              DELETE /oauth/applications/:id(.:format)            doorkeeper/applications#destroy
+oauth_authorized_applications GET    /oauth/authorized_applications(.:format)     doorkeeper/authorized_applications#index
+ oauth_authorized_application DELETE /oauth/authorized_applications/:id(.:format) doorkeeper/authorized_applications#destroy
+             oauth_token_info GET    /oauth/token/info(.:format)                  doorkeeper/token_info#show
+</code></pre>
+                </section>
+
+                <section>
+                    <h2>OAuth 2.0 - Agregando seguridad a nuestra API Rails</h2>
+
+                    <p>
+                        Ahora vamos a configurar doorkeeper para que utilice el password credentials flow. Para esto
+                        se debe crear el archivo <i>config/initializers/doorkeeper.rb</i> con el siguiente contenido:
+                    </p>
+
+<pre><code data-trim data-noescape>
+Doorkeeper.configure do
+  resource_owner_from_credentials do |routes|
+    user = User.find_for_database_authentication(:email => params[:username])
+    if user && user.valid_for_authentication? { user.valid_password?(params[:password]) }
+      user
+    end
+  end
+end
+
+Doorkeeper.configuration.token_grant_types << "password"
+</code></pre>
+
+                    Ahora, veamos como asegurar nuestra API...
+                </section>
+
+                <section style="font-size: 90%;">
+                    <h3>OAuth 2.0 - Agregando seguridad a nuestra API Rails</h3>
+
+                    <p>
+                        Doorkeeper nos provee de algunos métodos para asegurar acciones de nuestros controladores.
+                        En particular, es de utilidad en el filtro <i>before_action</i> el método <i>doorkeeper_authorize!</i>.
+                        Para probarlo, agreguemos el filtro en nuestro controlador de posts (<i>app/controllers/posts_controller.rb)</i>:
+                    </p>
+
+<pre><code data-trim data-noescape>
+class PostsController < ApplicationController
+  before_action :set_post, only: [:show, :edit, :update, :destroy]
+  before_action :doorkeeper_authorize!
+
+  # GET /posts
+  def index
+    @posts = Post.all
+  end
+
+  ...
+
+end
+</code></pre>
+
+                    <p>
+                        Esto indica que queremos autorizar todas las acciones del controlador (en una aplicación
+                        real seríamos más selectivos). Veamos que sucede si intentamos listar los posts...
+                    </p>
+                </section>
+
+                <section>
+                    <h3>OAuth 2.0 - Listando los posts (asegurados)</h3>
+
+                    <img src="img/list_posts_403.png" alt="List Posts Unauthorized">
+
+                    <p>
+                        Notar que devuelve un status code 403 - Unauthorized. Efectivamente doorkeper no nos permite
+                        listar los posts puesto que no hemos especificado un access token que indique que tenemos
+                        los permisos suficientes. Veamos como solucionarlo.
+                    </p>
+                </section>
+
+                <section>
+                    <h3>OAuth 2.0 - Listandos los posts (asegurados)</h3>
+
+                    <p>
+                        Como estamos utilizando el password credentials flow, para acceder a un token vamos a necesitar
+                        un <strong>resource owner</strong> (a.k.a un User) y un <strong>client</strong> (en palabras
+                        de doorkeeper una aplicación). Comencemos creando el usuario:
+                    </p>
+
+<pre><code data-trim data-noescape>
+rails console # esto accede a la consola de rails donde podemos probar comandos de utilidad
+@user = User.new(:email => 'diego.acuna@mailbox.org', :password => 'holamundo', :password_confirmation => 'holamundo')
+@user.save
+exit
+</code></pre>
+
+                    <p>
+                        Esto crea un usuario de username <i>diego.acuna@mailbox.org</i> y password <i>holamundo</i>
+                        en nuestra aplicación. Toda la gestión de las passwords y de los usuarios proviene de la
+                        gema devise.
+                    </p>
+
+                    <p>
+                        Ahora veamos como crear una aplicación (un <strong>client</strong>)...
+                    </p>
+                </section>
+                
+                <section style="font-size: 90%;">
+                    <h3>OAuth 2.0 - Listandos los posts (asegurados)</h3>
+                    
+                    <p>
+                        Amablemente, doorkeeper nos entrega rutas e incluso una interfaz gráfica para que podamos crear
+                        aplicaciones. Por defecto, esta interfaz es pública, lo que es útil al momento de desarrollar.
+                        En producción es conveniente proteger de alguna manera ciertas rutas de la interfaz. Si ingresamos
+                        a <a href="http://localhost:3000/oauth/applications">http://localhost:3000/oauth/applications</a>:
+                    </p>
+
+                    <img src="img/doorkeeper_applications.png" alt="Doorkeeper Applications" style="width: 55%;">
+                </section>
+
+                <section style="font-size: 90%;">
+                    <h3>OAuth 2.0 - Listandos los posts (asegurados)</h3>
+
+                    <p>
+                        Para crear una aplicación, presionar en el botón "New Application":
+                    </p>
+
+                    <img src="img/doorkeeper_create.png" alt="Doorkeeper Create Application" >
+
+                    <p>
+                        En mi caso, puse de nombre "frontend", URI: urn:ietf:wg:oauth:2.0:oob y scope en blanco...
+                    </p>
+                </section>
+
+                <section>
+                    <h3>OAuth 2.0 - Listandos los posts (asegurados)</h3>
+
+                    <p>
+                        Bien! tenemos nuestro Client ID y nuestro Client Secret (este no es necesario ya que estamos
+                        utilizando el password credentials flow).
+                    </p>
+
+                    <img src="img/doorkeeper_app_created.png" alt="Doorkeeper Application Created">
+                </section>
+
+                <section>
+                    <h3>OAuth 2.0 - Listandos los posts (asegurados)</h3>
+
+                    <p>
+                        Ya tenemos el <strong>resource owner</strong> y el <strong>client</strong>. Veamos ahora como
+                        solicitar al <strong>authorization server</strong> un <strong>access token</strong>. Dentro de las
+                        rutas generadas automáticamente por Doorkeeper, existe la ruta <i>/oauth/token</i> con el método POST.
+                        Le debemos especificar el siguiente cuerpo json a la petición:
+                    </p>
+
+<pre><code data-trim data-noescape>
+{
+  "grant_type"    : "password",
+  "username"      : "nombre de usuario",
+  "password"      : "password del usuario"
+}
+</code></pre>
+
+                    <small>
+                        <strong>NOTA</strong>: especificar el Client ID y el Client Secret en el password flow es opcional
+                        según la especificación OAuth 2.0 (dado que existe una alta confianza entre el <strong>client</strong>
+                        y el <strong>resource server</strong>.
+                    </small>
+
+                    <p>
+                        En nuestro caso, utilizaremos las credenciales del <strong>resource owner</strong> que
+                        creamos con anterioridad. Veamos la petición en POSTMAN...
+                    </p>
+                </section>
+
+                <section>
+                    <h3>OAuth 2.0 - Listandos los posts (asegurados)</h3>
+
+                    <img src="img/get_access_token.png" alt="Get Access Token in Doorkeeper">
+                </section>
+
+                <section>
+                    <h3>OAuth 2.0 - Listandos los posts (asegurados)</h3>
+
+                    <p>
+                        Nuestra API nos responde con un objeto json que contiene:
+                    </p>
+
+                    <ul>
+                        <li>
+                            <strong>access_token</strong>: es el access token que tanto estabamos buscando. Nos permitirá
+                            realizar llamadas a nuestra API que requieran de autorización.
+                        </li>
+                        <li>
+                            <strong>token_type</strong>: en OAuth este parámetro representa como el Access Token debe
+                            ser generado. Por defecto (y lo por lejos más utilizado) es <i>Bearer</i> que quiere decir
+                            que se genera el token y se le entrega al <strong>client</strong>. Luego, permite el acceso
+                            a quien quiera que entregue un token válido.
+                        </li>
+                        <li>
+                            <strong>expires_in</strong>: en OAuth los token tienen una vida útil. Luego de ese tiempo
+                            el token expira y ya no puede ser utilizado por el <strong>client</strong>.
+                        </li>
+                        <li>
+                            <strong>created_at</strong>: fecha en la que el token fue creado.
+                        </li>
+                    </ul>
+                </section>
+
+                <section style="font-size: 90%;">
+                    <h3>OAuth 2.0 - Listandos los posts (asegurados)</h3>
+
+                    <p>
+                        Ya disponemos de nuestro <strong>Access Token</strong>, veamos ahora como hacer una petición
+                        válida a nuestra API:
+                    </p>
+
+                    <img src="img/authorization_header.png" alt="Authorization Header">
+
+                    <p>
+                        La clave es especificar un header en la petición de nombre <strong>Authorization</strong>
+                        y de contenido <strong>Bearer ACCESS_TOKEN</strong>. En nuestro caso el contenido es:
+                        <strong>Bearer 9232184d0d4...</strong>. Este es el mecanismo estándar de OAuth 2.0 para especificar
+                        <strong>Access Tokens</strong> en una petición. Veamos que obtenemos de respuesta...
+                    </p>
+                </section>
+
+                <section>
+                    <h3>OAuth 2.0 - Listandos los posts (asegurados)</h3>
+
+                    <img src="img/list_posts_200.png" alt="List Posts 200 OK" style="width: 75%;">
+
+                    <p>
+                        Perfecto! logramos listar los posts correctamente.
+                    </p>
+                </section>
+
+                <section style="font-size: 90%;">
+                    <h3>Comentarios</h3>
+
+                    <ul>
+                        <li>
+                            OAuth 2.0 es un protocolo estandarizado (en el cual se ha invertido una gran cantidad
+                            de investigación y trabajo) que permite asegurar API's. Para ciertos casos puede parecer
+                            excesivo su uso pero hoy en día con la gran cantidad de librerías disponibles, la implementación
+                            es sencilla.
+                        </li>
+                        <li>
+                            OAuth 2.0 dispone de otros dos Grants que no analizamos en esta clase. Uno esta orientado
+                            a utilizar el protocolo en aplicaciones móviles o del lado del cliente (<strong>Implicit
+                            Grant Type</strong>). Además provee de otro Grant (<strong>Client Credentials</strong>) donde
+                            el mismo <strong>client</strong> puede obtener un token en su nombre (para por ejemplo actualizar
+                            sus datos de aplicación).
+                        </li>
+                        <li>
+                            En nuestro caso, al utilizar el <strong>password flow</strong> obtenemos tanto autenticación
+                            como autorización. Al utilizar otros tipos de Grant debemos preocuparnos de la autenticación.
+                            Para esto, OAuth 2.0 se integra fácilmente con OpenID.
+                        </li>
+                    </ul>
+                </section>
+
+                <section style="font-size: 80%;">
+                    <h3>Comentarios</h3>
+
+                    <img src="img/oauth2_book.png" alt="Getting Started With OAuth 2.0" style="width: 40%;">
+
+                    <p>
+                        OAuth 2.0, otros flujos y su integración con OpenID Access en solo 82 páginas!
+                    </p>
+                </section>
+
+                <section>
+                    <h1>¿Comentarios y/o consultas?</h1>
+                </section>
+
+            </div>
+		</div>
+
+		<script src="../revealjs/lib/js/head.min.js"></script>
+		<script src="../revealjs/js/reveal.js"></script>
+
+		<script>
+			// More info https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				history: true,
+				slideNumber: true,
+
+				// More info https://github.com/hakimel/reveal.js#dependencies
+				dependencies: [
+					{ src: '../revealjs/plugin/markdown/marked.js' },
+					{ src: '../revealjs/plugin/markdown/markdown.js' },
+					{ src: '../revealjs/plugin/notes/notes.js', async: true },
+					{ src: '../revealjs/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+				]
+			});
+		</script>
+	</body>
+</html>

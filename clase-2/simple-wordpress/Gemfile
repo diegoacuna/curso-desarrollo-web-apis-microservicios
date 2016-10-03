@@ -46,3 +46,5 @@ group :development do
 end
 
 gem 'responders'
+gem 'devise'
+gem 'doorkeeper'
