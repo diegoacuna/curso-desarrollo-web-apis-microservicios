@@ -1,0 +1,748 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>Desarrollo web orientado a API's y Microservicios - Clase 8</title>
+
+		<link rel="stylesheet" href="../revealjs/css/reveal.css">
+		<link rel="stylesheet" href="../revealjs/css/theme/league.css">
+		<link rel="stylesheet" href="../revealjs/css/bootstrap.css">
+		<link rel="stylesheet" href="../revealjs/css/main.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="../revealjs/lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? '../revealjs/css/print/pdf.css' : '../revealjs/css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+
+				<section>
+                    <h2>Desarrollo web orientado a API's y Microservicios</h2>
+                    <h4>Un enfoque moderno</h4>
+                    <h5 class="actual-session">Clase 9</h5>
+                    <p>
+                        <small>
+                            Diego Acu&ntilde;a Rozas<br>
+                            Ing. Civil en Inform&aacute;tica - UTFSM<br>
+                            <a href="mailto:diego.acuna@mailbox.org">diego.acuna@mailbox.org</a>
+                        </small>
+                    </p>
+                </section>
+
+				<section>
+                    <h2>Clase de hoy</h2>
+
+                    <p>Vamos a revisar algunos aspectos de infraestructura y deployment.</p>
+
+                    <ul>
+                        <li>
+                            Arquitecturas orientadas a microservicios
+                            <ul>
+                                <li>Enfoque tradicional: monolithic apps</li>
+                                <li>Microservicios</li>
+                                <li>Implementaci&oacute;n de microservicios</li>
+                            </ul>
+                        </li>
+                        <li>
+                            Deployment
+                            <ul>
+                                <li>Containers y Docker: porqu&eacute; y para qu&eacute;</li>
+                            </ul>
+                        </li>
+                        <li>Consultas y comentarios</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>Desarrollo de software vs Arquitectura de software</h2>
+
+                    <p>
+                        Ya hemos revisado los aspectos de desarrollo de construcci&oacute;n a API&apos;s, en particular:
+                    </p>
+
+                    <ul>
+                        <li>Estudiamos la construcci&oacute;n del backend</li>
+                        <li>Estudiamos la construcci&oacute;n del frontend</li>
+                        <li>Estudiamos aspectos de seguridad de una API</li>
+                    </ul>
+
+                    <p>
+                        Hoy nos vamos a concentrar en aspectos de la infraestructura de nuestros sistemas y de como
+                        hacemos el deployment. Comencemos entendiendo la diferencia entre desarrollo de software y
+                        arquitectura de software...
+                    </p>
+                </section>
+
+                <section>
+                    <h2>Desarrollo de software vs Arquitectura de software</h2>
+
+                    <p>
+                        Consideremos una aplicaci&oacute;n web ya desarrollada:
+                    </p>
+
+                    <img src="img/siga.png" alt="SIGA" style="width: 65%;">
+                </section>
+
+                <section style="font-size: 95%;">
+                    <h3>Desarrollo de software vs Arquitectura de software</h3>
+
+                    <p>
+                        Tengamos como supuesto que esta aplicaci&oacute;n cumple con todos los requerimientos funcionales
+                        solicitados por el cliente. Lo enviamos a producci&oacute;n en un servidor sencillo. Veamos si podemos
+                        responder a algunas preguntas:
+                    </p>
+
+                    <ul>
+                        <li>
+                            &iquest;Nuestro sistema soporta a millones de usuarios de manera concurrente?
+                        </li>
+                        <li>
+                            &iquest;C&oacute;mo ser&iacute;a la latencia de un usuario que ingresa desde Europa?
+                        </li>
+                        <li>
+                            &iquest;C&oacute;mo se recupera el sistema ante una ca&iacute;da?
+                        </li>
+                    </ul>
+
+                    <p>
+                        Parecen ser preguntas que no est&aacute;n relacionadas al c&oacute;digo del sistema &iquest;C&oacute;mo podemos mejorar
+                        nuestro sistema seg&uacute;n las preguntas anteriores?
+                    </p>
+
+                    <strong>Tiene que ver con la arquitectura del sistema (no con el c&oacute;digo)</strong>
+                </section>
+
+                <section>
+                    <h2>Monolithic Apps</h2>
+
+                    <p>
+                        Una aplicaci&oacute;n tipo <i>monolithic</i> es aquella que es construida como un &uacute;nico c&oacute;digo base en
+                        un mismo stack. Por ejemplo, si construimos un blog, podr&iacute;amos utilizar rails y construir la
+                        aplicaci&oacute;n completa en &quot;el mismo directorio&quot; (mismo c&oacute;digo base). Este enfoque tiene las
+                        siguientes ventajas:
+                    </p>
+
+                    <ul>
+                        <li>
+                            Simple de desarrollar: se configura todo solo 1 vez, buen soporte de IDE&apos;s.
+                        </li>
+                        <li>
+                            Simple de enviar a producci&oacute;n: solo es necesario enviar a producci&oacute;n una aplicaci&oacute;n (por
+                            ejemplo un directorio rails, un WAR, etc.
+                        </li>
+                        <li>
+                            Escalamiento: son sencillas de escalar seg&uacute;n dispongamos de los recursos necesarios.
+                        </li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>Monolithic Apps</h2>
+
+                    <p>
+                        Es la forma en la que hemos construido aplicaciones hist&oacute;ricamente (y tambi&eacute;n durante este curso).
+                    </p>
+
+                    <img src="img/mono_app.png" alt="Monolithic App">
+                </section>
+
+                <section>
+                    <h2>Monolithic Apps</h2>
+
+                    <p>
+                        Si bien es un enfoque sencillo y &uacute;til, tiene algunas desventajas:
+                    </p>
+
+                    <ul>
+                        <li>
+                            Complejidad del c&oacute;digo a medida que el sistema crece. Piensen en la documentaci&oacute;n, en c&oacute;mo
+                            se integra un nuevo desarrollador al equipo.
+                        </li>
+                        <li>
+                            <i>Slow deployment</i>: a medida que el sistema crece, los recursos que utiliza tambi&eacute;n
+                            crecen. Esto ralentiza la puesta en producci&oacute;n del sistema. Piensen que al modificar una
+                            peque&ntilde;a parte del sistema se debe enviar nuevamente a producci&oacute;n el sistema completo.
+                        </li>
+                        <li>
+                            <i>Technology Stack</i>: nos atamos a un stack para siempre.
+                        </li>
+                        <li>
+                            Escalabilidad en una sola direcci&oacute;n.
+                        </li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>Microservicios</h2>
+
+                    <p>
+                        Nace en respuesta a las debilidades de las <i>monolithic apps</i>. La idea es construir distintos
+                        servicios como distintas aplicaciones. Cada servicio posee una funcionalidad especifica y bien
+                        definida. Luego, el sistema completo se compone de un conjunto de servicios.
+                    </p>
+
+                    <img src="img/microservices.png" alt="Microservicios">
+                </section>
+
+                <section style="font-size:95%;">
+                    <h3>Microservicios</h3>
+
+                    <p>
+                        Este tipo de arquitectura posee un conjunto de ventajas:
+                    </p>
+
+                    <ul>
+                        <li>
+                            Cada microservicio es relativemente peque&ntilde;o: facilidad para los desarrolladores, rapidez
+                            de deployment.
+                        </li>
+                        <li>
+                            Cada servicio se puede enviar a producci&oacute;n de manera separada. El sistema completo se
+                            compone de m&uacute;ltiples fases de producci&oacute;n. Esto hace que el deployment sea m&aacute;s r&aacute;pido y
+                            eficiente ya que solo hay que enviar a producci&oacute;n los microservicios que han cambiado.
+                        </li>
+                        <li>
+                            Tolerancia a fallas: para que el sistema falle por completo deber&iacute;an fallar todos los
+                            microservicios =&gt; baja probabilidad.
+                        </li>
+                        <li>
+                            Sin compromiso a un stack: los microservicios son independientes por lo que se pueden utilizar
+                            m&uacute;ltiples stacks.
+                        </li>
+                    </ul>
+
+                    <p>
+                        Aunque tambi&eacute;n tiene sus desventajas...
+                    </p>
+                </section>
+
+                <section>
+                    <h3>Microservicios</h3>
+
+                    <p>
+                        Desventajas:
+                    </p>
+
+                    <ul>
+                        <li>
+                            Complejidad adicional al tener un sistema distribuido
+                        </li>
+                        <li>
+                            En general el soporte de IDE&apos;s est&aacute; orientado a la construcci&oacute;n de <i>monolithic apps</i>
+                        </li>
+                        <li>
+                            &iquest;C&oacute;mo hacemos testing?
+                        </li>
+                        <li>
+                            En general los recursos computacionales para sistemas basados en microservicios exceden a los
+                            necesarios para <i>monolithic apps</i>
+                        </li>
+                        <li>
+                            Dificultad para planificar que debe hacer cada microservicio, definir l&iacute;mites, etc.
+                        </li>
+                        <li>
+                            COMUNICACI&Oacute;N ENTRE MICROSERVICIOS!
+                        </li>
+                    </ul>
+                </section>
+
+                <section style="font-size: 95%;">
+                    <h3>Microservicios: Comunicaci&oacute;n</h3>
+
+                    <p>
+                        Una pregunta en este tipo de arquitecturas es &iquest;c&oacute;mo comunicamos los distintos microservicios
+                        que componen un mismo sistema? Existen distintos enfoques:
+                    </p>
+
+                    <ul>
+                        <li>
+                            API&apos;s REST: recordemos que cada microservicio expone una API REST. Si un microservicio quisiera
+                            comunicarse con otro bastar&iacute;a con que hiciera una petici&oacute;n HTTP a la API que expone el otro
+                            microservicio. PROBLEMAS: descubrimiento de servicios, co-dependencia, &iquest;problemas de dise&ntilde;o?
+                        </li>
+                        <li>
+                            Bus de mensajes: otro enfoque ser&iacute;a un bus tipo <i>publish/suscribe</i>. Cada microservicio
+                            expone un listado de eventos y cuando suceda dicho evento publica un mensaje en un bus. Luego,
+                            el broker de mensajes despachar&aacute; el evento a todos los microservicios interesados. La ventaja
+                            es que no existe co-dependencia.
+                        </li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3>Microservicios vs <i>Monolithic Apps</i></h3>
+
+                    <img src="img/micro_vs_mono.png" alt="Microservices vs Monolithic Apps">
+                </section>
+
+                <section>
+                    <h3>Microservicios: implementaci&oacute;n en el mundo real</h3>
+
+                    <p>
+                        &iquest;Necesitamos de un full-stack framework como rails? depende del caso. Si definimos microservicios
+                        siguiendo la l&oacute;gica de que sean bien delimitados y espec&iacute;ficos, frameworks de menor tama&ntilde;o nos
+                        ahorrar&aacute;n recursos y tiempo de desarrollo. Consideremos por ejemplo el DSL <a
+                            href="https://github.com/sinatra/sinatra">Sinatra</a> de ruby:
+                    </p>
+
+<pre><code data-trim data-noescape>
+gem install sinatra
+</code></pre>
+
+                    Archivo: hello_world.rb
+
+<pre><code data-trim data-noescape>
+require 'sinatra'
+
+get '/' do
+  'Hello World'
+end
+</code></pre>
+                    y para ejecutarlo (en desarrollo):
+
+<pre><code data-trim data-noescape>
+ruby hello_world.rb
+</code></pre>
+                </section>
+
+                <section>
+                    <h3>Microservicios: implementaci&oacute;n en el mundo real</h3>
+
+                    <p>
+                        Por defecto, Sinatra utiliza el puerto 4567:
+                    </p>
+
+                    <img src="img/sinatra_hello_world.png" alt="Sinatra Hello World">
+
+                    <p>Algunas utilidades:</p>
+
+                    <ul>
+                        <li>
+                            <a href="https://github.com/janko-m/sinatra-activerecord">sinatra-activerecord</a>: librer&iacute;a
+                            que implementa el patr&oacute;n ActiveRecord y lo integra a sinatra. Nos permitir&aacute; conectarnos a
+                            bases de datos relacionales al estilo de rails.
+                        </li>
+                        <li>
+                            <a href="https://github.com/intridea/oauth2">OAuth2</a>: wrapper escrito en Ruby del protocolo
+                            OAuth 2.0.
+                        </li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>Microservicios: implementaci&oacute;n en el mundo real</h2>
+
+                    <p>
+                        Dependiendo de la aplicaci&oacute;n necesitaremos de distintos recursos. Como consejo, como cada
+                        microservicio debe ser autolimitado no es necesario utilizar herramientas fullstack o que
+                        requieran de una mayor configuraci&oacute;n.
+                    </p>
+
+                    <p>
+                        Deber&aacute;n decidir por cada microservicio que es lo m&aacute;s adecuado a utilizar.
+                    </p>
+                </section>
+
+                <section>
+                    <h1>Deployment</h1>
+                </section>
+
+                <section style="font-size:95%;">
+                    <h2>Deployment</h2>
+
+                    <p>
+                        El paso a producci&oacute;n de un sistema es un proceso que puede resultar tedioso y complejo para el
+                        equipo de desarrollo si es que no se utilizan las herramientas correctas. En general, podemos
+                        observar los siguientes problemas al realizar el deployment:
+                    </p>
+
+                    <ul>
+                        <li>
+                            Diferencias entre los entornos de desarrollo y producci&oacute;n (por ejemplo: Windows vs Linux)
+                        </li>
+                        <li>
+                            Deployment manual: cada vez que se libera una nueva versi&oacute;n, un desarrollador debe conectarse
+                            al servidor (por ejemplo via ssh o sftp) y subir la nueva versi&oacute;n =&gt; tristeza para el desarrollador.
+                        </li>
+                        <li>
+                            Env&iacute;amos una nueva versi&oacute;n a producci&oacute;n y al cliente... le falla! (excusa del
+                            desarrollador = en mi computador funciona)
+                        </li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3>Deployment</h3>
+
+                    <p>Veamos la soluci&oacute;n a cada uno de los problemas anteriores:</p>
+
+                    <ul>
+                        <li>
+                            Diferencias entre los entornos de desarrollo y producci&oacute;n (por ejemplo: Windows vs Linux)
+                            =&gt; <strong>DOCKER!</strong>
+                        </li>
+                        <li>
+                            Deployment manual: cada vez que se libera una nueva versi&oacute;n, un desarrollador debe conectarse
+                            al servidor (por ejemplo via ssh o sftp) y subir la nueva versi&oacute;n =&gt; tristeza para el desarrollador.
+                            =&gt; <strong>CONTINUOUS INTEGRATION (CI)</strong>
+                        </li>
+                        <li>
+                            Env&iacute;amos una nueva versi&oacute;n a producci&oacute;n y al cliente... le falla! (excusa del
+                            desarrollador = en mi computador funciona) =&gt; <strong>TESTING Y CI</strong>
+                        </li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>Docker</h2>
+
+                    <p>
+                        <strong>&iquest;Qu&eacute; es Docker?</strong>: &quot;Docker es un proyecto de c&oacute;digo abierto que automatiza el
+                        despliegue de aplicaciones dentro de contenedores de software, proporcionando una capa
+                        adicional de abstracci&oacute;n y automatizaci&oacute;n de Virtualizaci&oacute;n a nivel de sistema operativo en
+                        Linux. Docker utiliza caracter&iacute;sticas de aislamiento de recursos del kernel de Linux, tales como
+                        cgroups y espacios de nombres (namespaces) para permitir que &quot;contenedores&quot; independientes se
+                        ejecuten dentro de una sola instancia de Linux, evitando la sobrecarga de iniciar y mantener
+                        m&aacute;quinas virtuales.&quot;
+                    </p>
+
+                    <strong>PALABRAS CLAVES:</strong> virtualización, containers, linux!
+                </section>
+
+                <section>
+                    <h2>Docker</h2>
+
+                    <p>
+                        Docker resuelve varios problemas relacionados con virtualización, microservicios y con los
+                        problemas de deployment que estuvimos analizando. En esta clase, nos enfocaremos en utilizar
+                        la herramienta para unificar los entornos de desarrollo y producción.
+                    </p>
+
+                    <p>
+                        <strong>IDEA</strong>: tener un entorno de desarrollo equivalente a lo que será el entorno de
+                        producción para evitar problemas de incompatibilidades entre sistema operativos. Bajo este
+                        enfoque podríamos considerar que Docker es Vagrant mejorado.
+                    </p>
+                </section>
+
+                <section>
+                    <h2>Vagrant</h2>
+
+                    <img src="img/vagrant.png" alt="Vagrant">
+                </section>
+
+                <section>
+                    <h2>Docker</h2>
+
+                    <p>Veamos algunos conceptos claves:</p>
+
+                    <ul>
+                        <li>
+                            <strong>Docker image</strong>: es un archivo que define lo que un container debe poseer.
+                            Pueden considerarlas como un esquema de su container. Docker define un repositorio p&uacute;blico
+                            desde donde pueden obtener im&aacute;genes creadas por la comunidad: <a
+                                href="https://hub.docker.com/explore/">Docker Hub</a>.
+                        </li>
+                        <li>
+                            <strong>Containers</strong>: se crean a partir una Docker image. Se pueden considerar como
+                            una instancia de un docker image. Es donde efectivamente corre su aplicaci&oacute;n.
+                        </li>
+                    </ul>
+
+                    <p>
+                        Veamos algunos ejemplos...
+                    </p>
+                </section>
+
+                <section>
+                    <h2>Docker: Comandos</h2>
+
+                    <ul>
+                        <li>
+                            <i>docker pull</i>: permite obtener una imagen desde Docker Hub. Por ejemplo:
+
+<pre><code data-trim data-noescape>
+docker pull ubuntu
+</code></pre>
+                        </li>
+                        <li>
+                            <i>docker run imagen</i>: una vez descargada la imagen, podemos crear un container con el comando run.
+                            Por ejemplo:
+
+<pre><code data-trim data-noescape>
+docker run ubuntu
+</code></pre>
+                            por defecto, docker ejecutará un comando en el container y luego lo finalizará. Como no hemos
+                            especificado ningún comando entonces no veremos ninguna salida. Veamos un echo:
+
+<pre><code data-trim data-noescape>
+docker run ubuntu echo "hola mundo"
+</code></pre>
+
+
+                        </li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>Docker: Comandos</h2>
+
+                    <ul>
+                        <li>
+                            <i>docker ps -a</i>: lista el estado de los containers en ejecución/ejecutados.
+                        </li>
+                    </ul>
+<pre><code data-trim data-noescape>
+docker ps -a
+> CONTAINER ID        IMAGE             COMMAND                CREATED             STATUS
+9edd2430a1cc        ubuntu:latest       "/bin/bash"            9 seconds ago       Exited (0) 8 seconds ago
+e3b65e84bca3        ubuntu:latest       "/bin/bash"            24 seconds ago      Exited (0) 23 seconds ago
+</code></pre>
+                    <ul>
+                        <li>
+                            <i>docker run -it IMAGEN sh</i>: nos permite ejecutar comandos en el container mediante
+                            una sesión interactiva (más útil que ejecutar solo 1 comando). Podemos salir del container
+                            con el comando 'exit'.
+                        </li>
+                    </ul>
+
+                    <p>
+                        Tratemos de ocupar alguna imagen de Docker un poco más interesante...
+                    </p>
+                </section>
+
+                <section>
+                    <h3>Docker y Rails</h3>
+
+                    <p>
+                        Primero instalaremos <i>Docker compose</i>. Esta herramienta permite crear un archivo de
+                        configuración .yml para crear y manejar múltiples containers de manera sencilla. Para instalarlo:
+                    </p>
+
+<pre><code data-trim data-noescape>
+curl -L https://github.com/docker/compose/releases/download/1.8.1/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+chmod +x /usr/local/bin/docker-compose
+</code></pre>
+
+                    <p>
+                        Ahora escribiremos un Dockerfile (especifica lo que debe contener una Docker image) que nos permita
+                        generar un container de Docker para una aplicación rails. En este caso utilizaremos la aplicación
+                        rails de la clase 2 (Dockerfile en la siguiente ppt).
+                    </p>
+
+                </section>
+
+                <section>
+                    <h3>Docker y Rails</h3>
+
+                    <p>
+                        Dockerfile:
+                    </p>
+
+                    <pre><code data-trim data-noescape>
+FROM ruby:2.2.0
+
+RUN apt-get update -qq && apt-get install -y build-essential
+
+# for postgres
+RUN apt-get install -y libpq-dev
+
+# for nokogiri
+RUN apt-get install -y libxml2-dev libxslt1-dev
+
+# for capybara-webkit
+RUN apt-get install -y libqt4-webkit libqt4-dev xvfb
+
+# for a JS runtime
+RUN apt-get install -y nodejs
+
+ENV APP_HOME /myapp
+RUN mkdir $APP_HOME
+WORKDIR $APP_HOME
+
+ADD Gemfile* $APP_HOME/
+RUN bundle install
+
+ADD . $APP_HOME
+</code></pre>
+
+                    <p>NOTA: este Dockerfile utiliza la imagen ruby de DockerHub. Para constuir la imagen, se
+                    utiliza el comando <i>docker build .</i></p>
+                </section>
+
+                <section>
+                    <h3>Docker y Rails</h3>
+
+                    <p>
+                        Ahora vamos a utilizar <i>docker-compose</i> para crear dos containers, uno para la app de rails
+                        y otro para la base de datos postgresql. Primero debemos crear un archivo <i>docker-compose.yml</i>:
+                    </p>
+
+<pre><code data-trim data-noescape>
+version: '2'
+services:
+  db:
+    image: postgres:9.4.1
+    ports:
+      - "5432:5432"
+
+  web:
+    build: .
+    command: bin/rails server --port 3000 --binding 0.0.0.0
+    ports:
+      - "3000:3000"
+    links:
+      - db
+    volumes:
+      - .:/myapp
+</code></pre>
+                </section>
+
+                <section>
+                    <h3>Docker y Rails</h3>
+
+                    <p>
+                        Lo que indica este archivo es que se deben levantar dos containers:
+                    </p>
+
+                    <ul>
+                        <li>
+                            <strong>db</strong>: basado en la imagen <i>postgres</i> y que expone el puerto 5432 en el
+                            puerto 5432 del host.
+                        </li>
+                        <li>
+                            <strong>web</strong>: que utiliza el Dockerfile que acabamos de crear (build .). Levanta
+                            el servidor de rails y expone el puerto 3000 en el host. Además, en el container utiliza
+                            el directorio <i>/myapp</i> para linkearlo con el directorio '.' del host, es decir, el
+                            directorio donde está la aplicación de rails.
+                        </li>
+                    </ul>
+
+                    <p>
+                        Para ejecutar el compose:
+                    </p>
+
+<pre><code data-trim data-noescape>
+docker-compose build
+</code></pre>
+                </section>
+
+                <section>
+                    <h3>Docker y Rails</h3>
+
+                    <p>
+                        Dado que estamos utilizando un container para la base de datos, debemos informarle a rails que
+                        utilice ese host como servidor de postgresql:
+                    </p>
+
+<pre><code data-trim data-noescape>
+development: &default
+  adapter: postgresql
+  database: app_development
+  min_messages: WARNING
+  pool: 5
+  username: postgres
+  host: db
+
+test:
+  &lt;<: *default
+      database: app_test
+</code></pre>
+
+                    Notar que en <i>host</i> hemos especificado el nombre del container que definimos en el archivo
+                    docker-compose.yml.
+                </section>
+
+                <section>
+                    <h3>Docker y Rails</h3>
+
+                    <p>
+                        Veamos como podemos ejecutar la imagen para tener nuestro entorno. Primero creamos las bases
+                        de datos:
+                    </p>
+
+<pre><code data-trim data-noescape>
+docker-compose run web rake db:create db:setup
+</code></pre>
+
+                    y ahora podremos ejecutar el container con la aplicaci&oacute;n:
+
+<pre><code data-trim data-noescape>
+docker-compose up
+</code></pre>
+
+                    <p>
+                        Con esto deber&iacute;an poder acceder a su API a trav&eacute;s del puerto 3000.
+                    </p>
+
+                    <p>
+                        Un ejemplo m&aacute;s completo (y complejo) lo pueden ver en:
+                        <a href="https://semaphoreci.com/community/tutorials/dockerizing-a-ruby-on-rails-application">
+                            Dockerizing a ruby on rails application
+                        </a>.
+                    </p>
+
+                </section>
+
+                <section>
+                    <h3>Comentarios finales</h3>
+
+                    <ul>
+                        <li>
+                            Beneficios de las arquitecturas basadas en microservicios: desacoplamiento, permite
+                            dividir sistemas complejos en partes m&aacute;s sencillas, mejoras en deployment.
+                        </li>
+                        <li>
+                            &iquest;Para qu&eacute; tipos de proyectos son factibles las arquitecturas basadas en microservicios?
+                            &iquest;Debemos olvidarnos de las <i>monolithic apps</i>?
+                        </li>
+                        <li>
+                            Docker como soluci&oacute;n a la heterogeneidad de los entornos de desarrollo y producci&oacute;n.
+                        </li>
+                        <li>
+                            Docker se basa en una tecnolog&iacute;a del kernel de linux, sin soporte nativo para OSX y Windows.
+                        </li>
+                        <li>
+                            Piensen como ser&iacute;a el deployment para aplicaciones &quot;Dockerizadas&quot;
+                        </li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h1>&iquest;Consultas y comentarios?</h1>
+                </section>
+
+            </div>
+		</div>
+
+		<script src="../revealjs/lib/js/head.min.js"></script>
+		<script src="../revealjs/js/reveal.js"></script>
+
+		<script>
+			// More info https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				history: true,
+				slideNumber: true,
+
+				// More info https://github.com/hakimel/reveal.js#dependencies
+				dependencies: [
+					{ src: '../revealjs/plugin/markdown/marked.js' },
+					{ src: '../revealjs/plugin/markdown/markdown.js' },
+					{ src: '../revealjs/plugin/notes/notes.js', async: true },
+					{ src: '../revealjs/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+				]
+			});
+		</script>
+	</body>
+</html>
